@@ -39,11 +39,18 @@ export const SignUp = () => {
 
     if (supabase) {
       try {
+        const redirectTo = `${window.location.origin}/login`;
+
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
-            data: { name: cleanName, username: cleanUsername }
+            emailRedirectTo: redirectTo,
+            data: {
+              name: cleanName,
+              username: cleanUsername,
+              bio: cleanBio
+            }
           }
         });
 
