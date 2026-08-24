@@ -11,14 +11,18 @@ import { useSanctuary } from '../context/SanctuaryContext';
 export const Layout = ({ children }) => {
   const location = useLocation();
   const {
+    currentUser,
     showEarlyMemberWelcomeModal,
     claimEarlyMemberModal,
     formattedPearlNumber,
     pendingSurpriseReward,
     setPendingSurpriseReward
   } = useSanctuary();
+
   const isDoNothing = location.pathname === '/do-nothing';
   const isAquariumWorld = location.pathname === '/world' || location.pathname === '/focus-aquarium';
+  const isAuthScreen = ['/login', '/signup', '/forgot-password', '/auth'].includes(location.pathname);
+  const showAuthenticatedNav = Boolean(currentUser && !isAuthScreen);
 
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden flex flex-col justify-between">
@@ -31,14 +35,16 @@ export const Layout = ({ children }) => {
       )}
 
       {/* One-Time Founding Member Welcome Reward Modal */}
-      <EarlyMemberModal
-        isOpen={showEarlyMemberWelcomeModal}
-        onClose={claimEarlyMemberModal}
-        pearlNumberStr={formattedPearlNumber}
-      />
+      {showAuthenticatedNav && (
+        <EarlyMemberModal
+          isOpen={showEarlyMemberWelcomeModal}
+          onClose={claimEarlyMemberModal}
+          pearlNumberStr={formattedPearlNumber}
+        />
+      )}
 
       {/* Return Day Milestone Surprise Reward Modal */}
-      {pendingSurpriseReward && (
+      {showAuthenticatedNav && pendingSurpriseReward && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/30 backdrop-blur-md animate-fade-in">
           <div className="w-full max-w-sm glass-panel-opaque rounded-3xl p-8 flex flex-col items-center text-center gap-5 border border-white/60 shadow-2xl relative z-10">
             <span className="font-label-sm text-xs text-primary font-semibold uppercase tracking-widest bg-primary-container/40 px-3.5 py-1 rounded-full border border-primary-container/30">
@@ -68,17 +74,17 @@ export const Layout = ({ children }) => {
         </div>
       )}
 
-      {/* Floating Header & Navbars */}
-      <TopAppBar />
-      <SideNavBar />
+      {/* Floating Header & Navbars (Authenticated Only) */}
+      {showAuthenticatedNav && <TopAppBar />}
+      {showAuthenticatedNav && <SideNavBar />}
 
       {/* Main Screen Content */}
       <div className="relative z-10 flex-grow w-full">
         {children}
       </div>
 
-      {/* Floating Bottom Toolbar */}
-      <BottomNavBar />
+      {/* Floating Bottom Toolbar (Authenticated Only) */}
+      {showAuthenticatedNav && <BottomNavBar />}
     </div>
   );
 };
