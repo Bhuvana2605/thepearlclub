@@ -278,7 +278,7 @@ export const Settings = () => {
                   : 'bg-gray-200 text-gray-500 cursor-not-allowed opacity-75'
               }`}
             >
-              {isDailyRewardAvailable ? 'Claim Reward' : 'Claimed'}
+              {isDailyRewardAvailable ? 'Claim Reward' : 'Claimed today'}
             </button>
           </div>
 

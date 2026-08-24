@@ -34,8 +34,8 @@ export const MoodCanvas = () => {
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
 
-    // Fill canvas background with soft white
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+    // Fill canvas background with solid white to match eraser color perfectly
+    ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Restore previous drawing if exists
@@ -83,7 +83,7 @@ export const MoodCanvas = () => {
     ctx.lineTo(currentPos.x, currentPos.y);
 
     if (activeTool === 'eraser') {
-      ctx.strokeStyle = 'rgba(255, 255, 255, 1)';
+      ctx.strokeStyle = '#ffffff';
       ctx.lineWidth = brushSize * 2.5;
     } else {
       ctx.strokeStyle = brushColor;
@@ -102,7 +102,7 @@ export const MoodCanvas = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+    ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   };
 

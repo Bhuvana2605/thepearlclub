@@ -6,6 +6,7 @@ import { BottomNavBar } from './BottomNavBar';
 import { WebGLWaterShader } from './WebGLWaterShader';
 import { EnvironmentBackground } from './EnvironmentBackground';
 import { EarlyMemberModal } from './EarlyMemberModal';
+import { RewardRevealModal } from './RewardRevealModal';
 import { useSanctuary } from '../context/SanctuaryContext';
 
 export const Layout = ({ children }) => {
@@ -45,33 +46,13 @@ export const Layout = ({ children }) => {
 
       {/* Return Day Milestone Surprise Reward Modal */}
       {showAuthenticatedNav && pendingSurpriseReward && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/30 backdrop-blur-md animate-fade-in">
-          <div className="w-full max-w-sm glass-panel-opaque rounded-3xl p-8 flex flex-col items-center text-center gap-5 border border-white/60 shadow-2xl relative z-10">
-            <span className="font-label-sm text-xs text-primary font-semibold uppercase tracking-widest bg-primary-container/40 px-3.5 py-1 rounded-full border border-primary-container/30">
-              Return Milestone Reward
-            </span>
-            <div>
-              <h2 className="font-headline-lg text-xl font-semibold text-primary">{pendingSurpriseReward.title}</h2>
-              <p className="font-body-md text-xs text-on-surface-variant mt-1">{pendingSurpriseReward.subtitle}</p>
-            </div>
-
-            <div className="w-24 h-24 rounded-full bg-white/80 border border-white/70 flex items-center justify-center p-3 shadow-md pearl-glow my-2">
-              <img
-                src={`/assets/collectibles/${pendingSurpriseReward.collectibleId}.png`}
-                alt="Surprise Reward"
-                className="w-16 h-16 object-contain"
-                onError={(e) => { e.target.src = '/assets/collectibles/pearl.png'; }}
-              />
-            </div>
-
-            <button
-              onClick={() => setPendingSurpriseReward(null)}
-              className="w-full py-3.5 rounded-full bg-primary text-white font-label-sm text-xs font-semibold shadow hover:bg-primary/90 transition-transform active:scale-95"
-            >
-              Add to Your Little World
-            </button>
-          </div>
-        </div>
+        <RewardRevealModal
+          isOpen={Boolean(pendingSurpriseReward)}
+          onClose={() => setPendingSurpriseReward(null)}
+          collectibleId={pendingSurpriseReward.collectibleId}
+          title={pendingSurpriseReward.title}
+          subtitle={pendingSurpriseReward.subtitle}
+        />
       )}
 
       {/* Floating Header & Navbars (Authenticated Only) */}
