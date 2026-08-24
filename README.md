@@ -77,11 +77,16 @@ npm run build
 
 ---
 
-## 4. Supabase Setup
+## 5. Live Production Deployment
 
-1. Copy `.env.example` to `.env` inside `frontend/` (or root):
-   ```env
-   VITE_SUPABASE_URL=https://your-supabase-project.supabase.co
-   VITE_SUPABASE_PUBLISHABLE_KEY=your-supabase-publishable-key
-   ```
-2. Run SQL migrations located under `backend/supabase/migrations/` in your Supabase SQL Editor.
+- **Live Application URL**: [https://thepearlclub.vercel.app](https://thepearlclub.vercel.app)
+- **Deployment Platform**: Vercel
+- **Database / Auth Provider**: Supabase (`https://bqfeekkbxcincwlvabdq.supabase.co`)
+
+### Supabase Auth URL Configuration:
+For production authentication email confirmations to redirect to the live Vercel deployment:
+- **Site URL**: `https://thepearlclub.vercel.app`
+- **Redirect URLs**:
+  - `http://localhost:3000/**`
+  - `https://thepearlclub.vercel.app/**`
+
