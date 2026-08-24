@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Pearl Club - Ocean Sanctuary</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&amp;family=Quicksand:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#f9f9f9",
+                        "surface-tint": "#006b58",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#005045",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f3f3f3",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-primary-fixed-variant": "#005142",
+                        "outline-variant": "#bacac3",
+                        "primary-fixed-dim": "#38debb",
+                        "secondary-fixed": "#9bf3df",
+                        "inverse-surface": "#2f3131",
+                        "surface-container-highest": "#e2e2e2",
+                        "primary-container": "#64ffda",
+                        "surface-bright": "#f9f9f9",
+                        "secondary-fixed-dim": "#7fd6c3",
+                        "tertiary": "#636037",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#9bf3df",
+                        "tertiary-fixed": "#eae4b1",
+                        "on-tertiary-fixed-variant": "#4b4822",
+                        "on-tertiary-fixed": "#1e1c00",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#eee8b4",
+                        "on-surface-variant": "#3c4a45",
+                        "on-surface": "#1a1c1c",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#017162",
+                        "outline": "#6b7a75",
+                        "tertiary-fixed-dim": "#cdc897",
+                        "on-tertiary-container": "#6c683e",
+                        "primary": "#006b58",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#00201b",
+                        "inverse-primary": "#38debb",
+                        "surface-container": "#eeeeee",
+                        "secondary": "#006b5c",
+                        "on-primary-fixed": "#002019",
+                        "on-primary-container": "#007560",
+                        "surface-container-high": "#e8e8e8",
+                        "surface": "#f9f9f9",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#5ffbd6",
+                        "on-background": "#1a1c1c",
+                        "surface-dim": "#dadada",
+                        "surface-variant": "#e2e2e2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "bubble-margin": "4rem",
+                        "safe-area": "2.5rem",
+                        "float-gap": "2rem",
+                        "organic-padding": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Quicksand"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg": ["Quicksand"],
+                        "headline-md": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .pearl-glow {
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.8), 0 4px 20px rgba(0, 107, 88, 0.1);
+        }
+
+        .ambient-bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
+            box-shadow: inset 0 0 10px rgba(255,255,255,0.5);
+            animation: float-up 10s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
+        }
+
+        .bg-ocean {
+            background: linear-gradient(180deg, #bcf5ea 0%, #8ae8d8 50%, #52d1bc 100%);
+        }
+    </style>
+</head>
+<body class="bg-ocean text-on-surface min-h-screen relative overflow-hidden font-body-md">
+<!-- Background Reference (Simulated as ambient layer) -->
+<div class="absolute inset-0 z-0">
+<img alt="Underwater background" class="w-full h-full object-cover opacity-60 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida/AEtjO1UeU80EVoyVuL80UICADjG_-_lv40-kKeobS9wPEpmjv9PAqluozutu3jKpJL2Tiv08kNrX9Dl4GLrpKR9Z8gycfN_3ztrW65t7dN9zhBsea_D57RTSmAE0L8XFx7pwtakB5bexP1463c4L10LbjCWqyyizvUQK8XEZAowRkGscRakMjKAfRQWkw7SzapXj0qxfWEaNPl6UtjfM9vudEHanxkuFBptdhGUVQcUI_XPyZdTNEvGsv8OBTGw"/>
+</div>
+<!-- Ambient Bubbles Layer -->
+<div class="absolute inset-0 z-0 overflow-hidden" id="bubble-container">
+<!-- Bubbles injected via JS -->
+</div>
+<!-- Main Content Canvas -->
+<div class="relative z-10 min-h-screen flex flex-col pt-safe-area px-organic-padding pb-safe-area md:pb-safe-area">
+<!-- TopAppBar -->
+<header class="w-full top-0 left-0 fixed top-0 w-full flex justify-between items-center px-organic-padding pt-safe-area z-50 bg-transparent no-border flat no shadows transition-all duration-500 ease-in-out">
+<h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed tracking-tight">The Pearl Club</h1>
+<div class="flex items-center gap-4">
+<button class="text-primary dark:text-primary-fixed hover:scale-105 transition-transform p-2 rounded-full glass-panel">
+<span class="material-symbols-outlined text-[28px]">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Central Layout -->
+<main class="flex-1 flex flex-col items-center justify-center w-full max-w-[900px] mx-auto mt-20 relative">
+<!-- Center Greeting Card (Glassmorphism) -->
+<div class="glass-panel rounded-xl p-8 max-w-md w-full text-center pearl-glow flex flex-col items-center justify-center gap-6 animate-fade-in-up">
+<h2 class="font-headline-lg text-headline-lg text-primary">Good morning, Diver</h2>
+<div class="font-display-lg text-display-lg text-on-surface-variant font-light tracking-wider" id="live-clock">
+                    10:42 AM
+                </div>
+<p class="font-body-md text-body-md text-on-surface-variant italic">
+                    "The sea, once it casts its spell, holds one in its net of wonder forever."
+                </p>
+<div class="w-16 h-1 bg-primary/20 rounded-full mt-2"></div>
+</div>
+<!-- Environment Selector -->
+<div class="mt-12 glass-panel rounded-full px-6 py-3 flex gap-4 overflow-x-auto max-w-full pearl-glow shadow-sm">
+<button class="px-4 py-2 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm whitespace-nowrap transition-colors">Ocean</button>
+<button class="px-4 py-2 rounded-full text-on-surface-variant hover:bg-white/30 font-label-sm text-label-sm whitespace-nowrap transition-colors">Rainy Ocean</button>
+<button class="px-4 py-2 rounded-full text-on-surface-variant hover:bg-white/30 font-label-sm text-label-sm whitespace-nowrap transition-colors">Underwater</button>
+<button class="px-4 py-2 rounded-full text-on-surface-variant hover:bg-white/30 font-label-sm text-label-sm whitespace-nowrap transition-colors">Beach</button>
+<button class="px-4 py-2 rounded-full text-on-surface-variant hover:bg-white/30 font-label-sm text-label-sm whitespace-nowrap transition-colors">Sunset Beach</button>
+<button class="px-4 py-2 rounded-full text-on-surface-variant hover:bg-white/30 font-label-sm text-label-sm whitespace-nowrap transition-colors">Grassland</button>
+</div>
+</main>
+<!-- SideNavBar (Desktop/Web only) -->
+<nav class="hidden md:flex fixed right-8 flex flex-col gap-4 z-50 fixed right-float-gap top-1/2 -translate-y-1/2 rounded-full py-organic-padding bg-surface-container/40 backdrop-blur-xl border border-white/20 shadow-bubble-margin shadow-primary/5">
+<button class="bg-primary-container text-on-primary-container rounded-full p-3 hover:bg-white/30 transition-colors Active: scale-90 transition-all flex flex-col items-center gap-1 group" title="Eye">
+<span class="material-symbols-outlined text-secondary dark:text-secondary-fixed">visibility</span>
+</button>
+<button class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors flex flex-col items-center gap-1 group" title="Focus">
+<span class="material-symbols-outlined text-secondary dark:text-secondary-fixed">center_focus_strong</span>
+</button>
+<button class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors flex flex-col items-center gap-1 group" title="Games">
+<span class="material-symbols-outlined text-secondary dark:text-secondary-fixed">videogame_asset</span>
+</button>
+<button class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors flex flex-col items-center gap-1 group" title="Aquarium">
+<span class="material-symbols-outlined text-secondary dark:text-secondary-fixed">water_drop</span>
+</button>
+</nav>
+<!-- BottomNavBar / Utilities -->
+<nav class="fixed bottom-safe-area left-0 w-full px-bubble-margin flex justify-between items-end z-50 bg-transparent no-border flat">
+<!-- Left Utilities -->
+<div class="flex gap-3">
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex flex-col items-center justify-center glass-panel w-14 h-14" title="To-Do">
+<span class="material-symbols-outlined text-primary">checklist</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex flex-col items-center justify-center glass-panel w-14 h-14" title="Journal">
+<span class="material-symbols-outlined text-primary">edit_note</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex flex-col items-center justify-center glass-panel w-14 h-14" title="Music">
+<span class="material-symbols-outlined text-primary">music_note</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex flex-col items-center justify-center glass-panel w-14 h-14" title="Help">
+<span class="material-symbols-outlined text-primary">self_care</span>
+</button>
+</div>
+<!-- Right Utilities -->
+<div class="flex gap-3">
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex flex-col items-center justify-center glass-panel w-14 h-14" title="Mood">
+<span class="material-symbols-outlined text-primary">palette</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex flex-col items-center justify-center glass-panel w-14 h-14" title="Bottle">
+<span class="material-symbols-outlined text-primary">sailing</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex flex-col items-center justify-center glass-panel w-14 h-14" title="Settings">
+<span class="material-symbols-outlined text-primary">settings</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex flex-col items-center justify-center glass-panel w-14 h-14" title="Share">
+<span class="material-symbols-outlined text-primary">share</span>
+</button>
+</div>
+</nav>
+</div>
+<script>
+        // Simple live clock
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            const strTime = hours + ':' + minutes + ' ' + ampm;
+            document.getElementById('live-clock').textContent = strTime;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Ambient bubbles generation
+        const bubbleContainer = document.getElementById('bubble-container');
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.classList.add('ambient-bubble');
+            
+            const size = Math.random() * 20 + 5; // 5px to 25px
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            
+            bubble.style.left = `${Math.random() * 100}vw`;
+            bubble.style.animationDuration = `${Math.random() * 5 + 8}s`; // 8s to 13s
+            bubble.style.animationDelay = `${Math.random() * 5}s`;
+            
+            bubbleContainer.appendChild(bubble);
+            
+            // Remove after animation completes to prevent DOM bloat
+            setTimeout(() => {
+                bubble.remove();
+            }, 15000);
+        }
+
+        // Initially create some bubbles
+        for(let i=0; i<15; i++) {
+            setTimeout(createBubble, Math.random() * 5000);
+        }
+        
+        // Continue creating bubbles periodically
+        setInterval(createBubble, 1500);
+    </script>
+</body></html>

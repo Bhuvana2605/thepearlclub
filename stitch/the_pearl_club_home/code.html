@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Pearl Club - Sanctuary</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&amp;family=Quicksand:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed": "#00201b",
+                      "inverse-primary": "#38debb",
+                      "inverse-surface": "#2f3131",
+                      "surface-container-high": "#e8e8e8",
+                      "on-tertiary-fixed-variant": "#4b4822",
+                      "surface-container-highest": "#e2e2e2",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed-dim": "#7fd6c3",
+                      "primary": "#006b58",
+                      "on-tertiary-fixed": "#1e1c00",
+                      "primary-fixed": "#5ffbd6",
+                      "secondary-container": "#9bf3df",
+                      "on-secondary": "#ffffff",
+                      "on-surface": "#1a1c1c",
+                      "surface-dim": "#dadada",
+                      "outline": "#6b7a75",
+                      "inverse-on-surface": "#f1f1f1",
+                      "on-background": "#1a1c1c",
+                      "on-primary-container": "#007560",
+                      "tertiary-fixed-dim": "#cdc897",
+                      "on-error-container": "#93000a",
+                      "outline-variant": "#bacac3",
+                      "tertiary-container": "#eee8b4",
+                      "surface-bright": "#f9f9f9",
+                      "secondary": "#006b5c",
+                      "surface-variant": "#e2e2e2",
+                      "on-secondary-fixed-variant": "#005045",
+                      "error": "#ba1a1a",
+                      "secondary-fixed": "#9bf3df",
+                      "on-surface-variant": "#3c4a45",
+                      "surface-container": "#eeeeee",
+                      "primary-fixed-dim": "#38debb",
+                      "on-tertiary-container": "#6c683e",
+                      "tertiary-fixed": "#eae4b1",
+                      "error-container": "#ffdad6",
+                      "surface-container-low": "#f3f3f3",
+                      "primary-container": "#64ffda",
+                      "on-tertiary": "#ffffff",
+                      "on-primary-fixed-variant": "#005142",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#006b58",
+                      "surface": "#f9f9f9",
+                      "tertiary": "#636037",
+                      "background": "#f9f9f9",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed": "#002019",
+                      "on-secondary-container": "#017162"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "bubble-margin": "4rem",
+                      "organic-padding": "1.5rem",
+                      "float-gap": "2rem",
+                      "safe-area": "2.5rem"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Quicksand"
+                      ],
+                      "headline-md": [
+                              "Quicksand"
+                      ],
+                      "body-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-sm": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Quicksand"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .pearl-glow {
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.8), 0 4px 20px rgba(0, 107, 88, 0.05);
+        }
+        .text-shadow-soft {
+            text-shadow: 0 2px 10px rgba(255,255,255,0.5);
+        }
+        
+        /* Floating animations */
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+        @keyframes float-fast {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(-1deg); }
+        }
+        .animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
+        .animate-float-fast { animation: float-fast 5s ease-in-out infinite; }
+    </style>
+</head>
+<body class="h-full bg-surface text-on-surface overflow-hidden relative">
+<!-- Background Shader -->
+<!-- STITCH_SHADER_START:ANIMATION_1 class="absolute inset-0 w-full h-full z-0 opacity-80 mix-blend-multiply pointer-events-none" -->
+<div class="absolute inset-0 w-full h-full z-0 opacity-80 mix-blend-multiply pointer-events-none" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_1" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_1');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+
+// Simplex noise for organic water movement
+vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+float snoise(vec2 v){
+  const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+           -0.577350269189626, 0.024390243902439);
+  vec2 i  = floor(v + dot(v, C.yy) );
+  vec2 x0 = v -   i + dot(i, C.xx);
+  vec2 i1;
+  i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod(i, 289.0);
+  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+  + i.x + vec3(0.0, i1.x, 1.0 ));
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
+    dot(x12.zw,x12.zw)), 0.0);
+  m = m*m ;
+  m = m*m ;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 a0 = x - floor(x + 0.5);
+  float m0 = 0.7 - dot(x0,x0);
+  float m1 = 0.7 - dot(x12.xy,x12.xy);
+  float m2 = 0.7 - dot(x12.zw,x12.zw);
+  m = max(vec3(m0, m1, m2), 0.0);
+  m = m*m;
+  m = m*m;
+  return 130.0 * dot(m, a0);
+}
+
+void main() {
+    vec2 uv = v_texCoord;
+    vec2 mouse = u_mouse / u_resolution;
+    
+    // Background Gradient (Deep to Shallow)
+    vec3 color1 = vec4(0.878, 0.949, 0.969, 1.0).rgb; // Soft ocean blue
+    vec3 color2 = vec4(0.655, 0.914, 0.922, 1.0).rgb; // Turquoise/Aqua
+    vec3 color3 = vec4(0.961, 0.961, 0.863, 1.0).rgb; // Sandy beige at bottom
+    
+    float noise = snoise(uv * 2.0 + u_time * 0.1);
+    float noise2 = snoise(uv * 4.0 - u_time * 0.05);
+    
+    vec3 bg = mix(color1, color2, uv.y + noise * 0.1);
+    bg = mix(bg, color3, (1.0 - uv.y) * 0.3);
+    
+    // Caustics/Light streaks
+    float streaks = sin(uv.x * 10.0 + uv.y * 5.0 + u_time) * 0.5 + 0.5;
+    streaks *= snoise(uv * 3.0 + u_time * 0.2);
+    bg += streaks * 0.05;
+    
+    // Mouse interaction - subtle ripple
+    float d = distance(uv, mouse);
+    bg += (1.0 - smoothstep(0.0, 0.3, d)) * 0.02;
+
+    gl_FragColor = vec4(bg, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_1 -->
+<!-- Top App Bar (Hidden on Desktop per rules, but present for structure) -->
+<header class="hidden md:flex fixed top-0 w-full justify-between items-center px-organic-padding pt-safe-area z-50 bg-transparent no-border transition-all duration-500 ease-in-out">
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">The Pearl Club</h1>
+<button aria-label="Account" class="text-primary hover:scale-105 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</header>
+<!-- Decorative Floating Elements -->
+<div class="absolute top-1/4 left-1/4 z-10 text-primary/30 animate-float-slow pointer-events-none">
+<span class="material-symbols-outlined" style="font-size: 48px; font-variation-settings: 'FILL' 1;">water_drop</span>
+</div>
+<div class="absolute bottom-1/3 right-1/4 z-10 text-tertiary-container animate-float-fast pointer-events-none">
+<div class="w-8 h-8 rounded-full bg-gradient-to-br from-white to-tertiary-container pearl-glow opacity-60"></div>
+</div>
+<div class="absolute top-1/3 right-1/3 z-10 text-primary/20 animate-float-slow pointer-events-none" style="animation-delay: 2s;">
+<span class="material-symbols-outlined" style="font-size: 32px; font-variation-settings: 'FILL' 0;">sailing</span>
+</div>
+<!-- Main Content Canvas -->
+<main class="relative z-20 h-full flex flex-col items-center justify-center p-organic-padding pt-safe-area max-w-[900px] mx-auto">
+<div class="text-center flex flex-col items-center gap-6 glass-panel p-12 rounded-xl pearl-glow max-w-2xl w-full animate-float-slow">
+<h2 class="font-display-lg text-display-lg text-primary text-shadow-soft" id="greeting">Good afternoon</h2>
+<div class="font-headline-lg text-headline-lg text-secondary tracking-widest font-light opacity-80" id="clock">
+                12:45
+            </div>
+<div class="w-16 h-[1px] bg-primary/20 my-4"></div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md italic opacity-90 text-center">
+                "When your mind feels messy, you may not need another tool. You may need somewhere to be."
+            </p>
+</div>
+</main>
+<!-- SideNavBar (Desktop Context) -->
+<nav class="hidden md:flex fixed right-float-gap top-1/2 -translate-y-1/2 rounded-full py-organic-padding bg-surface-container/40 backdrop-blur-xl border border-white/20 shadow-bubble-margin shadow-primary/5 flex-col gap-4 z-50">
+<!-- Aquarium is active contextually for the home/ambient screen -->
+<button aria-label="Eye" class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">visibility</span>
+<span class="font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity absolute -left-12">Eye</span>
+</button>
+<button aria-label="Focus" class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">center_focus_strong</span>
+<span class="font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity absolute -left-16">Focus</span>
+</button>
+<button aria-label="Games" class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">videogame_asset</span>
+<span class="font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity absolute -left-16">Games</span>
+</button>
+<button aria-label="Aquarium" class="bg-primary-container text-on-primary-container rounded-full p-3 hover:bg-white/30 transition-colors flex flex-col items-center gap-1 scale-90 transition-all group">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+<span class="font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity absolute -left-20">Aquarium</span>
+</button>
+</nav>
+<!-- BottomNavBar (Mobile & Expanded Context) -->
+<nav class="fixed bottom-safe-area left-0 w-full px-bubble-margin flex justify-between items-end z-50 bg-transparent no-border">
+<!-- Left Cluster -->
+<div class="flex gap-2">
+<button aria-label="To-Do" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined">checklist</span>
+</button>
+<button aria-label="Journal" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined">edit_note</span>
+</button>
+<button aria-label="Music" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined">music_note</span>
+</button>
+<button aria-label="Help" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined">self_care</span>
+</button>
+</div>
+<!-- Central FAB Context (The Pearl) - Hidden on this screen to prioritize ambient feel, but structure maintained for system -->
+<div class="hidden md:flex flex-col items-center justify-center relative -top-6">
+<button class="w-16 h-16 rounded-full bg-gradient-to-br from-primary-container to-secondary-container pearl-glow flex items-center justify-center hover:scale-105 transition-transform shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1; font-size: 32px;">water_drop</span>
+</button>
+</div>
+<!-- Right Cluster -->
+<div class="flex gap-2">
+<button aria-label="Mood" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined">palette</span>
+</button>
+<button aria-label="Bottle" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined">sailing</span>
+</button>
+<button aria-label="Settings" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button aria-label="Share" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</nav>
+<script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let ampm = hours >= 12 ? 'pm' : 'am';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            
+            document.getElementById('clock').textContent = hours + ':' + minutes;
+            
+            const greetingEl = document.getElementById('greeting');
+            const hour = now.getHours();
+            if (hour < 12) {
+                greetingEl.textContent = 'Good morning';
+            } else if (hour < 18) {
+                greetingEl.textContent = 'Good afternoon';
+            } else {
+                greetingEl.textContent = 'Good evening';
+            }
+        }
+        
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body></html>

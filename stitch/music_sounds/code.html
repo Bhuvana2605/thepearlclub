@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Pearl Club - Music &amp; Ambient Sound</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&amp;family=Quicksand:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom Slider Styling to match 'Pearl' aesthetic */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #ffffff;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.8), 0 0 10px rgba(0, 107, 88, 0.2);
+            cursor: pointer;
+            margin-top: -7px;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 2px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 9999px;
+        }
+        
+        /* Hide scrollbar for clean glass look */
+        ::-webkit-scrollbar { display: none; }
+    </style>
+<!-- Tailwind Config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed": "#00201b", "inverse-primary": "#38debb", "inverse-surface": "#2f3131", "surface-container-high": "#e8e8e8", "on-tertiary-fixed-variant": "#4b4822", "surface-container-highest": "#e2e2e2", "surface-container-lowest": "#ffffff", "secondary-fixed-dim": "#7fd6c3", "primary": "#006b58", "on-tertiary-fixed": "#1e1c00", "primary-fixed": "#5ffbd6", "secondary-container": "#9bf3df", "on-secondary": "#ffffff", "on-surface": "#1a1c1c", "surface-dim": "#dadada", "outline": "#6b7a75", "inverse-on-surface": "#f1f1f1", "on-background": "#1a1c1c", "on-primary-container": "#007560", "tertiary-fixed-dim": "#cdc897", "on-error-container": "#93000a", "outline-variant": "#bacac3", "tertiary-container": "#eee8b4", "surface-bright": "#f9f9f9", "secondary": "#006b5c", "surface-variant": "#e2e2e2", "on-secondary-fixed-variant": "#005045", "error": "#ba1a1a", "secondary-fixed": "#9bf3df", "on-surface-variant": "#3c4a45", "surface-container": "#eeeeee", "primary-fixed-dim": "#38debb", "on-tertiary-container": "#6c683e", "tertiary-fixed": "#eae4b1", "error-container": "#ffdad6", "surface-container-low": "#f3f3f3", "primary-container": "#64ffda", "on-tertiary": "#ffffff", "on-primary-fixed-variant": "#005142", "on-primary": "#ffffff", "surface-tint": "#006b58", "surface": "#f9f9f9", "tertiary": "#636037", "background": "#f9f9f9", "on-error": "#ffffff", "on-primary-fixed": "#002019", "on-secondary-container": "#017162"
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem", lg: "2rem", xl: "3rem", full: "9999px"
+                    },
+                    spacing: {
+                        "bubble-margin": "4rem", "organic-padding": "1.5rem", "float-gap": "2rem", "safe-area": "2.5rem"
+                    },
+                    fontFamily: {
+                        "headline-lg": ["Quicksand"], "headline-md": ["Quicksand"], "body-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "display-lg": ["Quicksand"]
+                    },
+                    fontSize: {
+                        "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "500" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "500" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface relative min-h-screen font-body-md text-on-surface overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Ambient Background Image -->
+<div class="fixed inset-0 z-0 bg-cover bg-center" data-alt="A serene underwater scene with gentle, dappled sunlight filtering down through crystal clear, light turquoise ocean water. Small, translucent bubbles float upwards. The mood is calm, ethereal, and protective, embodying a light-mode glassmorphism aesthetic. Soft, natural lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB4YDMx_Sf6bYr8aoW26Oo39eIFjozpnNeVbiO6ox0K-8cY0UbROoym1o93-H4wbCiy0ebduOAUavMSp9uPnIlGBd7F0TH4kbpk2uMJQQql9iQsAG6ogAkT22eN0mBhGf0_DjOgO6tHcLw1ceAI_vXoJdDdvhhS8tw4vYUHdOdFY5fRidYsWlOgqDnZ_ha-7F_aSGR9y-6pcNO-Up95ZxUaLquq0ohpuiwT9ZCea3eJ8VwH1kWhhQa1')"></div>
+<!-- Soft overlay to ensure readability while keeping the glass feel -->
+<div class="fixed inset-0 z-0 bg-surface/20 backdrop-blur-[2px]"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-organic-padding pt-safe-area z-50 bg-transparent transition-all duration-500 ease-in-out border-none shadow-none">
+<div class="font-display-lg text-display-lg text-primary dark:text-primary-fixed tracking-tight">
+            The Pearl Club
+        </div>
+<div class="flex items-center gap-4 hidden">
+<!-- Search bar hidden per JSON -->
+</div>
+<div class="flex items-center">
+<button class="text-primary dark:text-primary-fixed hover:scale-105 transition-transform p-2 rounded-full hover:bg-white/10">
+<span class="material-symbols-outlined text-[32px]">account_circle</span>
+</button>
+</div>
+</header>
+<!-- SideNavBar (Web) -->
+<nav class="hidden md:flex fixed right-8 flex-col gap-4 z-50 bg-surface-container/40 backdrop-blur-xl border border-white/20 shadow-bubble-margin shadow-primary/5 rounded-full py-organic-padding right-float-gap top-1/2 -translate-y-1/2">
+<div class="flex flex-col items-center gap-6 px-2">
+<div class="text-center mb-4 hidden">
+<img alt="Pearl Club Logo" class="w-12 h-12 mx-auto rounded-full" data-alt="A small, elegant icon representing a pearl inside a stylized seashell, designed in a minimalist vector style using soft teal and silver tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhqG8U7Hl-xCr1j04M2fOCJezFqQHC346xhQYaFm6NoCcnUawmAKQ6lgeanT-385SJWX1oeg1fmO9faFy_GSqunwjT0Sv7A36ihdsuGip-T7NH-Dy9mcyxe-yBesWPycqv3d60SdGTfmfGkkKYF-jyKy-DYUwNmG2eudNHlyZwoPihZ4NQxDEMJX7sw8xtEsRMC5CPa2U_YzMh40iNIZcp7UzW1Gsyb8wJnr77yrXF7-nkRULP3BL-"/>
+<div class="font-headline-md text-headline-md text-primary mt-2">Sanctuary</div>
+<div class="font-label-sm text-label-sm text-secondary">Deep Water</div>
+</div>
+<a class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors rounded-full flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">visibility</span>
+<span class="font-label-sm text-label-sm hidden group-hover:block absolute right-full mr-4 bg-surface/80 backdrop-blur-md px-3 py-1 rounded-full">Eye</span>
+</a>
+<a class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors rounded-full flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">center_focus_strong</span>
+<span class="font-label-sm text-label-sm hidden group-hover:block absolute right-full mr-4 bg-surface/80 backdrop-blur-md px-3 py-1 rounded-full">Focus</span>
+</a>
+<a class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors rounded-full flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">videogame_asset</span>
+<span class="font-label-sm text-label-sm hidden group-hover:block absolute right-full mr-4 bg-surface/80 backdrop-blur-md px-3 py-1 rounded-full">Games</span>
+</a>
+<a class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors rounded-full flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">water_drop</span>
+<span class="font-label-sm text-label-sm hidden group-hover:block absolute right-full mr-4 bg-surface/80 backdrop-blur-md px-3 py-1 rounded-full">Aquarium</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="relative z-10 w-full min-h-screen flex flex-col items-center justify-center pt-32 pb-32 px-organic-padding md:px-bubble-margin">
+<!-- Glassmorphism Mixer Panel -->
+<div class="w-full max-w-2xl bg-white/20 backdrop-blur-xl border border-white/30 rounded-[2rem] p-8 md:p-12 shadow-[0_8px_32px_rgba(0,107,88,0.1)] flex flex-col gap-10">
+<!-- Header -->
+<div class="text-center">
+<h1 class="font-headline-lg text-headline-lg text-on-surface-variant mb-2">Atmosphere</h1>
+<p class="font-body-md text-on-surface-variant/80">Blend your perfect sanctuary.</p>
+</div>
+<!-- Music Categories -->
+<div class="flex flex-col gap-4">
+<h2 class="font-label-sm text-label-sm text-primary uppercase tracking-widest px-2">Music</h2>
+<div class="flex flex-wrap gap-4">
+<button class="flex-1 min-w-[100px] py-3 px-6 rounded-full bg-white/30 backdrop-blur-md border border-white/40 text-on-surface-variant font-body-md hover:bg-white/40 hover:-translate-y-1 transition-all shadow-sm">
+                        Calm
+                    </button>
+<button class="flex-1 min-w-[100px] py-3 px-6 rounded-full bg-secondary-container text-on-secondary-container border border-white/50 font-body-md shadow-[inset_0_2px_4px_rgba(255,255,255,0.6)] hover:-translate-y-1 transition-all">
+                        Focus
+                    </button>
+<button class="flex-1 min-w-[100px] py-3 px-6 rounded-full bg-white/30 backdrop-blur-md border border-white/40 text-on-surface-variant font-body-md hover:bg-white/40 hover:-translate-y-1 transition-all shadow-sm">
+                        Ambient
+                    </button>
+</div>
+</div>
+<hr class="border-white/20"/>
+<!-- Ambient Sounds -->
+<div class="flex flex-col gap-6">
+<h2 class="font-label-sm text-label-sm text-primary uppercase tracking-widest px-2">Ambient Sounds</h2>
+<div class="flex flex-col gap-6">
+<!-- Sound Item: Waves -->
+<div class="flex items-center gap-6 p-4 rounded-xl hover:bg-white/10 transition-colors">
+<button class="w-12 h-12 rounded-full bg-white/40 flex items-center justify-center text-primary hover:scale-105 transition-transform shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<div class="flex-1 flex flex-col gap-2">
+<span class="font-body-lg text-body-lg text-on-surface">Waves</span>
+<input max="100" min="0" type="range" value="70"/>
+</div>
+<span class="material-symbols-outlined text-outline">water</span>
+</div>
+<!-- Sound Item: Rain -->
+<div class="flex items-center gap-6 p-4 rounded-xl hover:bg-white/10 transition-colors">
+<button class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-on-surface-variant hover:scale-105 transition-transform shadow-sm">
+<span class="material-symbols-outlined">pause</span>
+</button>
+<div class="flex-1 flex flex-col gap-2">
+<span class="font-body-lg text-body-lg text-on-surface">Rain</span>
+<input max="100" min="0" type="range" value="30"/>
+</div>
+<span class="material-symbols-outlined text-outline">rainy</span>
+</div>
+<!-- Sound Item: Wind -->
+<div class="flex items-center gap-6 p-4 rounded-xl hover:bg-white/10 transition-colors">
+<button class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-on-surface-variant hover:scale-105 transition-transform shadow-sm">
+<span class="material-symbols-outlined">play_arrow</span>
+</button>
+<div class="flex-1 flex flex-col gap-2">
+<span class="font-body-lg text-body-lg text-on-surface">Wind</span>
+<input max="100" min="0" type="range" value="0"/>
+</div>
+<span class="material-symbols-outlined text-outline">air</span>
+</div>
+<!-- Sound Item: Underwater -->
+<div class="flex items-center gap-6 p-4 rounded-xl hover:bg-white/10 transition-colors bg-white/10 border border-white/20">
+<button class="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center hover:scale-105 transition-transform shadow-[inset_0_2px_4px_rgba(255,255,255,0.4)]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">pause</span>
+</button>
+<div class="flex-1 flex flex-col gap-2">
+<span class="font-body-lg text-body-lg text-primary">Underwater</span>
+<input max="100" min="0" type="range" value="85"/>
+</div>
+<span class="material-symbols-outlined text-primary">scuba_diving</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-safe-area left-0 w-full px-bubble-margin flex justify-between items-end z-50 bg-transparent border-none">
+<div class="flex w-full justify-between items-center bg-surface-container/20 backdrop-blur-xl rounded-[2rem] p-2 border border-white/20 shadow-lg">
+<a class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex flex-col items-center" href="#">
+<span class="material-symbols-outlined">checklist</span>
+</a>
+<a class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex flex-col items-center" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+</a>
+<a class="bg-secondary-container text-on-secondary-container rounded-full p-4 shadow-[inset_0_2px_4px_rgba(255,255,255,0.8)] animate-pulse flex flex-col items-center -translate-y-2 border border-white/50" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">music_note</span>
+</a>
+<a class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex flex-col items-center" href="#">
+<span class="material-symbols-outlined">self_care</span>
+</a>
+<!-- Hiding remaining items on mobile for spacing, mimicking a scroll or sub-menu in real app, but showing a few to represent the bar -->
+</div>
+</nav>
+</body></html>

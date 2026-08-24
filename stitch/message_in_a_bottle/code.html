@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Pearl Club - Message in a Bottle</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config from Guidelines -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#00201b",
+                    "inverse-primary": "#38debb",
+                    "inverse-surface": "#2f3131",
+                    "surface-container-high": "#e8e8e8",
+                    "on-tertiary-fixed-variant": "#4b4822",
+                    "surface-container-highest": "#e2e2e2",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed-dim": "#7fd6c3",
+                    "primary": "#006b58",
+                    "on-tertiary-fixed": "#1e1c00",
+                    "primary-fixed": "#5ffbd6",
+                    "secondary-container": "#9bf3df",
+                    "on-secondary": "#ffffff",
+                    "on-surface": "#1a1c1c",
+                    "surface-dim": "#dadada",
+                    "outline": "#6b7a75",
+                    "inverse-on-surface": "#f1f1f1",
+                    "on-background": "#1a1c1c",
+                    "on-primary-container": "#007560",
+                    "tertiary-fixed-dim": "#cdc897",
+                    "on-error-container": "#93000a",
+                    "outline-variant": "#bacac3",
+                    "tertiary-container": "#eee8b4",
+                    "surface-bright": "#f9f9f9",
+                    "secondary": "#006b5c",
+                    "surface-variant": "#e2e2e2",
+                    "on-secondary-fixed-variant": "#005045",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#9bf3df",
+                    "on-surface-variant": "#3c4a45",
+                    "surface-container": "#eeeeee",
+                    "primary-fixed-dim": "#38debb",
+                    "on-tertiary-container": "#6c683e",
+                    "tertiary-fixed": "#eae4b1",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#f3f3f3",
+                    "primary-container": "#64ffda",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed-variant": "#005142",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#006b58",
+                    "surface": "#f9f9f9",
+                    "tertiary": "#636037",
+                    "background": "#f9f9f9",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#002019",
+                    "on-secondary-container": "#017162"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "bubble-margin": "4rem",
+                    "organic-padding": "1.5rem",
+                    "float-gap": "2rem",
+                    "safe-area": "2.5rem"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Quicksand", "sans-serif"],
+                    "headline-md": ["Quicksand", "sans-serif"],
+                    "body-md": ["Plus Jakarta Sans", "sans-serif"],
+                    "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+                    "label-sm": ["Plus Jakarta Sans", "sans-serif"],
+                    "display-lg": ["Quicksand", "sans-serif"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}]
+            },
+            "boxShadow": {
+                "inner-glow": "inset 0 2px 4px rgba(255,255,255,0.8)",
+                "soft-float": "0 20px 40px -10px rgba(0, 107, 88, 0.05)"
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&family=Quicksand:wght@500;600&display=swap');
+
+        /* Organic float animation for elements */
+        @keyframes gentle-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        @keyframes gentle-drift {
+            0%, 100% { transform: translateX(0px) translateY(0px) rotate(0deg); }
+            33% { transform: translateX(10px) translateY(-5px) rotate(1deg); }
+            66% { transform: translateX(-5px) translateY(10px) rotate(-1deg); }
+        }
+
+        .animate-float {
+            animation: gentle-float 6s ease-in-out infinite;
+        }
+        
+        .animate-drift {
+            animation: gentle-drift 12s ease-in-out infinite;
+        }
+
+        /* Glassmorphism utilities */
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container relative">
+<!-- Atmospheric Background Elements (Depth & Water feel) -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+<!-- Floating light blooms -->
+<div class="absolute top-[-10%] left-[-5%] w-[50vw] h-[50vw] rounded-full bg-primary-fixed-dim/10 blur-[100px] animate-drift"></div>
+<div class="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-secondary-container/20 blur-[120px] animate-drift" style="animation-delay: -4s;"></div>
+<div class="absolute top-[40%] left-[20%] w-[30vw] h-[30vw] rounded-full bg-tertiary-container/15 blur-[80px] animate-drift" style="animation-delay: -8s;"></div>
+</div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-organic-padding pt-safe-area z-50 bg-transparent transition-all duration-500 ease-in-out">
+<!-- Brand -->
+<div class="font-display-lg text-display-lg text-primary tracking-tight">
+            The Pearl Club
+        </div>
+<!-- Desktop Navigation Cluster (Hidden on Mobile) -->
+<nav class="hidden md:flex items-center gap-6 glass-panel px-8 py-3 rounded-full shadow-soft-float">
+<!-- Mapping labels from BottomNavBar JSON, setting 'Bottle' as active -->
+<a class="text-on-surface-variant hover:scale-105 transition-transform flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">checklist</span>
+<span class="font-label-sm text-label-sm">To-Do</span>
+</a>
+<a class="text-on-surface-variant hover:scale-105 transition-transform flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">edit_note</span>
+<span class="font-label-sm text-label-sm">Journal</span>
+</a>
+<a class="text-on-surface-variant hover:scale-105 transition-transform flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">music_note</span>
+<span class="font-label-sm text-label-sm">Music</span>
+</a>
+<a class="text-on-surface-variant hover:scale-105 transition-transform flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">self_care</span>
+<span class="font-label-sm text-label-sm">Help</span>
+</a>
+<a class="text-on-surface-variant hover:scale-105 transition-transform flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">palette</span>
+<span class="font-label-sm text-label-sm">Mood</span>
+</a>
+<!-- Active Tab -->
+<a class="text-primary font-bold hover:scale-105 transition-transform flex flex-col items-center gap-1 relative" href="#">
+<div class="absolute -inset-2 bg-secondary-container/30 rounded-full blur-md z-[-1]"></div>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sailing</span>
+<span class="font-label-sm text-label-sm">Bottle</span>
+</a>
+<a class="text-on-surface-variant hover:scale-105 transition-transform flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+<a class="text-on-surface-variant hover:scale-105 transition-transform flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">share</span>
+<span class="font-label-sm text-label-sm">Share</span>
+</a>
+</nav>
+<!-- Trailing Action -->
+<button class="hover:scale-105 transition-transform text-primary p-2 glass-panel rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-size: 28px;">account_circle</span>
+</button>
+</header>
+<!-- Main Content Canvas (Contextual Fluid Layout) -->
+<main class="relative z-10 w-full min-h-screen flex items-center justify-center pt-[100px] pb-[120px] px-organic-padding md:px-bubble-margin">
+<!-- Central Glassmorphism Card ("Well") -->
+<div class="glass-panel w-full max-w-[800px] rounded-xl p-8 md:p-12 flex flex-col items-center text-center gap-8 shadow-soft-float relative overflow-hidden">
+<!-- Decorative inner corner accents -->
+<div class="absolute top-0 left-0 w-24 h-24 bg-gradient-to-br from-white/40 to-transparent rounded-tl-xl pointer-events-none"></div>
+<div class="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-secondary-container/20 to-transparent rounded-br-xl pointer-events-none"></div>
+<!-- Status Badge -->
+<div class="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm shadow-inner-glow border border-white/40 animate-pulse">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                Coming Soon
+            </div>
+<!-- Visual: Floating Bottle Illustration -->
+<div class="relative w-64 h-64 md:w-80 md:h-80 my-4 animate-float flex items-center justify-center">
+<!-- Soft glow behind image -->
+<div class="absolute inset-0 bg-primary-fixed/20 rounded-full blur-2xl"></div>
+<img class="relative z-10 w-full h-full object-contain drop-shadow-xl" data-alt="A serene, high-key digital illustration of a beautiful glass bottle gently floating on the surface of calm, crystal-clear water. Inside the bottle is a glowing, ethereal light. The scene is illuminated by soft, diffused white and aquamarine lighting, evoking a sense of peacefulness and mystery. The color palette relies on pristine whites, soft translucent teals, and subtle iridescent reflections, matching a modern light-mode wellness application aesthetic. The style is minimalist yet highly detailed and organic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHzGz5cCbUC43fQG6EyW8Dtcnx_88nsw7cF1XrJi0ONfVg1wgullMJZ3CqkehH6RC5bNmgLhUztfjMX__Uj6oMCXw142cS5KG68B-eQSFOxYacNOYk2ga8X1iCFXnTcU7LJLyXyesXwXdmU3xP7AEpcQQl_WGQ_mVKZYEy5fkiOsxQQ6o1xvdyLeynEFITFtYpxmJbIHg3G-FRKwDR5MYK5htsMXsNPOQ_SSNgUEdqOn8OuaCvc0jQ"/>
+</div>
+<!-- Text Content -->
+<div class="flex flex-col gap-4 max-w-lg mx-auto">
+<h1 class="font-headline-lg text-headline-lg text-primary">
+                    Leave a thought for someone
+                </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+                    Anonymous messages from the sea. A safe harbor to cast your hopes, worries, and gentle words out into the current.
+                </p>
+</div>
+<!-- Waitlist/Interest Action (Contextual placeholder action) -->
+<button class="mt-4 px-8 py-4 rounded-full bg-gradient-to-r from-primary to-secondary text-on-primary font-label-sm text-label-sm shadow-inner-glow hover:scale-105 hover:shadow-soft-float transition-all duration-300 flex items-center gap-3 group">
+<span>Notify me when the tide arrives</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">water_drop</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-safe-area left-0 w-full px-bubble-margin flex justify-between items-end z-50 transition-all duration-500 ease-in-out">
+<!-- Inactive Tabs (Left side) -->
+<a class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center border border-white/30" href="#">
+<span class="material-symbols-outlined">checklist</span>
+</a>
+<a class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center border border-white/30" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+</a>
+<a class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center border border-white/30" href="#">
+<span class="material-symbols-outlined">music_note</span>
+</a>
+<!-- Active Tab ("Bottle") - Centered, elevated, pearl effect -->
+<a class="bg-secondary-container text-on-secondary-container rounded-full p-5 shadow-inner-glow hover:translate-y-[-4px] transition-transform animate-pulse border border-white/50 relative -top-4 shadow-soft-float flex items-center justify-center" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; font-size: 28px;">sailing</span>
+</a>
+<!-- Inactive Tabs (Right side) -->
+<a class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center border border-white/30" href="#">
+<span class="material-symbols-outlined">palette</span>
+</a>
+<a class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center border border-white/30" href="#">
+<span class="material-symbols-outlined">settings</span>
+</a>
+<a class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center border border-white/30" href="#">
+<span class="material-symbols-outlined">share</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Pearl Club - Mood Canvas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&amp;family=Quicksand:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#00201b",
+                        "inverse-primary": "#38debb",
+                        "inverse-surface": "#2f3131",
+                        "surface-container-high": "#e8e8e8",
+                        "on-tertiary-fixed-variant": "#4b4822",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#7fd6c3",
+                        "primary": "#006b58",
+                        "on-tertiary-fixed": "#1e1c00",
+                        "primary-fixed": "#5ffbd6",
+                        "secondary-container": "#9bf3df",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#1a1c1c",
+                        "surface-dim": "#dadada",
+                        "outline": "#6b7a75",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-background": "#1a1c1c",
+                        "on-primary-container": "#007560",
+                        "tertiary-fixed-dim": "#cdc897",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#bacac3",
+                        "tertiary-container": "#eee8b4",
+                        "surface-bright": "#f9f9f9",
+                        "secondary": "#006b5c",
+                        "surface-variant": "#e2e2e2",
+                        "on-secondary-fixed-variant": "#005045",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#9bf3df",
+                        "on-surface-variant": "#3c4a45",
+                        "surface-container": "#eeeeee",
+                        "primary-fixed-dim": "#38debb",
+                        "on-tertiary-container": "#6c683e",
+                        "tertiary-fixed": "#eae4b1",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f3f3f3",
+                        "primary-container": "#64ffda",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#005142",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#006b58",
+                        "surface": "#f9f9f9",
+                        "tertiary": "#636037",
+                        "background": "#f9f9f9",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed": "#002019",
+                        "on-secondary-container": "#017162"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "bubble-margin": "4rem",
+                        "organic-padding": "1.5rem",
+                        "float-gap": "2rem",
+                        "safe-area": "2.5rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Quicksand"],
+                        "headline-md": ["Quicksand"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+                    },
+                    "boxShadow": {
+                        "inner-glow": "inset 0 2px 4px rgba(255,255,255,0.8)",
+                        "bubble-margin": "0 20px 40px -10px rgba(0,0,0,0.05)"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #f9f9f9;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(167, 100%, 88%, 0.4) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(164, 100%, 90%, 0.4) 0px, transparent 50%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+        
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+
+        .pearl-btn {
+            background: linear-gradient(135deg, #f9f9f9 0%, #eeeeee 100%);
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.8), 0 4px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .pearl-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.9), 0 6px 15px rgba(0,0,0,0.08);
+        }
+
+        .active-tool {
+            background: linear-gradient(135deg, #9bf3df 0%, #64ffda 100%);
+            color: #007560;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.6), 0 4px 10px rgba(0,107,88,0.1);
+        }
+
+        #mood-canvas {
+            cursor: crosshair;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-on-surface antialiased flex flex-col items-center">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-organic-padding pt-safe-area z-50 bg-transparent no-border flat no shadows transition-all duration-500 ease-in-out md:flex hidden">
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">The Pearl Club</h1>
+<div class="flex items-center gap-4">
+<button class="text-primary hover:scale-105 transition-transform p-2 rounded-full glass-panel flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas Area -->
+<main class="w-full max-w-[900px] flex-grow flex flex-col items-center justify-center pt-[100px] pb-bubble-margin px-organic-padding relative z-10">
+<div class="text-center mb-8">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Today's Mood</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Express your feeling visually</p>
+</div>
+<div class="relative w-full aspect-[4/3] max-h-[60vh] glass-panel rounded-xl flex items-center justify-center p-4">
+<!-- The Canvas -->
+<canvas class="w-full h-full bg-white/80 rounded-lg shadow-inner" id="mood-canvas"></canvas>
+<!-- Floating Controls (Side) -->
+<div class="absolute -right-float-gap top-1/2 -translate-y-1/2 flex flex-col gap-4 z-20">
+<button class="pearl-btn active-tool w-12 h-12 rounded-full flex items-center justify-center text-primary-fixed" title="Brush">
+<span class="material-symbols-outlined">brush</span>
+</button>
+<button class="pearl-btn w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant" title="Eraser">
+<span class="material-symbols-outlined">ink_eraser</span>
+</button>
+<div class="w-8 h-[1px] bg-outline-variant mx-auto my-2"></div>
+<button class="pearl-btn w-12 h-12 rounded-full flex items-center justify-center text-error" onclick="clearCanvas()" title="Clear">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<!-- Color Palette (Bottom of frame) -->
+<div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3 p-3 glass-panel rounded-full">
+<button class="w-8 h-8 rounded-full bg-primary ring-2 ring-white shadow-sm hover:scale-110 transition-transform"></button>
+<button class="w-8 h-8 rounded-full bg-secondary-container ring-2 ring-transparent shadow-sm hover:scale-110 transition-transform"></button>
+<button class="w-8 h-8 rounded-full bg-[#fbbc04] ring-2 ring-transparent shadow-sm hover:scale-110 transition-transform"></button>
+<button class="w-8 h-8 rounded-full bg-[#ea4335] ring-2 ring-transparent shadow-sm hover:scale-110 transition-transform"></button>
+<button class="w-8 h-8 rounded-full bg-[#4285f4] ring-2 ring-transparent shadow-sm hover:scale-110 transition-transform"></button>
+</div>
+</div>
+<!-- Action Area -->
+<div class="mt-10">
+<button class="glass-panel text-primary font-headline-md text-headline-md px-8 py-4 rounded-full flex items-center gap-3 hover:scale-105 transition-transform hover:bg-white/70">
+<span class="material-symbols-outlined">favorite</span>
+                Save to Chronicle
+            </button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="fixed bottom-safe-area left-0 w-full px-bubble-margin flex justify-between items-end z-50 bg-transparent no-border flat md:hidden">
+<a class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex flex-col items-center" href="#">
+<span class="material-symbols-outlined">checklist</span>
+</a>
+<a class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex flex-col items-center" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+</a>
+<a class="bg-secondary-container text-on-secondary-container rounded-full p-4 shadow-inner-glow hover:translate-y-[-4px] transition-transform flex flex-col items-center animate-pulse" href="#">
+<span class="material-symbols-outlined">palette</span>
+</a>
+<a class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex flex-col items-center" href="#">
+<span class="material-symbols-outlined">sailing</span>
+</a>
+<a class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex flex-col items-center" href="#">
+<span class="material-symbols-outlined">settings</span>
+</a>
+</nav>
+<!-- Decorative Bubbles Background -->
+<div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+<div class="absolute top-[20%] left-[10%] w-32 h-32 rounded-full bg-white/20 backdrop-blur-xl border border-white/30 animate-pulse" style="animation-duration: 4s;"></div>
+<div class="absolute bottom-[30%] right-[15%] w-48 h-48 rounded-full bg-primary-container/10 backdrop-blur-3xl border border-white/20" style="animation: float 6s ease-in-out infinite;"></div>
+</div>
+<style>
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+    </style>
+<script>
+        const canvas = document.getElementById('mood-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Setup canvas size
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            // Padding offset
+            canvas.width = rect.width - 32; 
+            canvas.height = rect.height - 32;
+            
+            // Set drawing styles
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.lineWidth = 15; // Soft thick strokes
+            ctx.strokeStyle = '#006b58'; // Primary color default
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            // Handle touch or mouse events
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+
+            [lastX, lastY] = [x, y];
+        }
+
+        // Mouse Events
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            [lastX, lastY] = [e.clientX - rect.left, e.clientY - rect.top];
+        });
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mouseout', () => isDrawing = false);
+
+        // Touch Events
+        canvas.addEventListener('touchstart', (e) => {
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            [lastX, lastY] = [e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top];
+            e.preventDefault(); // Prevent scrolling
+        });
+        canvas.addEventListener('touchmove', (e) => {
+            draw(e);
+            e.preventDefault();
+        });
+        canvas.addEventListener('touchend', () => isDrawing = false);
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    </script>
+</body></html>

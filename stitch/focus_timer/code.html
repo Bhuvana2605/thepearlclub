@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Pearl Club - Focus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed": "#00201b",
+                        "inverse-primary": "#38debb",
+                        "inverse-surface": "#2f3131",
+                        "surface-container-high": "#e8e8e8",
+                        "on-tertiary-fixed-variant": "#4b4822",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#7fd6c3",
+                        "primary": "#006b58",
+                        "on-tertiary-fixed": "#1e1c00",
+                        "primary-fixed": "#5ffbd6",
+                        "secondary-container": "#9bf3df",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#1a1c1c",
+                        "surface-dim": "#dadada",
+                        "outline": "#6b7a75",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-background": "#1a1c1c",
+                        "on-primary-container": "#007560",
+                        "tertiary-fixed-dim": "#cdc897",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#bacac3",
+                        "tertiary-container": "#eee8b4",
+                        "surface-bright": "#f9f9f9",
+                        "secondary": "#006b5c",
+                        "surface-variant": "#e2e2e2",
+                        "on-secondary-fixed-variant": "#005045",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#9bf3df",
+                        "on-surface-variant": "#3c4a45",
+                        "surface-container": "#eeeeee",
+                        "primary-fixed-dim": "#38debb",
+                        "on-tertiary-container": "#6c683e",
+                        "tertiary-fixed": "#eae4b1",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f3f3f3",
+                        "primary-container": "#64ffda",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#005142",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#006b58",
+                        "surface": "#f9f9f9",
+                        "tertiary": "#636037",
+                        "background": "#f9f9f9",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed": "#002019",
+                        "on-secondary-container": "#017162"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "bubble-margin": "4rem",
+                        "organic-padding": "1.5rem",
+                        "float-gap": "2rem",
+                        "safe-area": "2.5rem"
+                    },
+                    fontFamily: {
+                        "headline-lg": ["Quicksand"],
+                        "headline-md": ["Quicksand"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg": ["Quicksand"]
+                    },
+                    fontSize: {
+                        "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "500" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "500" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "600" }]
+                    },
+                    boxShadow: {
+                        'pearl': 'inset 0 2px 10px rgba(255,255,255,0.8), 0 10px 40px -10px rgba(0, 107, 88, 0.1)',
+                        'pearl-hover': 'inset 0 4px 12px rgba(255,255,255,0.9), 0 12px 45px -10px rgba(0, 107, 88, 0.15)',
+                        'bubble': '0 4px 20px -2px rgba(0, 107, 88, 0.05)',
+                        'inner-glow': 'inset 0 2px 4px rgba(255,255,255,0.8)'
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .timer-circle {
+            background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.3) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .timer-circle.running {
+            box-shadow: inset 0 2px 15px rgba(255,255,255,0.9), 0 0 60px rgba(56, 222, 187, 0.2);
+            border-color: rgba(100, 255, 218, 0.4);
+        }
+        
+        .bg-ocean {
+            background: radial-gradient(circle at center, #e8f5e9 0%, #b2dfdb 100%);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .progress-ring__circle {
+            transition: stroke-dashoffset 1s linear;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+</head>
+<body class="bg-ocean min-h-screen flex flex-col font-body-md text-on-surface overflow-hidden relative selection:bg-primary-container selection:text-on-primary-container">
+<!-- Ambient Background Elements -->
+<div class="fixed inset-0 pointer-events-none z-0 opacity-50">
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-fixed-dim/20 rounded-full blur-3xl mix-blend-multiply"></div>
+<div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-secondary-fixed-dim/20 rounded-full blur-3xl mix-blend-multiply"></div>
+</div>
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-organic-padding pt-safe-area z-50 bg-transparent no-border flat no shadows transition-all duration-500 ease-in-out hidden md:flex">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-display-lg text-primary tracking-tight">The Pearl Club</span>
+</div>
+<div class="flex items-center gap-6">
+<!-- Simulated Nav Links -->
+<nav class="flex gap-6">
+<a class="text-on-surface-variant font-body-md text-body-md hover:scale-105 transition-transform" href="#">Eye</a>
+<a class="text-primary font-bold font-body-md text-body-md hover:scale-105 transition-transform border-b-2 border-primary" href="#">Focus</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:scale-105 transition-transform" href="#">Games</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:scale-105 transition-transform" href="#">Aquarium</a>
+</nav>
+<button class="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-primary hover:bg-white/50 transition-colors">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Side Nav Bar (Desktop) - Suppressed slightly by opacity for focus -->
+<nav class="fixed right-8 flex flex-col gap-4 z-50 fixed right-float-gap top-1/2 -translate-y-1/2 rounded-full py-organic-padding border border-white/20 shadow-bubble-margin shadow-primary/5 bg-surface-container/40 backdrop-blur-xl hidden md:flex opacity-60 hover:opacity-100 transition-opacity duration-300">
+<div class="flex flex-col items-center gap-6">
+<a class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors rounded-full flex flex-col items-center group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" data-icon="visibility">visibility</span>
+<span class="font-label-sm text-label-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Eye</span>
+</a>
+<a class="bg-primary-container text-on-primary-container rounded-full p-3 flex flex-col items-center Active: scale-90 transition-all shadow-inner-glow" href="#">
+<span class="material-symbols-outlined" data-icon="center_focus_strong" data-weight="fill" style="font-variation-settings: 'FILL' 1;">center_focus_strong</span>
+<span class="font-label-sm text-label-sm mt-1">Focus</span>
+</a>
+<a class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors rounded-full flex flex-col items-center group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" data-icon="videogame_asset">videogame_asset</span>
+<span class="font-label-sm text-label-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Games</span>
+</a>
+<a class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors rounded-full flex flex-col items-center group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" data-icon="water_drop">water_drop</span>
+<span class="font-label-sm text-label-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Aquarium</span>
+</a>
+</div>
+</nav>
+<!-- Bottom Nav Bar (Mobile) - Suppressed slightly -->
+<nav class="fixed bottom-safe-area left-0 w-full px-bubble-margin flex justify-between items-end z-50 bg-transparent no-border flat md:hidden opacity-60 hover:opacity-100 transition-opacity duration-300">
+<div class="flex w-full justify-between items-center glass-panel rounded-full px-4 py-2 shadow-bubble">
+<a class="p-2 text-on-surface-variant flex flex-col items-center" href="#">
+<span class="material-symbols-outlined" data-icon="checklist">checklist</span>
+</a>
+<a class="p-2 bg-secondary-container text-on-secondary-container rounded-full shadow-inner-glow flex flex-col items-center transform -translate-y-4 shadow-lg border border-white/50" href="#">
+<span class="material-symbols-outlined" data-icon="center_focus_strong" data-weight="fill" style="font-variation-settings: 'FILL' 1;">center_focus_strong</span>
+</a>
+<a class="p-2 text-on-surface-variant flex flex-col items-center" href="#">
+<span class="material-symbols-outlined" data-icon="music_note">music_note</span>
+</a>
+<a class="p-2 text-on-surface-variant flex flex-col items-center" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center relative z-10 w-full max-w-4xl mx-auto px-6 py-20 mt-16 md:mt-0">
+<!-- Timer Header -->
+<div class="text-center mb-12 floating">
+<h1 class="font-headline-lg text-headline-lg text-primary-fixed-variant tracking-wider opacity-80 uppercase">Deep Work</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Submerge into your task.</p>
+</div>
+<!-- The Pearl Timer Container -->
+<div class="relative flex items-center justify-center w-72 h-72 md:w-96 md:h-96">
+<!-- SVG Progress Ring -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none drop-shadow-md" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="48" stroke="rgba(255,255,255,0.3)" stroke-width="2"></circle>
+<circle class="progress-ring__circle" cx="50" cy="50" fill="none" id="progress-ring" r="48" stroke="#38debb" stroke-dasharray="301.59" stroke-dashoffset="0" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<!-- The Pearl -->
+<div class="timer-circle w-[90%] h-[90%] rounded-full flex flex-col items-center justify-center shadow-pearl relative z-10 cursor-pointer group" id="pearl-container">
+<div class="absolute inset-0 rounded-full bg-gradient-to-tr from-primary/5 to-transparent opacity-50"></div>
+<div class="font-display-lg text-display-lg text-on-surface font-light tracking-tighter relative z-20 group-hover:scale-105 transition-transform duration-300" id="time-display">
+                    25:00
+                </div>
+<button class="mt-4 font-label-sm text-label-sm text-primary flex items-center gap-1 opacity-60 hover:opacity-100 transition-opacity z-20 bg-white/30 px-3 py-1 rounded-full backdrop-blur-sm border border-white/40">
+<span class="material-symbols-outlined text-[16px]" data-icon="edit">edit</span>
+                    Duration
+                </button>
+</div>
+</div>
+<!-- Controls -->
+<div class="mt-16 flex items-center gap-6 z-20">
+<button class="w-14 h-14 rounded-full glass-panel flex items-center justify-center text-on-surface-variant hover:bg-white/60 hover:shadow-bubble transition-all duration-300 active:scale-95" id="reset-btn">
+<span class="material-symbols-outlined" data-icon="replay">replay</span>
+</button>
+<button class="w-20 h-20 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg hover:shadow-xl hover:bg-primary/90 hover:scale-105 transition-all duration-300 active:scale-95 relative overflow-hidden" id="play-pause-btn">
+<div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+<span class="material-symbols-outlined text-3xl" data-icon="play_arrow" data-weight="fill" id="play-icon" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<button class="w-14 h-14 rounded-full glass-panel flex items-center justify-center text-on-surface-variant hover:bg-white/60 hover:shadow-bubble transition-all duration-300 active:scale-95">
+<span class="material-symbols-outlined" data-icon="skip_next">skip_next</span>
+</button>
+</div>
+</main>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const timeDisplay = document.getElementById('time-display');
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            const playIcon = document.getElementById('play-icon');
+            const resetBtn = document.getElementById('reset-btn');
+            const pearlContainer = document.getElementById('pearl-container');
+            const progressRing = document.getElementById('progress-ring');
+            
+            const radius = progressRing.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+            progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+            progressRing.style.strokeDashoffset = circumference;
+            // Initially full
+            progressRing.style.strokeDashoffset = 0;
+
+            let isRunning = false;
+            let totalTime = 25 * 60; // 25 minutes in seconds
+            let timeLeft = totalTime;
+            let timerInterval;
+
+            function updateDisplay() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timeDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                const offset = circumference - (timeLeft / totalTime) * circumference;
+                progressRing.style.strokeDashoffset = offset;
+            }
+
+            function toggleTimer() {
+                if (isRunning) {
+                    clearInterval(timerInterval);
+                    playIcon.textContent = 'play_arrow';
+                    playIcon.setAttribute('data-icon', 'play_arrow');
+                    pearlContainer.classList.remove('running');
+                } else {
+                    timerInterval = setInterval(() => {
+                        if (timeLeft > 0) {
+                            timeLeft--;
+                            updateDisplay();
+                        } else {
+                            clearInterval(timerInterval);
+                            isRunning = false;
+                            playIcon.textContent = 'play_arrow';
+                            pearlContainer.classList.remove('running');
+                            // Add finish logic here
+                        }
+                    }, 1000);
+                    playIcon.textContent = 'pause';
+                    playIcon.setAttribute('data-icon', 'pause');
+                    pearlContainer.classList.add('running');
+                }
+                isRunning = !isRunning;
+            }
+
+            function resetTimer() {
+                clearInterval(timerInterval);
+                isRunning = false;
+                timeLeft = totalTime;
+                updateDisplay();
+                playIcon.textContent = 'play_arrow';
+                playIcon.setAttribute('data-icon', 'play_arrow');
+                pearlContainer.classList.remove('running');
+            }
+
+            playPauseBtn.addEventListener('click', toggleTimer);
+            resetBtn.addEventListener('click', resetTimer);
+            
+            // Allow clicking the pearl to start/stop
+            pearlContainer.addEventListener('click', (e) => {
+                // Don't trigger if clicking the edit button
+                if(!e.target.closest('button')) {
+                    toggleTimer();
+                }
+            });
+
+            // Initialize
+            updateDisplay();
+        });
+    </script>
+</body></html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Pearl Club - Sanctuary</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&amp;family=Quicksand:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed": "var(--on-secondary-fixed, #00201b)",
+                      "inverse-primary": "var(--inverse-primary, #38debb)",
+                      "inverse-surface": "var(--inverse-surface, #2f3131)",
+                      "surface-container-high": "var(--surface-container-high, #e8e8e8)",
+                      "on-tertiary-fixed-variant": "var(--on-tertiary-fixed-variant, #4b4822)",
+                      "surface-container-highest": "var(--surface-container-highest, #e2e2e2)",
+                      "surface-container-lowest": "var(--surface-container-lowest, #ffffff)",
+                      "secondary-fixed-dim": "var(--secondary-fixed-dim, #7fd6c3)",
+                      "primary": "var(--primary, #006b58)",
+                      "on-tertiary-fixed": "var(--on-tertiary-fixed, #1e1c00)",
+                      "primary-fixed": "var(--primary-fixed, #5ffbd6)",
+                      "secondary-container": "var(--secondary-container, #9bf3df)",
+                      "on-secondary": "var(--on-secondary, #ffffff)",
+                      "on-surface": "var(--on-surface, #1a1c1c)",
+                      "surface-dim": "var(--surface-dim, #dadada)",
+                      "outline": "var(--outline, #6b7a75)",
+                      "inverse-on-surface": "var(--inverse-on-surface, #f1f1f1)",
+                      "on-background": "var(--on-background, #1a1c1c)",
+                      "on-primary-container": "var(--on-primary-container, #007560)",
+                      "tertiary-fixed-dim": "var(--tertiary-fixed-dim, #cdc897)",
+                      "on-error-container": "var(--on-error-container, #93000a)",
+                      "outline-variant": "var(--outline-variant, #bacac3)",
+                      "tertiary-container": "var(--tertiary-container, #eee8b4)",
+                      "surface-bright": "var(--surface-bright, #f9f9f9)",
+                      "secondary": "var(--secondary, #006b5c)",
+                      "surface-variant": "var(--surface-variant, #e2e2e2)",
+                      "on-secondary-fixed-variant": "var(--on-secondary-fixed-variant, #005045)",
+                      "error": "var(--error, #ba1a1a)",
+                      "secondary-fixed": "var(--secondary-fixed, #9bf3df)",
+                      "on-surface-variant": "var(--on-surface-variant, #3c4a45)",
+                      "surface-container": "var(--surface-container, #eeeeee)",
+                      "primary-fixed-dim": "var(--primary-fixed-dim, #38debb)",
+                      "on-tertiary-container": "var(--on-tertiary-container, #6c683e)",
+                      "tertiary-fixed": "var(--tertiary-fixed, #eae4b1)",
+                      "error-container": "var(--error-container, #ffdad6)",
+                      "surface-container-low": "var(--surface-container-low, #f3f3f3)",
+                      "primary-container": "var(--primary-container, #64ffda)",
+                      "on-tertiary": "var(--on-tertiary, #ffffff)",
+                      "on-primary-fixed-variant": "var(--on-primary-fixed-variant, #005142)",
+                      "on-primary": "var(--on-primary, #ffffff)",
+                      "surface-tint": "var(--surface-tint, #006b58)",
+                      "surface": "var(--surface, #f9f9f9)",
+                      "tertiary": "var(--tertiary, #636037)",
+                      "background": "var(--background, #f9f9f9)",
+                      "on-error": "var(--on-error, #ffffff)",
+                      "on-primary-fixed": "var(--on-primary-fixed, #002019)",
+                      "on-secondary-container": "var(--on-secondary-container, #017162)"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "bubble-margin": "4rem",
+                      "organic-padding": "1.5rem",
+                      "float-gap": "2rem",
+                      "safe-area": "2.5rem"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Quicksand"
+                      ],
+                      "headline-md": [
+                              "Quicksand"
+                      ],
+                      "body-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-sm": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Quicksand"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .pearl-glow {
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.8), 0 4px 20px rgba(0, 107, 88, 0.05);
+        }
+        .text-shadow-soft {
+            text-shadow: 0 2px 10px rgba(255,255,255,0.5);
+        }
+        
+        /* Floating animations */
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+        @keyframes float-fast {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(-1deg); }
+        }
+        .animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
+        .animate-float-fast { animation: float-fast 5s ease-in-out infinite; }
+
+        .environment-bg {
+            transition: background-image 0.5s ease-in-out;
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="h-full bg-surface text-on-surface overflow-hidden relative">
+<!-- Environment Background -->
+<div class="absolute inset-0 w-full h-full z-0 environment-bg pointer-events-none" id="env-background"></div>
+<!-- Background Shader -->
+
+<!-- Top App Bar (Hidden on Desktop per rules, but present for structure) -->
+<header class="hidden md:flex fixed top-0 w-full justify-between items-center px-organic-padding pt-safe-area z-50 bg-transparent no-border transition-all duration-500 ease-in-out">
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">The Pearl Club</h1>
+<button aria-label="Account" class="text-primary hover:scale-105 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</header>
+<!-- Decorative Floating Elements -->
+<div class="absolute top-1/4 left-1/4 z-10 text-primary/30 animate-float-slow pointer-events-none">
+<span class="material-symbols-outlined" style="font-size: 48px; font-variation-settings: 'FILL' 1;">water_drop</span>
+</div>
+<div class="absolute bottom-1/3 right-1/4 z-10 text-tertiary-container animate-float-fast pointer-events-none">
+<div class="w-8 h-8 rounded-full bg-gradient-to-br from-white to-tertiary-container pearl-glow opacity-60"></div>
+</div>
+<div class="absolute top-1/3 right-1/3 z-10 text-primary/20 animate-float-slow pointer-events-none" style="animation-delay: 2s;">
+<span class="material-symbols-outlined" style="font-size: 32px; font-variation-settings: 'FILL' 0;">sailing</span>
+</div>
+<!-- Main Content Canvas -->
+<main class="relative z-20 h-full flex flex-col items-center justify-center p-organic-padding pt-safe-area max-w-[900px] mx-auto">
+<div class="text-center flex flex-col items-center gap-6 glass-panel p-12 rounded-xl pearl-glow max-w-2xl w-full animate-float-slow">
+<h2 class="font-display-lg text-display-lg text-primary text-shadow-soft" id="greeting">Good afternoon</h2>
+<div class="font-headline-lg text-headline-lg text-secondary tracking-widest font-light opacity-80" id="clock">
+                12:45
+            </div>
+<div class="w-16 h-[1px] bg-primary/20 my-4"></div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md italic opacity-90 text-center">
+                "When your mind feels messy, you may not need another tool. You may need somewhere to be."
+            </p>
+</div>
+</main>
+<!-- SideNavBar (Desktop Context) -->
+<nav class="hidden md:flex fixed right-float-gap top-1/2 -translate-y-1/2 rounded-full py-organic-padding bg-surface-container/40 backdrop-blur-xl border border-white/20 shadow-bubble-margin shadow-primary/5 flex-col gap-4 z-50">
+<!-- Aquarium is active contextually for the home/ambient screen -->
+<button aria-label="Eye" class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">visibility</span>
+<span class="font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity absolute -left-12">Eye</span>
+</button>
+<button aria-label="Focus" class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">center_focus_strong</span>
+<span class="font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity absolute -left-16">Focus</span>
+</button>
+<button aria-label="Games" class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">videogame_asset</span>
+<span class="font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity absolute -left-16">Games</span>
+</button>
+<button aria-label="Aquarium" class="bg-primary-container text-on-primary-container rounded-full p-3 hover:bg-white/30 transition-colors flex flex-col items-center gap-1 scale-90 transition-all group">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+<span class="font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity absolute -left-20">Aquarium</span>
+</button>
+</nav>
+<!-- BottomNavBar (Mobile & Expanded Context) -->
+<nav class="fixed bottom-safe-area left-0 w-full px-bubble-margin flex justify-between items-end z-50 bg-transparent no-border">
+<!-- Left Cluster -->
+<div class="flex gap-2">
+<button aria-label="To-Do" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined">checklist</span>
+</button>
+<button aria-label="Journal" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined">edit_note</span>
+</button>
+<button aria-label="Music" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined">music_note</span>
+</button>
+<button aria-label="Help" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined">self_care</span>
+</button>
+</div>
+<!-- Central FAB Context (The Pearl) - Hidden on this screen to prioritize ambient feel, but structure maintained for system -->
+<div class="hidden md:flex flex-col items-center justify-center relative -top-6">
+<button class="w-16 h-16 rounded-full bg-gradient-to-br from-primary-container to-secondary-container pearl-glow flex items-center justify-center hover:scale-105 transition-transform shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1; font-size: 32px;">water_drop</span>
+</button>
+</div>
+<!-- Right Cluster -->
+<div class="flex gap-2">
+<button aria-label="Mood" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined">palette</span>
+</button>
+<button aria-label="Bottle" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined">sailing</span>
+</button>
+<button aria-label="Settings" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center" id="env-settings-btn">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button aria-label="Share" class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</nav>
+<!-- Environment Selector Modal -->
+<div class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-on-surface/20 backdrop-blur-sm transition-opacity" id="env-modal">
+<div class="bg-surface/90 backdrop-blur-xl border border-white/20 rounded-xl p-8 max-w-md w-full shadow-2xl flex flex-col gap-6">
+<div class="flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-primary">Environment</h3>
+<button class="text-on-surface-variant hover:text-primary transition-colors" id="env-close-btn">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-4" id="env-selector-grid">
+<button class="p-4 rounded-lg border border-outline-variant hover:bg-primary-container/20 hover:border-primary text-left transition-all" data-env="ocean">Ocean</button>
+<button class="p-4 rounded-lg border border-outline-variant hover:bg-primary-container/20 hover:border-primary text-left transition-all" data-env="rainy-ocean">Rainy Ocean</button>
+<button class="p-4 rounded-lg border border-outline-variant hover:bg-primary-container/20 hover:border-primary text-left transition-all" data-env="underwater">Underwater</button>
+<button class="p-4 rounded-lg border border-outline-variant hover:bg-primary-container/20 hover:border-primary text-left transition-all" data-env="beach">Beach</button>
+<button class="p-4 rounded-lg border border-outline-variant hover:bg-primary-container/20 hover:border-primary text-left transition-all" data-env="sunset-beach">Sunset Beach</button>
+<button class="p-4 rounded-lg border border-outline-variant hover:bg-primary-container/20 hover:border-primary text-left transition-all" data-env="grassland">Grassland</button>
+</div>
+</div>
+</div>
+<script>
+        const ENVIRONMENTS = {
+            'ocean': 'url("https://lh3.googleusercontent.com/aida/AEtjO1UeU80EVoyVuL80UICADjG_-_lv40-kKeobS9wPEpmjv9PAqluozutu3jKpJL2Tiv08kNrX9Dl4GLrpKR9Z8gycfN_3ztrW65t7dN9zhBsea_D57RTSmAE0L8XFx7pwtakB5bexP1463c4L10LbjCWqyyizvUQK8XEZAowRkGscRakMjKAfRQWkw7SzapXj0qxfWEaNPl6UtjfM9vudEHanxkuFBptdhGUVQcUI_XPyZdTNEvGsv8OBTGw")',
+            'rainy-ocean': 'url("https://lh3.googleusercontent.com/aida/AEtjO1VIMUJxmqUYJNCCYS32WInu17wPEoIhwswkDU3DV8937rxcgTYXOQ5SKGYF3PB8evbjlte9is4Zf0QvLWBurLzQfbtgyfUJoDUOSVC94DjMJETO8o3o0NVEU_GHPRZQvIo0y-qxH1rtEi8pI4SsFU2KUY5kB99V3FSyv_0dCMD8RmVl5Pxc7-tH3gwyGx3E6vXYCOJhmdCFb7cOXva5WqTX073pcabUEAZl_NjGFWpuul2VPMLeRleok8c")',
+            'underwater': 'url("https://lh3.googleusercontent.com/aida/AEtjO1UmbunBv6luqoxRzwj4ESlIPaG9hf9PxEGNJveEDelewEYCdgzM6jv7W-bvCxn3j_uh14E2D0St2dpjSV84kc0bcYkx9pC7RIMVpY8smqhckWFBYQ2R56vop42r85VmEw2AHEr2iFXa6i0np36vKcKLb4SuIdhEzLOHQCY4eUKak6M_9Epocg_NcLOpGimIhn3gC4gXCNibmaWfyGkTerjgdq07m69DobEbmMXeaFVF9M1PRY9L1E7T2Nw")',
+            'beach': 'url("https://lh3.googleusercontent.com/aida/AEtjO1WcPKJ3QAJhcfk50RD2iuev401wCS7s88UbTlpIL2L4GrP6SX7LRUDkkYVcfJw8ejc3tKPnRqsYptIMsT6pWxb9HzTqriG9sWa7_SrgK3kRKq3sMe0FNRWSJZR9kCCzxG5__S9_FwvqGFOMW16ij6ia7BAs75v349MHUBvfwme9iTNwF_lZKRvMB9qExVBpOtC3N8daiM1D7KYcSzeo0GRw3yXBwRhsahUTgTEOnDgJ2ZamWb-h61QCxM8")',
+            'sunset-beach': 'url("https://lh3.googleusercontent.com/aida/AEtjO1XCkUAjVRFVI_16wo7RQnDoFTVzefUsxGJkvKpcUEeJd2m2KTx42FApWhmTvLHpeRbaH3be-Ztsm05tX70w_zwMnX6eiNZN6z2xvrf5f9sj2nefMIRaEBAdjvyepvx_G-ig0a_kIql690E0e9mcs4ILBGWgJ8pjPd0U4WQah2YnAnGkI-hrMizPosxTFx5HbxVyVY7I8pdPSDHGUd1SMaVM3xXzJVCkd1aGnZyPGuqX6cQa6R3HGinLaGI")',
+            'grassland': 'url("https://lh3.googleusercontent.com/aida/AEtjO1WCBa0FdyYwIDIt5DO1vJLOPSxfMlYik29JzJIHApdoIQU7-N0N8ro_l735LJg-3V6C6T5rxQd7yaAHzEVwiLHCh9Pgu5_QqAA64wsHYDK7e4eT3EPuMby-MMRxyIY3a9upYEhKPzgVQCqhdQuDy8cRMpFKzV0dVuq5qMn0vsidwo6M_Hi6fAhJRqwAIbU1G_M_iTgDVt8SbpZD_pb9H8kikna5JbCGCVVxwtsC6823HcJtTwQauqrFY0M")'
+        };
+
+        function setEnvironment(envKey) {
+            if (!ENVIRONMENTS[envKey]) envKey = 'ocean'; // Default
+            
+            // Persist
+            localStorage.setItem('selectedEnvironment', envKey);
+            
+            // Apply background
+            const bgElement = document.getElementById('env-background');
+            if (bgElement) {
+                bgElement.style.backgroundImage = ENVIRONMENTS[envKey];
+            }
+
+            // Update active state in modal
+            document.querySelectorAll('#env-selector-grid button').forEach(btn => {
+                if (btn.dataset.env === envKey) {
+                    btn.classList.add('border-primary', 'bg-primary-container/20');
+                    btn.classList.remove('border-outline-variant');
+                } else {
+                    btn.classList.remove('border-primary', 'bg-primary-container/20');
+                    btn.classList.add('border-outline-variant');
+                }
+            });
+        }
+
+        // Initialize Environment Provider Logic
+        function initEnvironment() {
+            const savedEnv = localStorage.getItem('selectedEnvironment') || 'ocean';
+            setEnvironment(savedEnv);
+
+            // Bind selectors
+            document.querySelectorAll('#env-selector-grid button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    setEnvironment(btn.dataset.env);
+                });
+            });
+            
+            // Modal logic
+            const modal = document.getElementById('env-modal');
+            const openBtn = document.getElementById('env-settings-btn');
+            const closeBtn = document.getElementById('env-close-btn');
+
+            openBtn.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+            });
+            
+            closeBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.classList.add('hidden');
+            });
+        }
+
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let ampm = hours >= 12 ? 'pm' : 'am';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            
+            document.getElementById('clock').textContent = hours + ':' + minutes;
+            
+            const greetingEl = document.getElementById('greeting');
+            const hour = now.getHours();
+            if (hour < 12) {
+                greetingEl.textContent = 'Good morning';
+            } else if (hour < 18) {
+                greetingEl.textContent = 'Good afternoon';
+            } else {
+                greetingEl.textContent = 'Good evening';
+            }
+        }
+        
+        setInterval(updateClock, 1000);
+        updateClock();
+        
+        // Boot environment on load
+        document.addEventListener('DOMContentLoaded', initEnvironment);
+    </script>
+</body></html>

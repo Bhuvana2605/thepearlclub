@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Your Little World - The Pearl Club</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#00201b",
+                    "inverse-primary": "#38debb",
+                    "inverse-surface": "#2f3131",
+                    "surface-container-high": "#e8e8e8",
+                    "on-tertiary-fixed-variant": "#4b4822",
+                    "surface-container-highest": "#e2e2e2",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed-dim": "#7fd6c3",
+                    "primary": "#006b58",
+                    "on-tertiary-fixed": "#1e1c00",
+                    "primary-fixed": "#5ffbd6",
+                    "secondary-container": "#9bf3df",
+                    "on-secondary": "#ffffff",
+                    "on-surface": "#1a1c1c",
+                    "surface-dim": "#dadada",
+                    "outline": "#6b7a75",
+                    "inverse-on-surface": "#f1f1f1",
+                    "on-background": "#1a1c1c",
+                    "on-primary-container": "#007560",
+                    "tertiary-fixed-dim": "#cdc897",
+                    "on-error-container": "#93000a",
+                    "outline-variant": "#bacac3",
+                    "tertiary-container": "#eee8b4",
+                    "surface-bright": "#f9f9f9",
+                    "secondary": "#006b5c",
+                    "surface-variant": "#e2e2e2",
+                    "on-secondary-fixed-variant": "#005045",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#9bf3df",
+                    "on-surface-variant": "#3c4a45",
+                    "surface-container": "#eeeeee",
+                    "primary-fixed-dim": "#38debb",
+                    "on-tertiary-container": "#6c683e",
+                    "tertiary-fixed": "#eae4b1",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#f3f3f3",
+                    "primary-container": "#64ffda",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed-variant": "#005142",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#006b58",
+                    "surface": "#f9f9f9",
+                    "tertiary": "#636037",
+                    "background": "#f9f9f9",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#002019",
+                    "on-secondary-container": "#017162"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "bubble-margin": "4rem",
+                    "organic-padding": "1.5rem",
+                    "float-gap": "2rem",
+                    "safe-area": "2.5rem"
+            },
+            "fontFamily": {
+                    "headline-lg": [
+                            "Quicksand"
+                    ],
+                    "headline-md": [
+                            "Quicksand"
+                    ],
+                    "body-md": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "body-lg": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "label-sm": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "display-lg": [
+                            "Quicksand"
+                    ]
+            },
+            "fontSize": {
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        /* Organic Animations for the Aquarium */
+        @keyframes float Gentle {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+        @keyframes floatSlight {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        @keyframes swimSlow {
+            0% { transform: translate(-10vw, 0) scaleX(-1); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(110vw, -20px) scaleX(-1); opacity: 0; }
+        }
+        @keyframes swimReverse {
+            0% { transform: translate(110vw, 0) scaleX(1); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(-10vw, 30px) scaleX(1); opacity: 0; }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(238,232,180,0.5), inset 0 -4px 12px rgba(0,0,0,0.1); }
+            50% { box-shadow: 0 0 40px rgba(238,232,180,0.9), inset 0 -4px 12px rgba(0,0,0,0.1); }
+        }
+        @keyframes riseBubble {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        .animate-float { animation: float Gentle 8s ease-in-out infinite; }
+        .animate-float-slight { animation: floatSlight 6s ease-in-out infinite; }
+        .animate-swim-1 { animation: swimSlow 45s linear infinite; }
+        .animate-swim-2 { animation: swimReverse 60s linear infinite 15s; }
+        .animate-pulse-glow { animation: pulseGlow 4s ease-in-out infinite; }
+        
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
+            border: 1px solid rgba(255,255,255,0.3);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased overflow-hidden selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TOP APP BAR (Shared Component - Visible mostly on Mobile/Tablet layout) -->
+<header class="fixed top-0 w-full flex justify-between items-center px-organic-padding pt-safe-area z-50 bg-transparent transition-all duration-500 ease-in-out md:hidden">
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">The Pearl Club</h1>
+<div class="flex gap-4">
+<button aria-label="Account" class="text-on-surface-variant hover:scale-105 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</div>
+</header>
+<!-- SIDE NAV BAR (Shared Component - Desktop Only) -->
+<nav class="hidden md:flex fixed right-8 flex-col gap-4 z-50 bg-surface-container/40 backdrop-blur-xl border border-white/20 shadow-bubble-margin shadow-primary/5 fixed right-float-gap top-1/2 -translate-y-1/2 rounded-full py-organic-padding transition-all duration-500 ease-in-out">
+<div class="flex flex-col items-center gap-6 px-3">
+<!-- Header/Logo area implied by JSON, though primarily tabs are rendered -->
+<div class="w-12 h-12 rounded-full bg-white/50 flex items-center justify-center mb-4">
+<span class="font-headline-md text-headline-md text-primary">S</span>
+</div>
+<!-- Inactive Tab: Eye -->
+<button class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors rounded-full flex flex-col items-center gap-1 group" title="Eye">
+<span class="material-symbols-outlined transition-transform group-hover:scale-105" data-icon="visibility">visibility</span>
+</button>
+<!-- Inactive Tab: Focus -->
+<button class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors rounded-full flex flex-col items-center gap-1 group" title="Focus">
+<span class="material-symbols-outlined transition-transform group-hover:scale-105" data-icon="center_focus_strong">center_focus_strong</span>
+</button>
+<!-- Inactive Tab: Games -->
+<button class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors rounded-full flex flex-col items-center gap-1 group" title="Games">
+<span class="material-symbols-outlined transition-transform group-hover:scale-105" data-icon="videogame_asset">videogame_asset</span>
+</button>
+<!-- Active Tab: Aquarium -->
+<button class="bg-primary-container text-on-primary-container rounded-full p-3 flex flex-col items-center gap-1 scale-90 transition-all shadow-inner-glow" title="Aquarium">
+<span class="material-symbols-outlined" data-icon="water_drop" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+</button>
+</div>
+</nav>
+<!-- MAIN CANVAS: The Aquarium -->
+<main class="relative w-full h-screen overflow-hidden">
+<!-- Background Scene -->
+<div class="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat z-0 transform scale-105" data-alt="A breathtakingly intimate and serene underwater aquarium scene designed as a private sanctuary. Soft, magical rays of warm sunlight filter down gently through pristine, light-mode aqua water, illuminating the depth. The ocean floor is covered in fine, perfectly smooth white sand, artfully scattered with delicate, pastel-colored corals and beautifully textured iridescent seashells. The overall aesthetic perfectly captures a calming, ethereal glassmorphism environment, balancing deep tranquility with a subtle, uplifting brightness suitable for a modern wellbeing application." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBv1nZs56qsZH2LqvjsC4r1tErIhVyYBDFP4XHlM9iBNwOR9jCG-KqhG-w3MSwtoHKswW0KVYspJ72YwT7YU6uxdRpbuvquDbisunZsPWX-9u5xqo0I_Pg2iRstdlgsojoaBUcRCiJwf6zTcQMt9nKT07pPqnxrW12527yFzYtddYMOdKog-aEc8ADjmlcNNWODCGXlsQ--N0wlAgUqT7fD21x1z8OAX_SsK3NrRaXXVPqiKHQUEFF2'); filter: brightness(1.05) contrast(0.95);">
+</div>
+<!-- Ambient Lighting Overlay -->
+<div class="absolute inset-0 bg-gradient-to-b from-surface-container-highest/20 via-transparent to-primary/10 z-10 pointer-events-none mix-blend-overlay"></div>
+<!-- Floating Elements Layer (Fish) -->
+<div class="absolute inset-0 z-20 pointer-events-none">
+<!-- Gentle Fish 1 -->
+<div class="absolute top-[30%] left-0 w-32 h-32 animate-swim-1">
+<img class="w-full h-full object-contain opacity-80 mix-blend-multiply" data-alt="A small, beautiful, translucent fish swimming gently through an illuminated underwater environment. The creature looks inherently magical and serene, glowing with a soft, ethereal light against the bright, uplifting light-mode water backdrop. Its scales reflect a subtle, iridescent shimmer that harmonizes with a calm, peaceful sanctuary aesthetic. The surrounding water is crystal clear, emphasizing the purity and quiet stillness of this private, personalized digital ecosystem." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANa3NGbj9QqnPlUeJzLzFdioQ6C1WOgR0uqmIm6ZPICzzQz4UGhjyYuRtIrfxAztbrlXlmYKgtn0PSUIDnu9KlBkeXp7lesd-3l3H3DQRv74eGBhDpPmtlwl58Tlni2HsrxzoRHJSf2NJ6woVZYjEFMUiMyFxv3Xyq_XbbxJDfBxSy5LiRJ3SDCIKz0U8kdbH5w64bIqtHqHU9PuW1ukRcS1vF0PJq6KZtfZS6tiFNxBWTdi4kucJK"/>
+</div>
+<!-- Gentle Jellyfish / Fish 2 -->
+<div class="absolute top-[60%] right-0 w-48 h-48 animate-swim-2">
+<img class="w-full h-full object-contain opacity-70 mix-blend-multiply" data-alt="A delicate, ethereal jellyfish floating slowly and gracefully. It is exceptionally pale and almost completely translucent, emitting a soft, warm inner glow against the bright, light-mode underwater background. Its long, flowing tentacles drift organically in the invisible currents, embodying a profound sense of deep peace and mindful relaxation within this personalized, digital sanctuary." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-C5NO11m3ySQNQs7sGBYLSRj9Dkpj_HjDM7ZMYLKG55UT9VgULHf-v6WN3rNhqWPrMxJlxFlq4UASoMSMizKYfn_VVyDdk7FuaaswrZBm1K_gqTeKilNbSo1K734szI8b_ajUD8Ftk_9ftw97WzNrjGyH6PoWHCvs_PbmAV67vC7yFzjElpIshQvlztGk4mblo-lIjNp5zM5hiS6UQniLHnJKEmp_mExeuJ7saO6I59YFowOGZuNv"/>
+</div>
+<!-- CSS Bubbles -->
+<div class="bubble w-4 h-4 left-[20%] animate-[riseBubble_12s_ease-in-out_infinite]"></div>
+<div class="bubble w-6 h-6 left-[65%] animate-[riseBubble_18s_ease-in-out_infinite_2s]"></div>
+<div class="bubble w-3 h-3 left-[80%] animate-[riseBubble_10s_ease-in-out_infinite_5s]"></div>
+<div class="bubble w-8 h-8 left-[40%] animate-[riseBubble_20s_ease-in-out_infinite_1s]"></div>
+</div>
+<!-- Interactive Environment Layer (Sand, Items) -->
+<div class="absolute bottom-0 left-0 w-full h-[40vh] z-30 perspective-1000">
+<!-- Background structural curve for sand depth -->
+<div class="absolute bottom-[-10vh] w-[120%] left-[-10%] h-full bg-gradient-to-t from-surface-variant/80 to-transparent rounded-t-[50%] blur-3xl pointer-events-none"></div>
+<!-- Decorative Shell resting on sand -->
+<div class="absolute bottom-[20%] right-[30%] w-24 h-24 animate-float-slight cursor-pointer group">
+<div class="w-full h-full rounded-full bg-gradient-to-tr from-surface-container-high to-white border border-white/40 shadow-lg flex items-center justify-center transform rotate-12 transition-transform duration-700 group-hover:scale-110">
+<span class="material-symbols-outlined text-outline text-4xl opacity-50" data-icon="cruelty_free">cruelty_free</span>
+</div>
+</div>
+<!-- The Golden Pearl (Collectible) -->
+<div class="absolute bottom-[25%] left-[35%] w-16 h-16 rounded-full bg-gradient-to-br from-tertiary-container via-tertiary-fixed to-white animate-pulse-glow animate-float cursor-pointer group flex items-center justify-center border border-white/60 z-40 transition-transform duration-500 hover:scale-125">
+<div class="w-full h-full rounded-full bg-gradient-to-tl from-black/5 to-transparent inset-0 absolute"></div>
+<div class="w-6 h-6 rounded-full bg-white/60 blur-sm absolute top-2 left-2"></div>
+</div>
+</div>
+<!-- FLOATING UI CONTROLS (Specific to this page) -->
+<div class="absolute bottom-36 md:bottom-16 left-1/2 -translate-x-1/2 flex items-center gap-3 p-3 rounded-full bg-surface-container/40 backdrop-blur-xl border border-white/30 shadow-[0_8px_32px_rgba(0,107,88,0.08)] z-40 transition-all duration-500 hover:bg-surface-container/50">
+<button class="flex items-center gap-2 px-5 py-3 rounded-full bg-white/20 hover:bg-white/40 hover:shadow-inner-glow transition-all group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-primary transition-colors">Collection</span>
+</button>
+<div class="w-[1px] h-8 bg-white/30 rounded-full mx-1"></div>
+<button class="flex items-center gap-2 px-5 py-3 rounded-full bg-white/20 hover:bg-white/40 hover:shadow-inner-glow transition-all group">
+<span class="material-symbols-outlined text-secondary group-hover:scale-110 transition-transform" data-icon="explore">explore</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-secondary transition-colors">Found Things</span>
+</button>
+<div class="w-[1px] h-8 bg-white/30 rounded-full mx-1"></div>
+<button class="flex items-center gap-2 px-5 py-3 rounded-full bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container shadow-lg shadow-primary/20 transition-all group">
+<span class="material-symbols-outlined group-hover:rotate-90 transition-transform duration-500" data-icon="add_circle">add_circle</span>
+<span class="font-label-sm text-label-sm">Place Item</span>
+</button>
+</div>
+</main>
+<!-- BOTTOM NAV BAR (Shared Component - Mobile Only) -->
+<!-- Note: All tabs inactive as the primary task is interacting with the canvas -->
+<nav class="fixed bottom-safe-area left-0 w-full px-bubble-margin flex justify-between items-end z-50 md:hidden pb-4">
+<div class="flex w-full justify-between items-center bg-transparent">
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="checklist">checklist</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="music_note">music_note</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="self_care">self_care</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="palette">palette</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="sailing">sailing</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+</div>
+</nav>
+<script>
+        // Simple ambient interactions
+        document.addEventListener('mousemove', (e) => {
+            const bubbles = document.querySelectorAll('.bubble');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            bubbles.forEach((bubble, index) => {
+                const speed = (index + 1) * 2;
+                bubble.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        });
+    </script>
+</body></html>

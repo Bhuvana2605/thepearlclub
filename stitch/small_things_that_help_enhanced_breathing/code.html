@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Small Things That Help</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600&amp;family=Plus+Jakarta+Sans:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#00201b",
+                        "inverse-primary": "#38debb",
+                        "inverse-surface": "#2f3131",
+                        "surface-container-high": "#e8e8e8",
+                        "on-tertiary-fixed-variant": "#4b4822",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#7fd6c3",
+                        "primary": "#006b58",
+                        "on-tertiary-fixed": "#1e1c00",
+                        "primary-fixed": "#5ffbd6",
+                        "secondary-container": "#9bf3df",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#1a1c1c",
+                        "surface-dim": "#dadada",
+                        "outline": "#6b7a75",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-background": "#1a1c1c",
+                        "on-primary-container": "#007560",
+                        "tertiary-fixed-dim": "#cdc897",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#bacac3",
+                        "tertiary-container": "#eee8b4",
+                        "surface-bright": "#f9f9f9",
+                        "secondary": "#006b5c",
+                        "surface-variant": "#e2e2e2",
+                        "on-secondary-fixed-variant": "#005045",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#9bf3df",
+                        "on-surface-variant": "#3c4a45",
+                        "surface-container": "#eeeeee",
+                        "primary-fixed-dim": "#38debb",
+                        "on-tertiary-container": "#6c683e",
+                        "tertiary-fixed": "#eae4b1",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f3f3f3",
+                        "primary-container": "#64ffda",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#005142",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#006b58",
+                        "surface": "#f9f9f9",
+                        "tertiary": "#636037",
+                        "background": "#f9f9f9",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed": "#002019",
+                        "on-secondary-container": "#017162"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "bubble-margin": "4rem",
+                        "organic-padding": "1.5rem",
+                        "float-gap": "2rem",
+                        "safe-area": "2.5rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Quicksand"],
+                        "headline-md": ["Quicksand"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #f9f9f9;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(100, 255, 218, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(155, 243, 223, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(0, 107, 88, 0.05), inset 0 2px 4px rgba(255,255,255,0.8);
+        }
+
+        .breathe-animation {
+            animation: breathe 19s infinite cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes breathe {
+            0%, 100% { 
+                transform: scale(0.8); 
+                opacity: 0.6; 
+                box-shadow: 0 0 10px rgba(100, 255, 218, 0.2), inset 0 2px 10px rgba(255,255,255,0.5);
+            } /* Exhale */
+            21% { 
+                transform: scale(1.5); 
+                opacity: 1; 
+                box-shadow: 0 0 40px rgba(100, 255, 218, 0.6), inset 0 4px 20px rgba(255,255,255,0.9);
+            } /* Inhale 4s */
+            58% { 
+                transform: scale(1.5); 
+                opacity: 0.9; 
+                box-shadow: 0 0 35px rgba(100, 255, 218, 0.5), inset 0 4px 18px rgba(255,255,255,0.8);
+            } /* Hold 7s */
+        }
+        
+        #breathe-circle {
+            background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.9) 0%, rgba(155, 243, 223, 0.5) 40%, rgba(100, 255, 218, 0.2) 100%);
+        }
+    </style>
+</head>
+<body class="text-on-surface antialiased overflow-x-hidden pb-32">
+<!-- Top Navigation Web -->
+<header class="hidden md:flex fixed top-0 w-full justify-between items-center px-organic-padding pt-safe-area z-50 bg-transparent no-border flat no shadows transition-all duration-500 ease-in-out hover:scale-105 transition-transform">
+<div class="font-display-lg text-display-lg text-primary dark:text-primary-fixed tracking-tight">The Pearl Club</div>
+<div class="flex items-center space-x-6">
+<span class="material-symbols-outlined text-primary font-bold">home</span>
+<span class="material-symbols-outlined text-on-surface-variant">account_circle</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-[900px] mx-auto pt-safe-area px-organic-padding md:pt-40 flex flex-col gap-12 relative z-10">
+<header class="text-center mb-8">
+<h1 class="font-display-lg text-display-lg text-primary mb-4">Small Things That Help</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Gentle practices to anchor your mind.</p>
+</header>
+<!-- Bento Layout -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Breathing Card -->
+<section class="glass-panel rounded-xl p-8 flex flex-col items-center justify-center min-h-[400px] relative overflow-hidden md:col-span-2">
+<h2 class="font-headline-md text-headline-md text-secondary absolute top-8 left-8">Breathing</h2>
+<div class="relative w-48 h-48 flex items-center justify-center">
+<div class="absolute inset-0 bg-primary-container rounded-full blur-2xl opacity-50 breathe-animation"></div>
+<div class="absolute inset-4 bg-secondary-container rounded-full blur-xl opacity-70 breathe-animation" style="animation-delay: -0.5s;"></div>
+<div class="w-32 h-32 rounded-full glass-panel z-10 flex items-center justify-center breathe-animation" id="breathe-circle">
+<span class="font-label-sm text-label-sm text-primary tracking-widest uppercase" id="breathe-text">Inhale</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-12 text-center max-w-sm">
+                    4-7-8 Technique. Follow the rhythm of the pearl.
+                </p>
+</section>
+<!-- Grounding Card -->
+<section class="glass-panel rounded-xl p-8 flex flex-col justify-between">
+<div>
+<h2 class="font-headline-md text-headline-md text-secondary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-outline">nature</span>
+                        Grounding
+                    </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Take a moment to notice your surroundings:</p>
+<ul class="space-y-4 font-body-md text-body-md">
+<li class="flex items-start gap-4"><span class="text-primary font-bold">5</span> <span class="text-on-surface">things you can see</span></li>
+<li class="flex items-start gap-4"><span class="text-primary font-bold">4</span> <span class="text-on-surface">things you can touch</span></li>
+<li class="flex items-start gap-4"><span class="text-primary font-bold">3</span> <span class="text-on-surface">things you can hear</span></li>
+<li class="flex items-start gap-4"><span class="text-primary font-bold">2</span> <span class="text-on-surface">things you can smell</span></li>
+<li class="flex items-start gap-4"><span class="text-primary font-bold">1</span> <span class="text-on-surface">thing you can taste</span></li>
+</ul>
+</div>
+</section>
+<!-- Reflection Card -->
+<section class="glass-panel rounded-xl p-8 flex flex-col">
+<h2 class="font-headline-md text-headline-md text-secondary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-outline">history_edu</span>
+                    Reflection
+                </h2>
+<div class="flex-grow flex flex-col justify-center">
+<p class="font-headline-lg text-headline-lg text-primary text-center italic opacity-80 mb-8">
+                        "What made you feel light today?"
+                    </p>
+<textarea class="w-full bg-surface-container-low/50 border-none rounded-lg p-4 font-body-md text-body-md text-on-surface focus:ring-2 focus:ring-primary-container resize-none h-32 placeholder-on-surface-variant/50" placeholder="Let your thoughts drift here..."></textarea>
+</div>
+</section>
+</div>
+</main>
+<!-- Bottom Nav Mobile -->
+<nav class="md:hidden fixed bottom-safe-area left-0 w-full px-bubble-margin flex justify-between items-end z-50 bg-transparent no-border flat">
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform">
+<span class="material-symbols-outlined">checklist</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform">
+<span class="material-symbols-outlined">edit_note</span>
+</button>
+<button class="bg-secondary-container text-on-secondary-container rounded-full p-4 shadow-inner-glow Active: animate-pulse">
+<span class="material-symbols-outlined">self_care</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform">
+<span class="material-symbols-outlined">palette</span>
+</button>
+</nav>
+<!-- Side Nav Desktop (Hidden on mobile) -->
+<nav class="hidden md:flex fixed right-8 flex-col gap-4 z-50 fixed right-float-gap top-1/2 -translate-y-1/2 rounded-full py-organic-padding bg-surface-container/40 backdrop-blur-xl border border-white/20 shadow-bubble-margin shadow-primary/5">
+<button class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<button class="bg-primary-container text-on-primary-container rounded-full p-3 Active: scale-90 transition-all">
+<span class="material-symbols-outlined">center_focus_strong</span>
+</button>
+<button class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors">
+<span class="material-symbols-outlined">videogame_asset</span>
+</button>
+<button class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors">
+<span class="material-symbols-outlined">water_drop</span>
+</button>
+</nav>
+<script>
+        // Simple breathing text logic
+        const breatheText = document.getElementById('breathe-text');
+        
+        function updateBreathingText() {
+            // Reset to Inhale at start of cycle
+            breatheText.innerText = 'Inhale';
+            breatheText.style.opacity = '1';
+            breatheText.style.transition = 'opacity 0.5s ease';
+
+            setTimeout(() => {
+                breatheText.style.opacity = '0';
+                setTimeout(() => {
+                    breatheText.innerText = 'Hold';
+                    breatheText.style.opacity = '0.7';
+                }, 500);
+            }, 3500); // Trigger transition before 4s Inhale ends
+            
+            setTimeout(() => {
+                breatheText.style.opacity = '0';
+                setTimeout(() => {
+                    breatheText.innerText = 'Exhale';
+                    breatheText.style.opacity = '1';
+                }, 500);
+            }, 10500); // Trigger transition before 11s (4s+7s) Hold ends
+        }
+
+        updateBreathingText();
+        setInterval(updateBreathingText, 19000);
+    </script>
+</body></html>

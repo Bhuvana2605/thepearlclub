@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Pearl Club - Sanctuary - Rainy Ocean</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&amp;family=Quicksand:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#f9f9f9",
+                        "surface-tint": "#006b58",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#005045",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f3f3f3",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-primary-fixed-variant": "#005142",
+                        "outline-variant": "#bacac3",
+                        "primary-fixed-dim": "#38debb",
+                        "secondary-fixed": "#9bf3df",
+                        "inverse-surface": "#2f3131",
+                        "surface-container-highest": "#e2e2e2",
+                        "primary-container": "#64ffda",
+                        "surface-bright": "#f9f9f9",
+                        "secondary-fixed-dim": "#7fd6c3",
+                        "tertiary": "#636037",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#9bf3df",
+                        "tertiary-fixed": "#eae4b1",
+                        "on-tertiary-fixed-variant": "#4b4822",
+                        "on-tertiary-fixed": "#1e1c00",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#eee8b4",
+                        "on-surface-variant": "#3c4a45",
+                        "on-surface": "#1a1c1c",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#017162",
+                        "outline": "#6b7a75",
+                        "tertiary-fixed-dim": "#cdc897",
+                        "on-tertiary-container": "#6c683e",
+                        "primary": "#006b58",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#00201b",
+                        "inverse-primary": "#38debb",
+                        "surface-container": "#eeeeee",
+                        "secondary": "#006b5c",
+                        "on-primary-fixed": "#002019",
+                        "on-primary-container": "#007560",
+                        "surface-container-high": "#e8e8e8",
+                        "surface": "#f9f9f9",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#5ffbd6",
+                        "on-background": "#1a1c1c",
+                        "surface-dim": "#dadada",
+                        "surface-variant": "#e2e2e2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "bubble-margin": "4rem",
+                        "safe-area": "2.5rem",
+                        "float-gap": "2rem",
+                        "organic-padding": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Quicksand"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg": ["Quicksand"],
+                        "headline-md": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+        .pearl-shadow {
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.8), 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .rain-bg {
+            background-color: #8fa6b8; /* Muted blue/grey overlay */
+            background-blend-mode: overlay;
+        }
+        /* Subtler animations for rain theme */
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.02); }
+        }
+        .animate-float-slow {
+            animation: float-slow 8s ease-in-out infinite;
+        }
+        
+        .raindrop {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.4));
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen relative overflow-x-hidden font-body-md select-none">
+<!-- Background Image -->
+<div class="fixed inset-0 z-0">
+<img alt="Rainy Ocean Background" class="w-full h-full object-cover opacity-80 rain-bg mix-blend-multiply" src="https://lh3.googleusercontent.com/aida/AEtjO1VIMUJxmqUYJNCCYS32WInu17wPEoIhwswkDU3DV8937rxcgTYXOQ5SKGYF3PB8evbjlte9is4Zf0QvLWBurLzQfbtgyfUJoDUOSVC94DjMJETO8o3o0NVEU_GHPRZQvIo0y-qxH1rtEi8pI4SsFU2KUY5kB99V3FSyv_0dCMD8RmVl5Pxc7-tH3gwyGx3E6vXYCOJhmdCFb7cOXva5WqTX073pcabUEAZl_NjGFWpuul2VPMLeRleok8c"/>
+<div class="absolute inset-0 bg-gradient-to-b from-surface-container/60 to-surface/80 backdrop-blur-[2px]"></div>
+</div>
+<!-- Rain Effect Overlay -->
+<div class="fixed inset-0 z-0 pointer-events-none overflow-hidden opacity-50" id="rain-container">
+<!-- Javascript will inject raindrops here -->
+</div>
+<!-- Top Navigation -->
+<nav class="fixed top-0 w-full flex justify-between items-center px-organic-padding pt-safe-area z-50 bg-transparent">
+<div class="font-display-lg text-display-lg text-primary tracking-tight">The Pearl Club</div>
+<div class="flex items-center gap-4 hidden">
+<!-- Search bar hidden per JSON -->
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-surface-variant hover:scale-105 transition-transform duration-500 ease-in-out">
+<span class="material-symbols-outlined font-[300]" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</div>
+</nav>
+<!-- Side Navigation (Desktop) -->
+<aside class="hidden md:flex fixed right-8 flex-col gap-4 z-50 fixed right-float-gap top-1/2 -translate-y-1/2 rounded-full py-organic-padding bg-surface-container/40 backdrop-blur-xl border border-white/20 shadow-bubble-margin shadow-primary/5">
+<div class="px-4 pb-2 text-center border-b border-white/10 mb-2">
+<div class="font-headline-md text-headline-md text-primary truncate w-16 mx-auto">Sanctuary</div>
+<div class="font-label-sm text-label-sm text-secondary truncate w-16 mx-auto opacity-70">Deep Water</div>
+</div>
+<button class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors mx-2 rounded-full flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined group-active:scale-90 transition-all">visibility</span>
+<span class="font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity absolute right-16 bg-surface-container px-2 py-1 rounded-lg">Eye</span>
+</button>
+<button class="bg-primary-container text-on-primary-container rounded-full p-3 hover:bg-white/30 transition-colors mx-2 flex flex-col items-center gap-1 group shadow-inner-glow scale-105">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">center_focus_strong</span>
+<span class="font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity absolute right-16 bg-surface-container px-2 py-1 rounded-lg">Focus</span>
+</button>
+<button class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors mx-2 rounded-full flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined group-active:scale-90 transition-all">videogame_asset</span>
+<span class="font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity absolute right-16 bg-surface-container px-2 py-1 rounded-lg">Games</span>
+</button>
+<button class="text-on-surface-variant p-3 hover:bg-white/30 transition-colors mx-2 rounded-full flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined group-active:scale-90 transition-all">water_drop</span>
+<span class="font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity absolute right-16 bg-surface-container px-2 py-1 rounded-lg">Aquarium</span>
+</button>
+</aside>
+<!-- Main Content Canvas -->
+<main class="relative z-10 pt-32 pb-40 px-6 md:px-24 max-w-7xl mx-auto flex flex-col items-center justify-center min-h-[80vh]">
+<!-- Environment Title & Info -->
+<div class="text-center mb-16 animate-float-slow">
+<h1 class="font-display-lg text-display-lg text-on-surface mb-2 opacity-90 drop-shadow-sm">Rainy Ocean</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant opacity-80">Calm focus environment</p>
+</div>
+<!-- Central Focus Timer/Widget Area (Placeholder for actual functionality) -->
+<div class="relative w-72 h-72 rounded-full glass-panel flex items-center justify-center mb-16 pearl-shadow group hover:scale-105 transition-transform duration-700 ease-out cursor-pointer">
+<div class="absolute inset-2 rounded-full border border-white/20"></div>
+<div class="absolute inset-4 rounded-full border border-white/10 border-dashed animate-[spin_60s_linear_infinite]"></div>
+<div class="text-center z-10">
+<div class="font-headline-lg text-headline-lg text-primary mb-1">25:00</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Focus Session</div>
+</div>
+<!-- Start button overlay -->
+<div class="absolute inset-0 bg-primary/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
+<span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<!-- Environment Selector (Bento Grid Style) -->
+<div class="w-full max-w-4xl glass-panel rounded-3xl p-6 md:p-8">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6 ml-2">Environments</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Current Env -->
+<div class="rounded-2xl bg-white/20 p-4 border border-white/40 pearl-shadow cursor-pointer relative overflow-hidden group h-40 flex flex-col justify-end">
+<img class="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay group-hover:scale-110 transition-transform duration-700" data-alt="A moody, soft-focus painting of a calm ocean during a gentle rainstorm, rendered in muted grey-blues and soft aquas, conveying a serene and focused light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQWzutRnythb0rM2eB__T-tUrlCewq-jK8puiy0IJjDMchKrBEh9kF_2qeIRmwllxZFcUC36zfdi5ZdrxQA9xYBNpIZ30dXqxXg256HJjUkUvNNiCFR6FPW2cYbwIBscAuBoK9GOj0mqinI6UL_EfT0c77n7VotUeN6aZdMJVz-V7Ak4EfaOu_5MN5ZoKZtdymmzFxZnx9zPj_3GLdhKCHKF0CgAxHw7X-gzJ7VVaqnoPvB4Bij4gL"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container/90 to-transparent"></div>
+<div class="relative z-10 flex justify-between items-center">
+<span class="font-body-lg text-body-lg text-on-surface font-semibold">Rainy Ocean</span>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<!-- Env Option 2 -->
+<div class="rounded-2xl bg-white/10 p-4 border border-white/10 hover:bg-white/20 transition-colors cursor-pointer relative overflow-hidden group h-40 flex flex-col justify-end">
+<img class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay group-hover:scale-110 group-hover:opacity-50 transition-all duration-700" data-alt="A bright, sunlit coral reef scene, bursting with gentle pastels and vibrant tropical colors, slightly blurred to maintain a serene, light-mode background aesthetic without distraction." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1Ls6d7_ss3UVJ13eVotD3jlPv1RaId-WTviMHaNlEoEbSY4-5sJTUNX7xOB7_HOveAPenCtGB8UWAnl7QfrwLXwBnI2j8ElmljvdBCjIaAA_RDKvXGip0ywWcVsCU147C2TIwP46-7mRkwl_L0X6BICotNLSnY5FGhtPM_z5RapvgP3FPAo5q8xBD92Vc6ZSukzM8speEtQvf57sDGpO_3sxUma5uMGfj0VGuEy_bvIqXjGwifROR"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container/80 to-transparent"></div>
+<div class="relative z-10 flex justify-between items-center">
+<span class="font-body-lg text-body-lg text-on-surface-variant">Coral Lagoon</span>
+</div>
+</div>
+<!-- Env Option 3 -->
+<div class="rounded-2xl bg-white/10 p-4 border border-white/10 hover:bg-white/20 transition-colors cursor-pointer relative overflow-hidden group h-40 flex flex-col justify-end">
+<img class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay group-hover:scale-110 group-hover:opacity-50 transition-all duration-700" data-alt="A deep, ethereal underwater trench scene, illuminated by glowing bioluminescent flora in soft greens and teals, creating a calm, slightly mysterious yet safe light-mode visual." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnYr4xOb-wPVKfoTHHmXiaimlCpK4exxiATw_pqFrboaK4nLfco-t_LIkZ17MzxA1o4-eIaZDHoJ4URpcdDjFXn7QhBBstjJxrDST6UsBqSqVaBkgXjFpyMrYZgMbr9L9Ca4-EhsDUn8wpSemfXk4xLXTuta1Cds3RoLSPjYEG5XjkPmjtHw2X7ln571R6112iRHSCWbxRDy9_jRi77zwSMlxpMYBV-xlFFY_32HM7E6WGhIL1VqCS"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container/80 to-transparent"></div>
+<div class="relative z-10 flex justify-between items-center">
+<span class="font-body-lg text-body-lg text-on-surface-variant">Deep Trench</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile) -->
+<nav class="md:hidden fixed bottom-safe-area left-0 w-full px-bubble-margin flex justify-between items-end z-50 bg-transparent">
+<div class="flex justify-between w-full glass-panel rounded-full p-2">
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform">
+<span class="material-symbols-outlined">checklist</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform">
+<span class="material-symbols-outlined">edit_note</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform">
+<span class="material-symbols-outlined">music_note</span>
+</button>
+<button class="bg-secondary-container text-on-secondary-container rounded-full p-4 shadow-inner-glow hover:translate-y-[-4px] transition-transform animate-pulse scale-110 -translate-y-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">center_focus_strong</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform">
+<span class="material-symbols-outlined">self_care</span>
+</button>
+<button class="bg-white/20 backdrop-blur-md text-on-surface-variant rounded-full p-4 hover:translate-y-[-4px] transition-transform">
+<span class="material-symbols-outlined">palette</span>
+</button>
+</div>
+</nav>
+<!-- Simple Rain Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('rain-container');
+            const numDrops = 40; // Muted rain effect
+            
+            for(let i = 0; i < numDrops; i++) {
+                const drop = document.createElement('div');
+                drop.classList.add('raindrop');
+                
+                // Randomize position and animation properties
+                const left = Math.random() * 100;
+                const duration = Math.random() * 0.5 + 0.5; // 0.5s to 1s
+                const delay = Math.random() * 2;
+                
+                drop.style.left = `${left}vw`;
+                drop.style.animationDuration = `${duration}s`;
+                drop.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(drop);
+            }
+        });
+    </script>
+</body></html>
