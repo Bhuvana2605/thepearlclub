@@ -14,7 +14,7 @@ const formatPearlNo = (val) => {
 
 /**
  * Secure Admin Analytics Dashboard (/admin)
- * Includes Registered Accounts Directory table with numerical Pearl Number sorting.
+ * Includes Registered Accounts Directory table with strict numerical Pearl Number sorting (#0001, #0002...).
  */
 export const AdminAnalytics = () => {
   const { currentUser, profile, signOutUser, focusHistory, journalEntries, activityHistory, formattedPearlNumber } = useSanctuary();
@@ -24,9 +24,9 @@ export const AdminAnalytics = () => {
   const [userProfiles, setUserProfiles] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
 
-  // Table Column Sorting State (Default: Pearl Number Ascending #0001 -> #0011)
-  const [sortField, setSortField] = useState('pearlVal'); // 'pearlVal' | 'name' | 'createdAtDate'
-  const [sortDirection, setSortDirection] = useState('asc'); // 'asc' | 'desc'
+  // Table Column Sorting State (Default: Pearl Number Ascending #0001 -> #0002 -> #0003...)
+  const [sortField, setSortField] = useState('pearlVal');
+  const [sortDirection, setSortDirection] = useState('asc');
 
   const [telemetry, setTelemetry] = useState({
     totalVisits: 1,
@@ -68,7 +68,7 @@ export const AdminAnalytics = () => {
     };
     loadTelemetry();
 
-    // 2. Fetch Real Registered Users from Supabase Database (Ordered by signup date ascending first)
+    // 2. Fetch Real Registered Users from Supabase Database
     const fetchUsers = async () => {
       setLoadingUsers(true);
       let list = [];
@@ -77,15 +77,20 @@ export const AdminAnalytics = () => {
         try {
           const { data, error } = await supabase
             .from('profiles')
-            .select('*')
-            .order('created_at', { ascending: true });
+            .select('*');
 
           if (!error && data && data.length > 0) {
-            list = data.map((u, idx) => {
-              const rawNum = u.pearl_number ?? u.pearl_no;
-              const numericPearl = rawNum !== null && rawNum !== undefined && !isNaN(rawNum)
-                ? parseInt(rawNum, 10)
-                : idx + 1;
+            // Sort profiles by created_at ascending (oldest signup = #PEARL-0001)
+            const sortedByDate = [...data].sort(
+              (a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0)
+            );
+
+            list = sortedByDate.map((u, idx) => {
+              const dbNum = u.pearl_number ?? u.pearl_no;
+              const numericPearl =
+                dbNum !== null && dbNum !== undefined && !isNaN(dbNum) && parseInt(dbNum, 10) > 0
+                  ? parseInt(dbNum, 10)
+                  : idx + 1;
 
               return {
                 id: u.id || `u_${idx}`,
@@ -94,7 +99,7 @@ export const AdminAnalytics = () => {
                 email: u.email || (u.id === currentUser?.id ? currentUser?.email : 'private@pearlclub.sanctuary'),
                 pearlVal: numericPearl,
                 pearlNumber: formatPearlNo(numericPearl),
-                createdAtDate: u.created_at ? new Date(u.created_at) : new Date(Date.now() - idx * 86400000),
+                createdAtDate: u.created_at ? new Date(u.created_at) : new Date(Date.now() - (sortedByDate.length - idx) * 86400000),
                 createdAt: u.created_at ? new Date(u.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent',
                 role: u.role || (checkIsAdmin(u, u) ? 'admin' : 'member'),
                 isEarlyMember: u.is_early_member ?? true
@@ -192,7 +197,7 @@ export const AdminAnalytics = () => {
     }
   };
 
-  // Sorted & Search-Filtered Member Accounts List
+  // Sorted & Search-Filtered Member Accounts List (Strictly Pearl Number Ascending by default)
   const sortedAndFilteredUsers = [...userProfiles]
     .filter((u) => {
       const q = userSearch.toLowerCase().trim();
