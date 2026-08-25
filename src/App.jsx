@@ -87,6 +87,7 @@ export function App() {
 
             <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
             <Route path="/u/:username" element={<ProtectedRoute><PublicProfile /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute><AdminAnalytics /></ProtectedRoute>} />
             <Route path="/admin/analytics" element={<ProtectedRoute><AdminAnalytics /></ProtectedRoute>} />
           </Routes>
         </Layout>

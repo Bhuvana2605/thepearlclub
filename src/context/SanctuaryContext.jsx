@@ -3,6 +3,7 @@ import { storage } from '../lib/storage/storage';
 import { ambientPlayer } from '../lib/audio/ambientPlayer';
 import { environmentAudioPlayer } from '../lib/audio/environmentAudioPlayer';
 import { supabase } from '../lib/supabase/client';
+import { trackSiteVisit } from '../lib/analytics/telemetry';
 import { CURATED_AUDIO_REGISTRY } from '../data/curatedAudio';
 import { getCollectible, COLLECTIBLE_REGISTRY } from '../data/collectibles';
 import { getEnvironment } from '../data/environments';
@@ -149,6 +150,7 @@ export const SanctuaryProvider = ({ children }) => {
 
   useEffect(() => {
     storage.save('visited_days', visitedDays);
+    trackSiteVisit();
   }, [visitedDays]);
 
   const [focusCategories, setFocusCategories] = useState(() => {

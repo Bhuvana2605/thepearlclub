@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSanctuary } from '../context/SanctuaryContext';
+import { checkIsAdmin } from '../config/adminConfig';
 
 export const Profile = () => {
-  const { profile, updateProfile, getProfileStats, formattedPearlNumber, isEarlyMember, signOutUser } = useSanctuary();
+  const { currentUser, profile, updateProfile, getProfileStats, formattedPearlNumber, isEarlyMember, signOutUser } = useSanctuary();
   const navigate = useNavigate();
   const stats = getProfileStats();
 
@@ -211,6 +212,29 @@ export const Profile = () => {
             </div>
           </div>
         </div>
+
+        {/* Admin Dashboard Quick Access Button */}
+        {checkIsAdmin(currentUser, profile) && (
+          <div className="p-4 rounded-2xl bg-primary-container/30 border border-primary-container/50 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div className="flex items-center gap-2.5">
+              <span className="material-symbols-outlined text-primary text-2xl">admin_panel_settings</span>
+              <div className="text-left">
+                <span className="font-label-sm text-xs font-bold text-primary block uppercase tracking-wider">
+                  Admin Privileges Verified
+                </span>
+                <span className="font-body-md text-xs text-on-surface-variant">
+                  Access aggregate visitor metrics, session telemetry, and feature analytics.
+                </span>
+              </div>
+            </div>
+            <Link
+              to="/admin"
+              className="py-2 px-5 rounded-full bg-primary text-white font-label-sm text-xs font-semibold shadow hover:bg-primary/90 transition-transform active:scale-95 shrink-0"
+            >
+              Open Admin Dashboard
+            </Link>
+          </div>
+        )}
       </div>
     </main>
   );
