@@ -1,43 +1,150 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 export const SideNavBar = () => {
   const location = useLocation();
+  const [isExpanded, setIsExpanded] = useState(false);
+
   if (location.pathname === '/do-nothing') return null;
 
-  const links = [
-    { to: '/do-nothing', label: 'Eye', icon: 'visibility' },
-    { to: '/focus', label: 'Focus', icon: 'center_focus_strong' },
-    { to: '/games', label: 'Games', icon: 'videogame_asset' },
-    { to: '/world', label: 'Your Little World', icon: 'waves' },
+  const groupedLinks = [
+    {
+      category: 'MAIN',
+      items: [
+        { to: '/', label: 'Home', icon: 'home' },
+        { to: '/journal', label: 'Journal', icon: 'edit_note' },
+        { to: '/focus', label: 'Focus', icon: 'center_focus_strong' },
+      ]
+    },
+    {
+      category: 'EXPLORE',
+      items: [
+        { to: '/music', label: 'Music & Sounds', icon: 'music_note' },
+        { to: '/games', label: 'Sanctuary Games', icon: 'videogame_asset' },
+        { to: '/feed', label: 'Pearl Club Feed', icon: 'forum' },
+        { to: '/bottle', label: 'Message in a Bottle', icon: 'sailing' },
+        { to: '/small-things', label: 'Small Things That Help', icon: 'self_care' },
+      ]
+    },
+    {
+      category: 'WORLD',
+      items: [
+        { to: '/world', label: 'Your Little World', icon: 'waves' },
+        { to: '/do-nothing', label: 'Do Nothing', icon: 'visibility' },
+      ]
+    },
+    {
+      category: 'ACCOUNT',
+      items: [
+        { to: '/profile', label: 'Profile', icon: 'account_circle' },
+        { to: '/settings', label: 'Sanctuary Settings', icon: 'settings' },
+      ]
+    }
   ];
 
   return (
-    <nav className="hidden md:flex fixed right-float-gap top-1/2 -translate-y-1/2 rounded-full py-organic-padding bg-surface-container/40 backdrop-blur-xl border border-white/20 shadow-bubble-margin shadow-primary/5 flex-col gap-4 z-40">
-      {links.map((item) => (
-        <NavLink
-          key={item.to}
-          to={item.to}
-          className={({ isActive }) =>
-            `p-3 rounded-full flex flex-col items-center gap-1 group transition-all ${
-              isActive
-                ? 'bg-primary-container text-on-primary-container scale-95 shadow-inner-glow'
-                : 'text-on-surface-variant hover:bg-white/30'
-            }`
-          }
-          title={item.label}
-        >
-          <span
-            className="material-symbols-outlined group-hover:scale-110 transition-transform"
-            style={{ fontVariationSettings: location.pathname === item.to ? "'FILL' 1" : "'FILL' 0" }}
+    <nav className="hidden md:flex fixed right-float-gap top-1/2 -translate-y-1/2 z-40 items-end">
+      {/* CLOSED COMPACT STRIP */}
+      {!isExpanded ? (
+        <div className="rounded-full py-3 px-2 glass-panel flex flex-col items-center gap-3 border border-white/40 shadow-xl transition-all">
+          {/* Menu Toggle / Expand Button */}
+          <button
+            onClick={() => setIsExpanded(true)}
+            className="p-2.5 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-all flex items-center justify-center"
+            title="Expand Navigation Menu"
+            aria-label="Expand Navigation Menu"
           >
-            {item.icon}
-          </span>
-          <span className="font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity absolute -left-28 bg-white/80 backdrop-blur-md px-2.5 py-1 rounded-full text-primary shadow-sm pointer-events-none whitespace-nowrap">
-            {item.label}
-          </span>
-        </NavLink>
-      ))}
+            <span className="material-symbols-outlined text-2xl">menu</span>
+          </button>
+
+          <div className="w-6 h-[1px] bg-white/40 my-1" />
+
+          {/* Quick Shortcuts in Closed Strip */}
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `p-2.5 rounded-full flex items-center justify-center transition-all ${
+                isActive ? 'bg-primary text-white shadow-md' : 'text-on-surface-variant hover:bg-white/40'
+              }`
+            }
+            title="Home"
+          >
+            <span className="material-symbols-outlined text-xl">home</span>
+          </NavLink>
+
+          <NavLink
+            to="/focus"
+            className={({ isActive }) =>
+              `p-2.5 rounded-full flex items-center justify-center transition-all ${
+                isActive ? 'bg-primary text-white shadow-md' : 'text-on-surface-variant hover:bg-white/40'
+              }`
+            }
+            title="Focus"
+          >
+            <span className="material-symbols-outlined text-xl">center_focus_strong</span>
+          </NavLink>
+
+          <NavLink
+            to="/world"
+            className={({ isActive }) =>
+              `p-2.5 rounded-full flex items-center justify-center transition-all ${
+                isActive ? 'bg-primary text-white shadow-md' : 'text-on-surface-variant hover:bg-white/40'
+              }`
+            }
+            title="Your Little World"
+          >
+            <span className="material-symbols-outlined text-xl">waves</span>
+          </NavLink>
+        </div>
+      ) : (
+        /* EXPANDED FULL SIDEBAR DRAWER */
+        <div className="w-64 glass-panel-opaque rounded-3xl p-5 shadow-2xl flex flex-col gap-4 border border-white/60 animate-fade-in max-h-[85vh] overflow-y-auto">
+          {/* Header & Collapse Toggle */}
+          <div className="flex items-center justify-between border-b border-gray-200/50 pb-3">
+            <div className="flex items-center gap-2 text-primary font-semibold text-sm">
+              <span className="material-symbols-outlined text-xl">auto_awesome</span>
+              <span>Sanctuary Navigation</span>
+            </div>
+            <button
+              onClick={() => setIsExpanded(false)}
+              className="p-1.5 rounded-full hover:bg-gray-100/60 text-gray-500 transition-colors"
+              title="Collapse Menu"
+              aria-label="Collapse Navigation Menu"
+            >
+              <span className="material-symbols-outlined text-xl">menu_open</span>
+            </button>
+          </div>
+
+          {/* Grouped Link Sections */}
+          <div className="flex flex-col gap-4">
+            {groupedLinks.map((group) => (
+              <div key={group.category} className="flex flex-col gap-1">
+                <span className="font-label-sm text-[10px] uppercase tracking-widest text-primary/70 font-bold px-2">
+                  {group.category}
+                </span>
+                {group.items.map((item) => {
+                  const isActive = location.pathname === item.to;
+                  return (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      onClick={() => setIsExpanded(false)}
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
+                        isActive
+                          ? 'bg-primary text-white shadow-sm font-semibold'
+                          : 'text-on-surface-variant hover:bg-white/50 hover:text-primary'
+                      }`}
+                    >
+                      <span className="material-symbols-outlined text-lg">{item.icon}</span>
+                      <span>{item.label}</span>
+                    </NavLink>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

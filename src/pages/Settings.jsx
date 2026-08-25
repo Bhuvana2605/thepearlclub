@@ -34,7 +34,7 @@ export const Settings = () => {
 
   const fontSizes = [
     { id: 'small', label: 'Small' },
-    { id: 'default', label: 'Default' },
+    { id: 'default', label: 'Medium' },
     { id: 'large', label: 'Large' }
   ];
 

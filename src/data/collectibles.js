@@ -44,12 +44,12 @@ export const COLLECTIBLE_REGISTRY = {
   'angelfish': {
     id: 'angelfish',
     name: 'Angelfish',
-    category: 'common-fish',
-    rarity: 'common',
+    category: 'rare-fish',
+    rarity: 'rare',
     asset: '/assets/collectibles/angelfish.png',
     image: '/assets/collectibles/angelfish.png',
     description: 'A graceful triangular angelfish with subtle teal stripes.',
-    homeAmbient: true,
+    homeAmbient: false,
     aquariumEligible: true,
     speed: 0.9
   },
@@ -142,18 +142,28 @@ export const COLLECTIBLE_REGISTRY = {
     speed: 0
   },
 
-  // UNMAPPED STARFISH ITEM (NO STARFISH PNG EXISTS IN PUBLIC/ASSETS/COLLECTIBLES/)
+  'starfish': {
+    id: 'starfish',
+    name: 'Starfish',
+    category: 'collectible-objects',
+    rarity: 'common',
+    asset: '/assets/collectibles/starfish.png',
+    image: '/assets/collectibles/starfish.png',
+    description: 'A cheerful sunlit golden starfish resting on the sea bed.',
+    homeAmbient: true,
+    aquariumEligible: true,
+    speed: 0
+  },
   'tiny-starfish': {
     id: 'tiny-starfish',
     name: 'Tiny Starfish',
     category: 'collectible-objects',
     rarity: 'common',
-    asset: null,
-    image: null,
-    missingAssetError: 'Starfish asset not found in the current collectible folder.',
+    asset: '/assets/collectibles/starfish.png',
+    image: '/assets/collectibles/starfish.png',
     description: 'A cheerful sunlit golden starfish resting on the sea bed.',
-    homeAmbient: false,
-    aquariumEligible: false,
+    homeAmbient: true,
+    aquariumEligible: true,
     speed: 0
   },
 
@@ -259,11 +269,10 @@ export const HOME_AMBIENT_ASSETS = Object.values(COLLECTIBLE_REGISTRY).filter(
  */
 const ALIAS_MAP = {
   // Sea Glass Aliases
-  'starfish': 'sea-glass', // Previous misnamed starfish.png file contained Sea Glass visual
-  'col_starfish': 'sea-glass',
-  'daily_star': 'sea-glass',
-  'tiny_starfish': 'sea-glass',
-  'rew_starfish_gold': 'sea-glass',
+  'col_starfish': 'starfish',
+  'daily_star': 'starfish',
+  'tiny_starfish': 'starfish',
+  'rew_starfish_gold': 'starfish',
 
   // Pearl Shell Aliases
   'pearl_shell': 'pearl-shell',

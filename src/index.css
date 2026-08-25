@@ -7,6 +7,7 @@
     font-family: 'Plus Jakarta Sans', sans-serif;
     color: #1a1c1c;
     background-color: #f9f9f9;
+    transition: font-size 0.2s ease;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -14,21 +15,101 @@
   }
 }
 
+/* Global Font Scaling Accessibility System */
+html[data-font-size="small"] {
+  font-size: 87.5%;
+}
+html[data-font-size="default"],
+html[data-font-size="medium"] {
+  font-size: 100%;
+}
+html[data-font-size="large"] {
+  font-size: 112.5%;
+}
+
+html[data-font-size="small"] .font-body-md,
+html[data-font-size="small"] p,
+html[data-font-size="small"] button,
+html[data-font-size="small"] input,
+html[data-font-size="small"] label,
+html[data-font-size="small"] span,
+html[data-font-size="small"] textarea,
+html[data-font-size="small"] select {
+  font-size: 0.875em;
+}
+
+html[data-font-size="large"] .font-body-md,
+html[data-font-size="large"] p,
+html[data-font-size="large"] button,
+html[data-font-size="large"] input,
+html[data-font-size="large"] label,
+html[data-font-size="large"] span,
+html[data-font-size="large"] textarea,
+html[data-font-size="large"] select {
+  font-size: 1.125em;
+}
+
+/* Global Reduced Motion Accessibility System */
+html.reduced-motion *,
+html.reduced-motion *::before,
+html.reduced-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
+html.reduced-motion .animate-float-slow,
+html.reduced-motion .animate-float-fast,
+html.reduced-motion .animate-float-slight,
+html.reduced-motion .animate-float-pearl,
+html.reduced-motion .animate-float-pearl-alt,
+html.reduced-motion .animate-pearl-pulse,
+html.reduced-motion .animate-swim-1,
+html.reduced-motion .animate-swim-2,
+html.reduced-motion .animate-breathe,
+html.reduced-motion .animate-bounce,
+html.reduced-motion .animate-ping,
+html.reduced-motion .animate-pulse {
+  animation: none !important;
+}
+
+:root {
+  --surface-glass: rgba(255, 255, 255, 0.45);
+  --surface-opaque: rgba(255, 255, 255, 0.75);
+  --text-main: #1a1c1c;
+  --text-muted: rgba(26, 28, 28, 0.7);
+  --panel-border: transparent;
+  --card-shadow: 0 8px 32px rgba(0, 107, 88, 0.08);
+}
+
+html.dark {
+  --surface-glass: rgba(15, 23, 42, 0.75);
+  --surface-opaque: rgba(15, 23, 42, 0.88);
+  --text-main: #f8fafc;
+  --text-muted: rgba(248, 250, 252, 0.75);
+  --panel-border: transparent;
+  --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
 /* Glassmorphism Panel */
 .glass-panel {
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: var(--surface-glass);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 30px rgba(0, 107, 88, 0.05);
+  border: none;
+  box-shadow: var(--card-shadow);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .glass-panel-opaque {
-  background-color: rgba(255, 255, 255, 0.65);
+  background-color: var(--surface-opaque);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 8px 32px rgba(0, 107, 88, 0.08);
+  border: none;
+  box-shadow: var(--card-shadow);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Pearl Glow & Effects */

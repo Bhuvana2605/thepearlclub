@@ -20,7 +20,7 @@ export const ENVIRONMENTS = {
     background: '/assets/backgrounds/the_pearl_club_ocean_theme/screen.png',
     fallbackBackground: '/assets/backgrounds/ocean.png',
     gradientFallback: 'linear-gradient(to bottom, #80deea 0%, #4dd0e1 35%, #00897b 75%, #004d40 100%)',
-    allowedCreatures: ['clownfish', 'guppy', 'seahorse'],
+    allowedCreatures: ['clownfish', 'guppy'],
     isV0Active: true
   },
   'rainy-ocean': {
@@ -29,7 +29,7 @@ export const ENVIRONMENTS = {
     sourceFolder: '/assets/backgrounds/the_pearl_club_rainy_ocean_theme/',
     background: '/assets/backgrounds/the_pearl_club_rainy_ocean_theme/screen.png',
     gradientFallback: 'linear-gradient(to bottom, #78909c 0%, #546e7a 40%, #37474f 75%, #263238 100%)',
-    allowedCreatures: ['guppy'],
+    allowedCreatures: ['clownfish', 'guppy'],
     isV0Active: true
   },
   'underwater': {
@@ -38,7 +38,7 @@ export const ENVIRONMENTS = {
     sourceFolder: '/assets/backgrounds/the_pearl_club_underwater_theme/',
     background: '/assets/backgrounds/the_pearl_club_underwater_theme/screen.png',
     gradientFallback: 'linear-gradient(to bottom, #00b0ff 0%, #00838f 45%, #00695c 75%, #003830 100%)',
-    allowedCreatures: ['clownfish', 'guppy', 'jellyfish'],
+    allowedCreatures: ['clownfish', 'guppy'],
     isV0Active: true
   },
   'beach': {

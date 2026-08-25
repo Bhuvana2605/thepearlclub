@@ -221,7 +221,7 @@ export const SanctuaryProvider = ({ children }) => {
 
   const [returnDays, setReturnDays] = useState([]);
   const [returnRewards, setReturnRewards] = useState({ day3: false, day5: false, day7: false });
-  const [rewardFlags, setRewardFlags] = useState({ earlyMemberClaimed: false, goldenPearlClaimed: false });
+  const [rewardFlags, setRewardFlags] = useState({ earlyMemberClaimed: false, goldenPearlClaimed: false, goldenPearlRevealPending: false });
   const [pendingSurpriseReward, setPendingSurpriseReward] = useState(null);
 
   // User Isolation Loader: Runs whenever currentUser session changes
@@ -235,10 +235,18 @@ export const SanctuaryProvider = ({ children }) => {
       const savedFocusHistory = storage.get('focus_history', [], userId);
       const savedJournal = storage.get('journal_entries', {}, userId);
       const savedTasks = storage.get('tasks', [], userId);
-      const savedDaily = storage.get('daily_reward_state', { lastClaimedDate: null, totalClaims: 0 }, userId);
+      const savedDaily = storage.get('daily_reward_state', { lastClaimedDate: null, totalClaims: 0, history: [] }, userId);
       const savedReturnDays = storage.get('return_days', [], userId);
       const savedReturnRewards = storage.get('return_rewards', { day3: false, day5: false, day7: false }, userId);
-      const savedRewardFlags = storage.get('user_reward_flags', { earlyMemberClaimed: false, goldenPearlClaimed: false }, userId);
+      const savedRewardFlags = storage.get('user_reward_flags', { earlyMemberClaimed: false, goldenPearlClaimed: false, goldenPearlRevealPending: false }, userId);
+      const savedVisitedDays = storage.get('visited_days', [todayKey], userId);
+      const savedFocusCategories = storage.get('focus_categories', DEFAULT_FOCUS_CATEGORIES, userId);
+      const savedActivityEvents = storage.get('activity_events', [], userId);
+      const savedActivityHistory = storage.get('activity_history', { journal: [todayKey], focus: [], sudoku: [], pearlCatch: [], quickMath: [] }, userId);
+
+      const savedFontSize = storage.get('fontSizePreference', 'default', userId);
+      const savedReducedMotion = storage.get('reducedMotion', false, userId);
+      const savedAppearance = storage.get('appearance', 'light', userId);
 
       setWorldState(savedWorld);
       setAchievedState(savedAchieved);
@@ -250,6 +258,16 @@ export const SanctuaryProvider = ({ children }) => {
       setReturnDays(savedReturnDays);
       setReturnRewards(savedReturnRewards);
       setRewardFlags(savedRewardFlags);
+      setVisitedDays(savedVisitedDays.includes(todayKey) ? savedVisitedDays : [...savedVisitedDays, todayKey]);
+      setFocusCategories(savedFocusCategories);
+      setActivityEvents(savedActivityEvents);
+      setActivityHistory(savedActivityHistory);
+      setSettings((prev) => ({
+        ...prev,
+        appearance: savedAppearance,
+        fontSize: savedFontSize,
+        reducedMotion: savedReducedMotion
+      }));
     } else {
       // Unauthenticated / Logout: Reset to clean empty initial defaults
       setWorldState({ hasGoldenPearl: false, goldenPearlFoundAt: null, ownedItems: [] });
@@ -258,10 +276,14 @@ export const SanctuaryProvider = ({ children }) => {
       setFocusHistory([]);
       setJournalEntries({});
       setTasks([]);
-      setDailyRewardState({ lastClaimedDate: null, totalClaims: 0 });
+      setDailyRewardState({ lastClaimedDate: null, totalClaims: 0, history: [] });
       setReturnDays([]);
       setReturnRewards({ day3: false, day5: false, day7: false });
-      setRewardFlags({ earlyMemberClaimed: false, goldenPearlClaimed: false });
+      setRewardFlags({ earlyMemberClaimed: false, goldenPearlClaimed: false, goldenPearlRevealPending: false });
+      setVisitedDays([todayKey]);
+      setFocusCategories(DEFAULT_FOCUS_CATEGORIES);
+      setActivityEvents([]);
+      setActivityHistory({ journal: [todayKey], focus: [], sudoku: [], pearlCatch: [], quickMath: [] });
     }
   }, [currentUser?.id]);
 
@@ -333,7 +355,7 @@ export const SanctuaryProvider = ({ children }) => {
     setWorldState((prev) => {
       const existing = prev.ownedItems || [];
       const isAlreadyOwned = existing.some((item) => item.id === collectibleId);
-      if (isAlreadyOwned && source !== 'focus-pearl') {
+      if (isAlreadyOwned && source !== 'focus-pearl' && source !== 'daily_reward' && source !== 'return_milestone') {
         return prev;
       }
 
@@ -341,6 +363,7 @@ export const SanctuaryProvider = ({ children }) => {
       const newPlacement = {
         id: collectibleId,
         source: source,
+        addedAt: new Date().toISOString(),
         ...getAutoPlacementCoords(placementIndex)
       };
 
@@ -586,7 +609,7 @@ export const SanctuaryProvider = ({ children }) => {
   useEffect(() => {
     const userId = currentUser?.id;
     if (userId && isEarlyMember) {
-      const savedFlags = storage.get('user_reward_flags', { earlyMemberClaimed: false, goldenPearlClaimed: false }, userId);
+      const savedFlags = storage.get('user_reward_flags', { earlyMemberClaimed: false, goldenPearlClaimed: false, goldenPearlRevealPending: false }, userId);
       if (!savedFlags.earlyMemberClaimed) {
         setWorldState((prev) => {
           const exists = (prev.ownedItems || []).some((item) => item.id === 'pearl-club-early-member');
@@ -609,7 +632,7 @@ export const SanctuaryProvider = ({ children }) => {
   const claimEarlyMemberModal = () => {
     const userId = currentUser?.id;
     if (userId) {
-      const savedFlags = storage.get('user_reward_flags', { earlyMemberClaimed: false, goldenPearlClaimed: false }, userId);
+      const savedFlags = storage.get('user_reward_flags', { earlyMemberClaimed: false, goldenPearlClaimed: false, goldenPearlRevealPending: false }, userId);
       const updatedFlags = { ...savedFlags, earlyMemberClaimed: true };
       storage.save('user_reward_flags', updatedFlags, userId);
       setRewardFlags(updatedFlags);
@@ -630,15 +653,44 @@ export const SanctuaryProvider = ({ children }) => {
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
-      if (settings.appearance === 'dark') {
+      const mode = settings.appearance === 'dark' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-appearance', mode);
+      if (mode === 'dark') {
         document.documentElement.classList.add('dark');
         document.documentElement.classList.remove('light');
       } else {
         document.documentElement.classList.add('light');
         document.documentElement.classList.remove('dark');
       }
+      if (currentUser?.id) {
+        storage.save('appearance', mode, currentUser.id);
+      }
     }
-  }, [settings.appearance]);
+  }, [settings.appearance, currentUser?.id]);
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      const fs = settings.fontSize || 'default';
+      document.documentElement.setAttribute('data-font-size', fs);
+      if (currentUser?.id) {
+        storage.save('fontSizePreference', fs, currentUser.id);
+      }
+    }
+  }, [settings.fontSize, currentUser?.id]);
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      const isReduced = Boolean(settings.reducedMotion);
+      if (isReduced) {
+        document.documentElement.classList.add('reduced-motion');
+      } else {
+        document.documentElement.classList.remove('reduced-motion');
+      }
+      if (currentUser?.id) {
+        storage.save('reducedMotion', isReduced, currentUser.id);
+      }
+    }
+  }, [settings.reducedMotion, currentUser?.id]);
 
   useEffect(() => { if (currentUser?.id) storage.save('focus_categories', focusCategories, currentUser.id); }, [focusCategories, currentUser?.id]);
   useEffect(() => { if (currentUser?.id) storage.save('activity_events', activityEvents, currentUser.id); }, [activityEvents, currentUser?.id]);
@@ -804,27 +856,34 @@ export const SanctuaryProvider = ({ children }) => {
     setPendingUnlockedAchievement(null);
   };
 
-  const isDailyRewardAvailable = Boolean(currentUser?.id && dailyRewardState?.lastClaimedDate !== todayKey);
+  const isDailyRewardAvailable = Boolean(
+    currentUser?.id &&
+    dailyRewardState?.lastClaimedDate !== todayKey &&
+    !(dailyRewardState?.history || []).some((h) => h.date === todayKey)
+  );
 
   const claimDailyReward = () => {
     const userId = currentUser?.id;
     if (!userId) return null;
 
     // Verify against latest user-scoped storage to prevent double claims or race conditions
-    const latestDailyState = storage.get('daily_reward_state', { lastClaimedDate: null, totalClaims: 0 }, userId);
-    if (latestDailyState.lastClaimedDate === todayKey) {
+    const latestDailyState = storage.get('daily_reward_state', { lastClaimedDate: null, totalClaims: 0, history: [] }, userId);
+    const existingHistory = latestDailyState.history || [];
+
+    if (latestDailyState.lastClaimedDate === todayKey || existingHistory.some((h) => h.date === todayKey)) {
       console.log('[Daily Reward] Already claimed today for user:', userId);
       return null;
     }
 
-    const pool = ['soft-white-pearl', 'pearl-shell', 'starfish', 'sea-glass', 'clownfish', 'guppy'];
+    const pool = ['starfish', 'sea-glass', 'pearl-shell', 'clownfish', 'guppy', 'coral', 'seahorse'];
     const randomIndex = Math.floor(Math.random() * pool.length);
     const catId = pool[randomIndex];
     const reg = getCollectible(catId);
 
     const newDailyState = {
       lastClaimedDate: todayKey,
-      totalClaims: (latestDailyState?.totalClaims || 0) + 1
+      totalClaims: (latestDailyState?.totalClaims || 0) + 1,
+      history: [...existingHistory, { date: todayKey, collectibleId: catId }]
     };
 
     // Save to user storage BEFORE updating component state
@@ -854,20 +913,31 @@ export const SanctuaryProvider = ({ children }) => {
   };
 
   const collectGoldenPearl = () => {
-    if (worldState.hasGoldenPearl) return;
+    const userId = currentUser?.id;
+    if (!userId) return;
 
-    const goldenPearlItem = {
-      id: 'golden-pearl',
-      name: 'Golden Pearl',
-      source: 'found'
-    };
+    const savedFlags = storage.get('user_reward_flags', { earlyMemberClaimed: false, goldenPearlClaimed: false, goldenPearlRevealPending: false }, userId);
 
-    addItemToInventory(goldenPearlItem);
+    addCollectibleToUser('golden-pearl', 'found');
+    const updatedFlags = { ...savedFlags, goldenPearlClaimed: true, goldenPearlRevealPending: true };
+    storage.save('user_reward_flags', updatedFlags, userId);
+    setRewardFlags(updatedFlags);
+
     setWorldState((prev) => ({
       ...prev,
       hasGoldenPearl: true,
       goldenPearlFoundAt: new Date().toISOString()
     }));
+  };
+
+  const markGoldenPearlRevealed = () => {
+    const userId = currentUser?.id;
+    if (!userId) return;
+
+    const savedFlags = storage.get('user_reward_flags', { earlyMemberClaimed: false, goldenPearlClaimed: false, goldenPearlRevealPending: false }, userId);
+    const updatedFlags = { ...savedFlags, goldenPearlRevealPending: false };
+    storage.save('user_reward_flags', updatedFlags, userId);
+    setRewardFlags(updatedFlags);
   };
 
   const reportBottle = (bottleId, reason) => {
@@ -1327,6 +1397,8 @@ export const SanctuaryProvider = ({ children }) => {
         setPendingUnlockedAchievement,
         worldState,
         collectGoldenPearl,
+        markGoldenPearlRevealed,
+        rewardFlags,
         bottleSafety,
         reportBottle,
         blockSender,
