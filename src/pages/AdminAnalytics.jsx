@@ -14,7 +14,7 @@ const formatPearlNo = (val) => {
 
 /**
  * Secure Admin Analytics Dashboard (/admin)
- * Includes Registered Accounts Directory table (Name, Email, Pearl Number, Role, Joined Date).
+ * Includes Registered Accounts Directory table with numerical Pearl Number sorting.
  */
 export const AdminAnalytics = () => {
   const { currentUser, profile, signOutUser, focusHistory, journalEntries, activityHistory, formattedPearlNumber } = useSanctuary();
@@ -23,6 +23,10 @@ export const AdminAnalytics = () => {
   const [userSearch, setUserSearch] = useState('');
   const [userProfiles, setUserProfiles] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
+
+  // Table Column Sorting State (Default: Pearl Number Ascending #0001 -> #0011)
+  const [sortField, setSortField] = useState('pearlVal'); // 'pearlVal' | 'name' | 'createdAtDate'
+  const [sortDirection, setSortDirection] = useState('asc'); // 'asc' | 'desc'
 
   const [telemetry, setTelemetry] = useState({
     totalVisits: 1,
@@ -64,7 +68,7 @@ export const AdminAnalytics = () => {
     };
     loadTelemetry();
 
-    // 2. Fetch Real Registered Users from Supabase Database
+    // 2. Fetch Real Registered Users from Supabase Database (Ordered by signup date ascending first)
     const fetchUsers = async () => {
       setLoadingUsers(true);
       let list = [];
@@ -74,19 +78,28 @@ export const AdminAnalytics = () => {
           const { data, error } = await supabase
             .from('profiles')
             .select('*')
-            .order('created_at', { ascending: false });
+            .order('created_at', { ascending: true });
 
           if (!error && data && data.length > 0) {
-            list = data.map((u, idx) => ({
-              id: u.id || `u_${idx}`,
-              name: u.display_name || u.username || u.full_name || 'Pearl Club Member',
-              username: u.username ? `@${u.username.replace(/^@/, '')}` : '@member',
-              email: u.email || (u.id === currentUser?.id ? currentUser?.email : 'private@pearlclub.sanctuary'),
-              pearlNumber: formatPearlNo(u.pearl_number || u.pearl_no || (idx + 1)),
-              createdAt: u.created_at ? new Date(u.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent',
-              role: u.role || (checkIsAdmin(u, u) ? 'admin' : 'member'),
-              isEarlyMember: u.is_early_member ?? true
-            }));
+            list = data.map((u, idx) => {
+              const rawNum = u.pearl_number ?? u.pearl_no;
+              const numericPearl = rawNum !== null && rawNum !== undefined && !isNaN(rawNum)
+                ? parseInt(rawNum, 10)
+                : idx + 1;
+
+              return {
+                id: u.id || `u_${idx}`,
+                name: u.display_name || u.username || u.full_name || u.name || 'Pearl Club Member',
+                username: u.username ? `@${u.username.replace(/^@/, '')}` : '@member',
+                email: u.email || (u.id === currentUser?.id ? currentUser?.email : 'private@pearlclub.sanctuary'),
+                pearlVal: numericPearl,
+                pearlNumber: formatPearlNo(numericPearl),
+                createdAtDate: u.created_at ? new Date(u.created_at) : new Date(Date.now() - idx * 86400000),
+                createdAt: u.created_at ? new Date(u.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent',
+                role: u.role || (checkIsAdmin(u, u) ? 'admin' : 'member'),
+                isEarlyMember: u.is_early_member ?? true
+              };
+            });
           }
         } catch (e) {
           console.error('[Admin] Error fetching profiles:', e);
@@ -95,13 +108,16 @@ export const AdminAnalytics = () => {
 
       // Local / Offline Fallback Profile
       if (list.length === 0 && currentUser) {
+        const adminPearlNo = parseInt((formattedPearlNumber || '1').replace(/\D/g, ''), 10) || 1;
         list = [
           {
             id: currentUser.id || '1',
             name: profile?.display_name || profile?.username || 'Bhuvana (Admin)',
             username: profile?.username ? `@${profile.username.replace(/^@/, '')}` : '@bhuvana',
             email: currentUser.email || 'chbhuvana0505@gmail.com',
-            pearlNumber: formattedPearlNumber || '#PEARL-0001',
+            pearlVal: adminPearlNo,
+            pearlNumber: formatPearlNo(adminPearlNo),
+            createdAtDate: new Date(),
             createdAt: 'Aug 25, 2026',
             role: 'admin',
             isEarlyMember: true
@@ -166,17 +182,39 @@ export const AdminAnalytics = () => {
     }
   }, [dateFilter, focusHistory, journalEntries, activityHistory, currentUser, profile, formattedPearlNumber]);
 
-  // Filtered Users List for Search
-  const filteredUsers = userProfiles.filter((u) => {
-    const q = userSearch.toLowerCase().trim();
-    if (!q) return true;
-    return (
-      u.name.toLowerCase().includes(q) ||
-      u.email.toLowerCase().includes(q) ||
-      u.pearlNumber.toLowerCase().includes(q) ||
-      u.username.toLowerCase().includes(q)
-    );
-  });
+  // Handle Header Column Sorting Toggle
+  const handleSortToggle = (field) => {
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  // Sorted & Search-Filtered Member Accounts List
+  const sortedAndFilteredUsers = [...userProfiles]
+    .filter((u) => {
+      const q = userSearch.toLowerCase().trim();
+      if (!q) return true;
+      return (
+        u.name.toLowerCase().includes(q) ||
+        u.email.toLowerCase().includes(q) ||
+        u.pearlNumber.toLowerCase().includes(q) ||
+        u.username.toLowerCase().includes(q)
+      );
+    })
+    .sort((a, b) => {
+      let result = 0;
+      if (sortField === 'pearlVal') {
+        result = a.pearlVal - b.pearlVal;
+      } else if (sortField === 'name') {
+        result = a.name.localeCompare(b.name);
+      } else if (sortField === 'createdAtDate') {
+        result = a.createdAtDate - b.createdAtDate;
+      }
+      return sortDirection === 'asc' ? result : -result;
+    });
 
   if (!currentUser) {
     return (
@@ -334,7 +372,7 @@ export const AdminAnalytics = () => {
               <div>
                 <h2 className="font-headline-md text-lg font-bold text-primary">Registered Member Accounts</h2>
                 <p className="font-body-md text-xs text-on-surface-variant">
-                  Detailed list of users registered on Pearl Club with their name, email, and Pearl Number.
+                  Sorted by Pearl Number ascending (#0001, #0002...). Click column headers to re-sort.
                 </p>
               </div>
             </div>
@@ -359,11 +397,41 @@ export const AdminAnalytics = () => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-primary/10 border-b border-primary/20 text-primary font-label-sm text-xs font-bold uppercase tracking-wider">
-                  <th className="py-3 px-4">Member Name</th>
+                  <th
+                    onClick={() => handleSortToggle('name')}
+                    className="py-3 px-4 cursor-pointer hover:bg-primary/15 transition-colors select-none"
+                  >
+                    <div className="flex items-center gap-1">
+                      <span>Member Name</span>
+                      <span className="material-symbols-outlined text-sm">
+                        {sortField === 'name' ? (sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward') : 'unfold_more'}
+                      </span>
+                    </div>
+                  </th>
                   <th className="py-3 px-4">Email Address</th>
-                  <th className="py-3 px-4">Pearl Number</th>
+                  <th
+                    onClick={() => handleSortToggle('pearlVal')}
+                    className="py-3 px-4 cursor-pointer hover:bg-primary/15 transition-colors select-none"
+                  >
+                    <div className="flex items-center gap-1">
+                      <span>Pearl Number</span>
+                      <span className="material-symbols-outlined text-sm text-amber-800">
+                        {sortField === 'pearlVal' ? (sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward') : 'unfold_more'}
+                      </span>
+                    </div>
+                  </th>
                   <th className="py-3 px-4">Role / Status</th>
-                  <th className="py-3 px-4">Joined Date</th>
+                  <th
+                    onClick={() => handleSortToggle('createdAtDate')}
+                    className="py-3 px-4 cursor-pointer hover:bg-primary/15 transition-colors select-none"
+                  >
+                    <div className="flex items-center gap-1">
+                      <span>Joined Date</span>
+                      <span className="material-symbols-outlined text-sm">
+                        {sortField === 'createdAtDate' ? (sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward') : 'unfold_more'}
+                      </span>
+                    </div>
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/30 font-body-md text-xs">
@@ -376,14 +444,14 @@ export const AdminAnalytics = () => {
                       </div>
                     </td>
                   </tr>
-                ) : filteredUsers.length === 0 ? (
+                ) : sortedAndFilteredUsers.length === 0 ? (
                   <tr>
                     <td colSpan="5" className="py-8 text-center text-on-surface-variant font-medium">
                       No matching registered accounts found.
                     </td>
                   </tr>
                 ) : (
-                  filteredUsers.map((user) => (
+                  sortedAndFilteredUsers.map((user) => (
                     <tr key={user.id} className="hover:bg-white/50 transition-colors">
                       {/* Name & Avatar */}
                       <td className="py-3.5 px-4 font-semibold text-on-surface">
@@ -439,8 +507,8 @@ export const AdminAnalytics = () => {
           </div>
 
           <div className="flex justify-between items-center text-[11px] text-outline px-1">
-            <span>Showing {filteredUsers.length} of {userProfiles.length} total registered accounts</span>
-            <span className="font-semibold text-primary">Live Database Sync Enabled</span>
+            <span>Showing {sortedAndFilteredUsers.length} of {userProfiles.length} total registered accounts</span>
+            <span className="font-semibold text-primary">Sorted numerically by Pearl Number</span>
           </div>
         </div>
 
