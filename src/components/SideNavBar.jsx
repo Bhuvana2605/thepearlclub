@@ -9,35 +9,31 @@ export const SideNavBar = () => {
 
   const groupedLinks = [
     {
-      category: 'MAIN',
+      category: 'Main experiences',
       items: [
         { to: '/', label: 'Home', icon: 'home' },
         { to: '/journal', label: 'Journal', icon: 'edit_note' },
-        { to: '/focus', label: 'Focus', icon: 'center_focus_strong' },
+        { to: '/games', label: 'Games', icon: 'videogame_asset' },
       ]
     },
     {
-      category: 'EXPLORE',
+      category: 'Connect & Explore',
       items: [
-        { to: '/music', label: 'Music & Sounds', icon: 'music_note' },
-        { to: '/games', label: 'Sanctuary Games', icon: 'videogame_asset' },
-        { to: '/feed', label: 'Pearl Club Feed', icon: 'forum' },
         { to: '/bottle', label: 'Message in a Bottle', icon: 'sailing' },
-        { to: '/small-things', label: 'Small Things That Help', icon: 'self_care' },
+        { to: '/feed', label: 'Feed', icon: 'forum' },
       ]
     },
     {
-      category: 'WORLD',
+      category: 'Wellbeing',
       items: [
-        { to: '/world', label: 'Your Little World', icon: 'waves' },
+        { to: '/small-things', label: 'Small Things That Help', icon: 'self_care' },
         { to: '/do-nothing', label: 'Do Nothing', icon: 'visibility' },
       ]
     },
     {
-      category: 'ACCOUNT',
+      category: 'Personal',
       items: [
-        { to: '/profile', label: 'Profile', icon: 'account_circle' },
-        { to: '/settings', label: 'Sanctuary Settings', icon: 'settings' },
+        { to: '/settings', label: 'Settings', icon: 'settings' },
       ]
     }
   ];

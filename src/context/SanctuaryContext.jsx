@@ -692,16 +692,16 @@ export const SanctuaryProvider = ({ children }) => {
     }
   }, [settings.reducedMotion, currentUser?.id]);
 
-  useEffect(() => { if (currentUser?.id) storage.save('focus_categories', focusCategories, currentUser.id); }, [focusCategories, currentUser?.id]);
-  useEffect(() => { if (currentUser?.id) storage.save('activity_events', activityEvents, currentUser.id); }, [activityEvents, currentUser?.id]);
-  useEffect(() => { if (currentUser?.id) storage.save('tasks', tasks, currentUser.id); }, [tasks, currentUser?.id]);
-  useEffect(() => { if (currentUser?.id) storage.save('journal_entries', journalEntries, currentUser.id); }, [journalEntries, currentUser?.id]);
-  useEffect(() => { if (currentUser?.id) storage.save('focus_history', focusHistory, currentUser.id); }, [focusHistory, currentUser?.id]);
-  useEffect(() => { if (currentUser?.id) storage.save('focus_state', focusState, currentUser.id); }, [focusState, currentUser?.id]);
-  useEffect(() => { if (currentUser?.id) storage.save('activity_history', activityHistory, currentUser.id); }, [activityHistory, currentUser?.id]);
-  useEffect(() => { if (currentUser?.id) storage.save('daily_reward_state', dailyRewardState, currentUser.id); }, [dailyRewardState, currentUser?.id]);
-  useEffect(() => { if (currentUser?.id) storage.save('world_state', worldState, currentUser.id); }, [worldState, currentUser?.id]);
-  useEffect(() => { if (currentUser?.id) storage.save('achieved_state', achievedState, currentUser.id); }, [achievedState, currentUser?.id]);
+  useEffect(() => { storage.save('focus_categories', focusCategories, currentUser?.id); }, [focusCategories, currentUser?.id]);
+  useEffect(() => { storage.save('activity_events', activityEvents, currentUser?.id); }, [activityEvents, currentUser?.id]);
+  useEffect(() => { storage.save('tasks', tasks, currentUser?.id); }, [tasks, currentUser?.id]);
+  useEffect(() => { storage.save('journal_entries', journalEntries, currentUser?.id); }, [journalEntries, currentUser?.id]);
+  useEffect(() => { storage.save('focus_history', focusHistory, currentUser?.id); }, [focusHistory, currentUser?.id]);
+  useEffect(() => { storage.save('focus_state', focusState, currentUser?.id); }, [focusState, currentUser?.id]);
+  useEffect(() => { storage.save('activity_history', activityHistory, currentUser?.id); }, [activityHistory, currentUser?.id]);
+  useEffect(() => { storage.save('daily_reward_state', dailyRewardState, currentUser?.id); }, [dailyRewardState, currentUser?.id]);
+  useEffect(() => { storage.save('world_state', worldState, currentUser?.id); }, [worldState, currentUser?.id]);
+  useEffect(() => { storage.save('achieved_state', achievedState, currentUser?.id); }, [achievedState, currentUser?.id]);
   useEffect(() => { storage.save('sound_state', soundState); }, [soundState]);
   useEffect(() => {
     storage.save('settings', settings);

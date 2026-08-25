@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSanctuary } from '../context/SanctuaryContext';
 import { EnvironmentBackground } from '../components/EnvironmentBackground';
+import { PlaylistLibrary } from '../components/PlaylistLibrary';
 
 export const FocusTimer = () => {
   const { focusCategories, addFocusCategory, recordFocusSession, focusState } = useSanctuary();
@@ -146,266 +147,268 @@ export const FocusTimer = () => {
 
   return (
     <main className="relative z-10 w-full min-h-[85vh] flex flex-col items-center justify-center pt-24 pb-32 px-organic-padding">
-      <div className="w-full max-w-lg glass-panel rounded-3xl p-8 md:p-10 shadow-2xl border border-white/60 text-center flex flex-col items-center gap-6 relative overflow-hidden">
-        
-        {/* Header & Aquarium Quick Link */}
-        <div className="w-full flex flex-col items-center gap-2">
-          <div className="w-full flex justify-between items-center">
-            <span className="font-label-sm text-xs text-primary font-semibold uppercase tracking-widest bg-primary-container/40 px-3 py-1 rounded-full border border-primary-container/30">
-              Deep Focus
-            </span>
+      <div className="w-full max-w-4xl flex flex-col gap-8 items-center">
+        {/* FOCUS TIMER & STOPWATCH CARD - ORIGINAL SANCTUARY THEME */}
+        <div className="w-full max-w-lg glass-panel rounded-3xl p-8 md:p-10 shadow-2xl border border-white/60 text-center flex flex-col items-center gap-6 relative overflow-hidden">
+          
+          {/* Header & Aquarium Quick Link */}
+          <div className="w-full flex flex-col items-center gap-2">
+            <div className="w-full flex justify-between items-center">
+              <span className="font-label-sm text-xs text-primary font-semibold uppercase tracking-widest bg-primary-container/40 px-3 py-1 rounded-full border border-primary-container/30">
+                Deep Focus
+              </span>
 
-            {/* Focus Pearl Aquarium Access Button */}
-            <Link
-              to="/focus-aquarium"
-              className="px-3.5 py-1.5 rounded-full bg-white/70 hover:bg-white text-primary border border-white/80 font-label-sm text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5 hover:scale-105"
-              title="Open Focus Pearl Aquarium"
-            >
-              <img src="/assets/collectibles/pearl.png" alt="Pearl" className="w-4 h-4 object-contain" />
-              Focus Aquarium
-            </Link>
-          </div>
-
-          <h1 className="font-headline-lg text-headline-lg text-primary text-2xl md:text-3xl mt-1">
-            Quiet Presence
-          </h1>
-        </div>
-
-        {/* Mode Selector */}
-        {!isRunning && !isCompleted && (
-          <div className="flex glass-panel p-1.5 rounded-full border border-white/60 shadow-sm">
-            <button
-              onClick={() => handleSwitchMode('timer')}
-              className={`px-6 py-2 rounded-full font-label-sm text-xs font-semibold transition-all ${
-                focusMode === 'timer'
-                  ? 'bg-primary text-white shadow-md'
-                  : 'text-on-surface-variant hover:bg-white/40'
-              }`}
-            >
-              Timer
-            </button>
-            <button
-              onClick={() => handleSwitchMode('stopwatch')}
-              className={`px-6 py-2 rounded-full font-label-sm text-xs font-semibold transition-all ${
-                focusMode === 'stopwatch'
-                  ? 'bg-primary text-white shadow-md'
-                  : 'text-on-surface-variant hover:bg-white/40'
-              }`}
-            >
-              Stopwatch
-            </button>
-          </div>
-        )}
-
-        {/* Category Selector */}
-        {!isRunning && !isCompleted && (
-          <div className="w-full flex flex-col items-center gap-3">
-            <label className="font-label-sm text-xs text-outline uppercase tracking-wider">
-              Category
-            </label>
-
-            <div className="flex flex-wrap justify-center gap-2 max-w-md">
-              {focusCategories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-1.5 rounded-full font-label-sm text-xs transition-all ${
-                    selectedCategory === cat
-                      ? 'bg-primary text-white shadow-md font-semibold'
-                      : 'bg-white/40 text-on-surface-variant hover:bg-white/70'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-
-              <button
-                onClick={() => setShowAddCustom(true)}
-                className="px-3.5 py-1.5 rounded-full font-label-sm text-xs bg-white/30 text-primary border border-primary/30 hover:bg-white/60 transition-all flex items-center gap-1"
+              {/* Focus Pearl Aquarium Access Button */}
+              <Link
+                to="/focus-aquarium"
+                className="px-3.5 py-1.5 rounded-full bg-white/70 hover:bg-white text-primary border border-white/80 font-label-sm text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5 hover:scale-105"
+                title="Open Focus Pearl Aquarium"
               >
-                <span className="material-symbols-outlined text-xs">add</span>
-                + Add your own
+                <img src="/assets/collectibles/pearl.png" alt="Pearl" className="w-4 h-4 object-contain" />
+                Focus Aquarium
+              </Link>
+            </div>
+
+            <h1 className="font-headline-lg text-headline-lg text-primary text-2xl md:text-3xl mt-1">
+              Quiet Presence
+            </h1>
+          </div>
+
+          {/* Mode Selector */}
+          {!isRunning && !isCompleted && (
+            <div className="flex glass-panel p-1.5 rounded-full border border-white/60 shadow-sm">
+              <button
+                onClick={() => handleSwitchMode('timer')}
+                className={`px-6 py-2 rounded-full font-label-sm text-xs font-semibold transition-all ${
+                  focusMode === 'timer'
+                    ? 'bg-primary text-white shadow-md'
+                    : 'text-on-surface-variant hover:bg-white/40'
+                }`}
+              >
+                Timer
+              </button>
+              <button
+                onClick={() => handleSwitchMode('stopwatch')}
+                className={`px-6 py-2 rounded-full font-label-sm text-xs font-semibold transition-all ${
+                  focusMode === 'stopwatch'
+                    ? 'bg-primary text-white shadow-md'
+                    : 'text-on-surface-variant hover:bg-white/40'
+                }`}
+              >
+                Stopwatch
               </button>
             </div>
+          )}
 
-            {showAddCustom && (
-              <form onSubmit={handleAddCustomCategory} className="flex gap-2 mt-2 w-full max-w-xs">
-                <input
-                  type="text"
-                  placeholder="Category name..."
-                  value={customInput}
-                  onChange={(e) => setCustomInput(e.target.value)}
-                  autoFocus
-                  className="flex-1 bg-white/80 border border-white/60 rounded-xl px-3 py-1.5 font-body-md text-xs text-on-surface focus:outline-none"
-                />
+          {/* Category Selector */}
+          {!isRunning && !isCompleted && (
+            <div className="w-full flex flex-col items-center gap-3">
+              <label className="font-label-sm text-xs text-outline uppercase tracking-wider">
+                Category
+              </label>
+
+              <div className="flex flex-wrap justify-center gap-2 max-w-md">
+                {focusCategories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-4 py-1.5 rounded-full font-label-sm text-xs transition-all ${
+                      selectedCategory === cat
+                        ? 'bg-primary text-white shadow-md font-semibold'
+                        : 'bg-white/40 text-on-surface-variant hover:bg-white/70'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+
                 <button
-                  type="submit"
-                  className="px-4 py-1.5 rounded-xl bg-primary text-white font-label-sm text-xs shadow"
+                  onClick={() => setShowAddCustom(true)}
+                  className="px-3.5 py-1.5 rounded-full font-label-sm text-xs bg-white/30 text-primary border border-primary/30 hover:bg-white/60 transition-all flex items-center gap-1"
                 >
-                  Save
+                  <span className="material-symbols-outlined text-xs">add</span>
+                  + Add your own
                 </button>
-              </form>
-            )}
-          </div>
-        )}
-
-        {/* Selected Category Pill during run */}
-        {isRunning && (
-          <div className="px-4 py-1 rounded-full bg-secondary-container/60 text-on-secondary-container font-label-sm text-xs border border-secondary/30">
-            Focusing on: <span className="font-semibold">{selectedCategory}</span>
-          </div>
-        )}
-
-        {/* MODE A: TIMER DISPLAY */}
-        {focusMode === 'timer' && (
-          <>
-            {/* Circular Progress Timer Dial */}
-            <div className="relative w-56 h-56 flex items-center justify-center">
-              <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="44"
-                  className="text-white/30 stroke-current"
-                  strokeWidth="6"
-                  fill="transparent"
-                />
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="44"
-                  className="text-primary stroke-current transition-all duration-1000 ease-linear"
-                  strokeWidth="6"
-                  strokeDasharray="276.46"
-                  strokeDashoffset={276.46 - (276.46 * timerProgressPercent) / 100}
-                  strokeLinecap="round"
-                  fill="transparent"
-                />
-              </svg>
-
-              <div className="absolute flex flex-col items-center">
-                <span className="font-display-lg text-display-lg text-primary tracking-widest font-light">
-                  {formatTimerTime(secondsLeft)}
-                </span>
-                <span className="font-label-sm text-xs text-outline mt-1">
-                  {durationMinutes} Minute Session
-                </span>
               </div>
-            </div>
 
-            {/* Timer Presets & Custom Duration */}
-            {!isRunning && !isCompleted && (
-              <div className="flex flex-col items-center gap-2">
-                <div className="flex gap-2 flex-wrap justify-center">
-                  {[25, 45].map((mins) => (
+              {showAddCustom && (
+                <form onSubmit={handleAddCustomCategory} className="flex gap-2 mt-2 w-full max-w-xs">
+                  <input
+                    type="text"
+                    placeholder="Category name..."
+                    value={customInput}
+                    onChange={(e) => setCustomInput(e.target.value)}
+                    autoFocus
+                    className="flex-1 bg-white/80 border border-white/60 rounded-xl px-3 py-1.5 font-body-md text-xs text-on-surface focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    className="px-4 py-1.5 rounded-xl bg-primary text-white font-label-sm text-xs shadow"
+                  >
+                    Save
+                  </button>
+                </form>
+              )}
+            </div>
+          )}
+
+          {/* Selected Category Pill during run */}
+          {isRunning && (
+            <div className="px-4 py-1 rounded-full bg-secondary-container/60 text-on-secondary-container font-label-sm text-xs border border-secondary/30">
+              Focusing on: <span className="font-semibold">{selectedCategory}</span>
+            </div>
+          )}
+
+          {/* MODE A: TIMER DISPLAY */}
+          {focusMode === 'timer' && (
+            <>
+              {/* Circular Progress Timer Dial */}
+              <div className="relative w-56 h-56 flex items-center justify-center">
+                <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="44"
+                    className="text-white/30 stroke-current"
+                    strokeWidth="6"
+                    fill="transparent"
+                  />
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="44"
+                    className="text-primary stroke-current transition-all duration-1000 ease-linear"
+                    strokeWidth="6"
+                    strokeDasharray="276.46"
+                    strokeDashoffset={276.46 - (276.46 * timerProgressPercent) / 100}
+                    strokeLinecap="round"
+                    fill="transparent"
+                  />
+                </svg>
+
+                <div className="absolute flex flex-col items-center">
+                  <span className="font-display-lg text-display-lg text-primary tracking-widest font-light">
+                    {formatTimerTime(secondsLeft)}
+                  </span>
+                  <span className="font-label-sm text-xs text-outline mt-1">
+                    {durationMinutes} Minute Session
+                  </span>
+                </div>
+              </div>
+
+              {/* Timer Presets & Custom Duration */}
+              {!isRunning && !isCompleted && (
+                <div className="flex flex-col items-center gap-2">
+                  <div className="flex gap-2 flex-wrap justify-center">
+                    {[25, 45].map((mins) => (
+                      <button
+                        key={mins}
+                        onClick={() => handleSelectDuration(mins)}
+                        className={`px-5 py-2 rounded-full font-label-sm text-xs font-semibold transition-all ${
+                          durationMinutes === mins && !showCustomDurationInput
+                            ? 'bg-secondary-container text-on-secondary-container shadow'
+                            : 'bg-white/40 text-on-surface-variant hover:bg-white/70'
+                        }`}
+                      >
+                        {mins} min
+                      </button>
+                    ))}
+
                     <button
-                      key={mins}
-                      onClick={() => handleSelectDuration(mins)}
+                      onClick={() => setShowCustomDurationInput(!showCustomDurationInput)}
                       className={`px-5 py-2 rounded-full font-label-sm text-xs font-semibold transition-all ${
-                        durationMinutes === mins && !showCustomDurationInput
+                        showCustomDurationInput || (durationMinutes !== 25 && durationMinutes !== 45)
                           ? 'bg-secondary-container text-on-secondary-container shadow'
                           : 'bg-white/40 text-on-surface-variant hover:bg-white/70'
                       }`}
                     >
-                      {mins} min
+                      Custom
                     </button>
-                  ))}
+                  </div>
 
-                  <button
-                    onClick={() => setShowCustomDurationInput(!showCustomDurationInput)}
-                    className={`px-5 py-2 rounded-full font-label-sm text-xs font-semibold transition-all ${
-                      showCustomDurationInput || (durationMinutes !== 25 && durationMinutes !== 45)
-                        ? 'bg-secondary-container text-on-secondary-container shadow'
-                        : 'bg-white/40 text-on-surface-variant hover:bg-white/70'
-                    }`}
-                  >
-                    Custom
-                  </button>
+                  {showCustomDurationInput && (
+                    <form onSubmit={handleApplyCustomDuration} className="flex gap-2 mt-2 items-center">
+                      <input
+                        type="number"
+                        min="1"
+                        max="180"
+                        value={customDurationValue}
+                        onChange={(e) => setCustomDurationValue(e.target.value)}
+                        className="w-20 bg-white/80 border border-white/60 rounded-xl px-3 py-1.5 font-body-md text-xs text-center text-on-surface focus:outline-none"
+                      />
+                      <span className="font-label-sm text-xs text-outline">minutes</span>
+                      <button
+                        type="submit"
+                        className="px-4 py-1.5 rounded-xl bg-primary text-white font-label-sm text-xs shadow"
+                      >
+                        Set
+                      </button>
+                    </form>
+                  )}
                 </div>
+              )}
+            </>
+          )}
 
-                {showCustomDurationInput && (
-                  <form onSubmit={handleApplyCustomDuration} className="flex gap-2 mt-2 items-center">
-                    <input
-                      type="number"
-                      min="1"
-                      max="180"
-                      value={customDurationValue}
-                      onChange={(e) => setCustomDurationValue(e.target.value)}
-                      className="w-20 bg-white/80 border border-white/60 rounded-xl px-3 py-1.5 font-body-md text-xs text-center text-on-surface focus:outline-none"
-                    />
-                    <span className="font-label-sm text-xs text-outline">minutes</span>
-                    <button
-                      type="submit"
-                      className="px-4 py-1.5 rounded-xl bg-primary text-white font-label-sm text-xs shadow"
-                    >
-                      Set
-                    </button>
-                  </form>
-                )}
-              </div>
-            )}
-          </>
-        )}
+          {/* MODE B: STOPWATCH DISPLAY */}
+          {focusMode === 'stopwatch' && (
+            <div className="w-full flex flex-col items-center gap-4 py-4">
+              <div className="w-64 h-44 rounded-3xl glass-panel-opaque border border-white/70 flex flex-col items-center justify-center p-6 shadow-inner relative">
+                <span className="font-label-sm text-[10px] text-outline uppercase tracking-widest mb-1">
+                  Stopwatch Mode
+                </span>
+                <span className="font-display-lg text-4xl md:text-5xl text-primary tracking-widest font-mono font-light">
+                  {formatStopwatchTime(stopwatchSeconds)}
+                </span>
 
-        {/* MODE B: STOPWATCH DISPLAY */}
-        {focusMode === 'stopwatch' && (
-          <div className="w-full flex flex-col items-center gap-4 py-4">
-            <div className="w-64 h-44 rounded-3xl glass-panel-opaque border border-white/70 flex flex-col items-center justify-center p-6 shadow-inner relative">
-              <span className="font-label-sm text-[10px] text-outline uppercase tracking-widest mb-1">
-                Stopwatch Mode
-              </span>
-              <span className="font-display-lg text-4xl md:text-5xl text-primary tracking-widest font-mono font-light">
-                {formatStopwatchTime(stopwatchSeconds)}
-              </span>
-
-              {/* Qualification badge */}
-              <div className="mt-3">
-                {stopwatchQualifies ? (
-                  <span className="font-label-sm text-[11px] text-emerald-800 bg-emerald-100/90 px-3 py-1 rounded-full border border-emerald-300 font-semibold flex items-center gap-1 shadow-xs">
-                    <span className="material-symbols-outlined text-xs">check_circle</span>
-                    Qualifies for 1 Focus Pearl (25m+)
-                  </span>
-                ) : (
-                  <span className="font-label-sm text-[11px] text-outline bg-white/50 px-3 py-1 rounded-full border border-white/60">
-                    Reach 25:00 for 1 Focus Pearl
-                  </span>
-                )}
+                {/* Qualification badge */}
+                <div className="mt-3">
+                  {stopwatchQualifies ? (
+                    <span className="font-label-sm text-[11px] text-emerald-800 bg-emerald-100/90 px-3 py-1 rounded-full border border-emerald-300 font-semibold flex items-center gap-1 shadow-xs">
+                      <span className="material-symbols-outlined text-xs">check_circle</span>
+                      Qualifies for 1 Focus Pearl (25m+)
+                    </span>
+                  ) : (
+                    <span className="font-label-sm text-[11px] text-outline bg-white/50 px-3 py-1 rounded-full border border-white/60">
+                      Reach 25:00 for 1 Focus Pearl
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Control Buttons */}
-        {!isCompleted && (
-          <div className="flex gap-4 items-center">
-            <button
-              onClick={toggleRun}
-              className="px-8 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-headline-md text-headline-md shadow-md hover:scale-105 transition-transform active:scale-95 flex items-center gap-2"
-            >
-              <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                {isRunning ? 'pause' : 'play_arrow'}
-              </span>
-              {isRunning ? 'Pause' : 'Start'}
-            </button>
-
-            {focusMode === 'stopwatch' && isRunning && (
+          {/* Control Buttons */}
+          {!isCompleted && (
+            <div className="flex gap-4 items-center">
               <button
-                onClick={handleStopwatchFinish}
-                className="px-6 py-3 rounded-full bg-emerald-600 text-white font-label-sm text-xs font-semibold shadow hover:scale-105 transition-transform"
+                onClick={toggleRun}
+                className="px-8 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-headline-md text-headline-md shadow-md hover:scale-105 transition-transform active:scale-95 flex items-center gap-2"
               >
-                Complete
+                <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  {isRunning ? 'pause' : 'play_arrow'}
+                </span>
+                {isRunning ? 'Pause' : 'Start'}
               </button>
-            )}
 
-            <button
-              onClick={resetSession}
-              className="p-3 rounded-full glass-panel text-on-surface-variant hover:text-primary transition-transform hover:scale-105"
-              title="Reset"
-            >
-              <span className="material-symbols-outlined text-xl">refresh</span>
-            </button>
-          </div>
-        )}
+              {focusMode === 'stopwatch' && isRunning && (
+                <button
+                  onClick={handleStopwatchFinish}
+                  className="px-6 py-3 rounded-full bg-emerald-600 text-white font-label-sm text-xs font-semibold shadow hover:scale-105 transition-transform"
+                >
+                  Complete
+                </button>
+              )}
+
+              <button
+                onClick={resetSession}
+                className="p-3 rounded-full glass-panel text-on-surface-variant hover:text-primary transition-transform hover:scale-105"
+                title="Reset"
+              >
+                <span className="material-symbols-outlined text-xl">refresh</span>
+              </button>
+            </div>
+          )}
 
         {/* COMPLETION FLOW MODAL */}
         {isCompleted && completionResult && (
@@ -537,6 +540,10 @@ export const FocusTimer = () => {
             )}
           </div>
         )}
+        </div>
+
+        {/* OCEAN PLAYLIST LIBRARY COMPONENT */}
+        <PlaylistLibrary />
       </div>
     </main>
   );

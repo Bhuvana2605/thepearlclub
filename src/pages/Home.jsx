@@ -128,40 +128,40 @@ export const Home = () => {
             onClick={() => setShowPearlDiscovery(true)}
             className="absolute bottom-1/3 left-1/4 z-30 group p-2.5 rounded-full glass-panel border border-amber-300/80 shadow-xl animate-bounce hover:scale-110 transition-transform"
             style={{ animationDuration: '3.5s' }}
-            title="Special reward waiting in treasure chest!"
+            title="Unclaimed Treasure"
             aria-label="Open Reward Treasure Chest"
           >
             <img
               src="/assets/collectibles/treasure-chest.png"
-              alt="Reward Chest"
+              alt="Reward Treasure Chest"
               className="w-10 h-10 object-contain drop-shadow-md"
             />
           </button>
         )}
 
-        {/* 1. Time / Greeting Card (Shorter Height, Translucent Glass, Soft Shadow) */}
-        <div className="text-center flex flex-col items-center gap-1 sm:gap-1.5 glass-panel p-3 sm:p-4 rounded-3xl pearl-glow max-w-xs sm:max-w-sm md:max-w-md w-full shadow-lg relative z-10">
+        {/* 1. Time / Greeting Card (Compact Padding, Prominent Time Digits, Minimal Whitespace) */}
+        <div className="text-center flex flex-col items-center gap-1 glass-panel px-4 py-3 sm:py-3.5 rounded-3xl pearl-glow max-w-xs sm:max-w-sm w-full shadow-lg relative z-10">
           {/* Official Brand Logo */}
           <PearlClubLogo variant="full" size="md" className="my-0" />
 
-          <h2 className="font-headline-md text-headline-md text-primary text-xl sm:text-2xl font-semibold tracking-tight my-0">
+          <h2 className="font-headline-md text-headline-md text-primary text-lg sm:text-xl font-semibold tracking-tight my-0">
             {greeting}
           </h2>
 
-          {/* Live Clock & Local Date (Prominently Sized Time) */}
+          {/* Live Clock & Local Date (Prominently Sized Time with Compact Layout) */}
           <div className="flex flex-col items-center gap-0 my-0.5">
-            <div className="font-display-md text-3xl sm:text-4xl md:text-4xl text-secondary tracking-wider font-light">
+            <div className="font-display-md text-4xl sm:text-5xl md:text-5xl text-secondary tracking-wider font-normal">
               {timeStr || '12:00 PM'}
             </div>
-            <div className="font-label-sm text-xs sm:text-sm text-outline uppercase tracking-wider font-semibold">
+            <div className="font-label-sm text-xs text-outline uppercase tracking-wider font-semibold mt-0.5">
               {dateStr || 'August 22, 2026'}
             </div>
           </div>
 
-          <div className="w-10 h-[1px] bg-primary/20 my-0.5"></div>
+          <div className="w-12 h-[1px] bg-primary/20 my-0.5"></div>
 
           {/* Deterministic Curated Quote */}
-          <p className="font-body-md text-xs sm:text-sm md:text-base text-on-surface-variant max-w-xs italic font-normal text-center leading-snug">
+          <p className="font-body-md text-xs sm:text-sm text-on-surface-variant max-w-xs italic font-normal text-center leading-snug">
             "{currentQuote.text}"
           </p>
         </div>

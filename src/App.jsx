@@ -14,7 +14,6 @@ import { FocusTimer } from './pages/FocusTimer';
 import { FocusAquarium } from './pages/FocusAquarium';
 import { SmallThings } from './pages/SmallThings';
 import { Games } from './pages/Games';
-import { Music } from './pages/Music';
 import { Aquarium } from './pages/Aquarium';
 import { DoNothing } from './pages/DoNothing';
 import { Bottle } from './pages/Bottle';
@@ -79,7 +78,7 @@ export function App() {
             <Route path="/focus-aquarium" element={<ProtectedRoute><FocusAquarium /></ProtectedRoute>} />
             <Route path="/small-things" element={<ProtectedRoute><SmallThings /></ProtectedRoute>} />
             <Route path="/games" element={<ProtectedRoute><Games /></ProtectedRoute>} />
-            <Route path="/music" element={<ProtectedRoute><Music /></ProtectedRoute>} />
+            <Route path="/music" element={<Navigate to="/focus" replace />} />
             <Route path="/world" element={<ProtectedRoute><Aquarium /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />

@@ -91,6 +91,11 @@ html.dark {
   --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
+html.dark body {
+  background-color: #081110;
+  color: #f1f5f9;
+}
+
 /* Glassmorphism Panel */
 .glass-panel {
   background-color: var(--surface-glass);
@@ -100,6 +105,20 @@ html.dark {
   box-shadow: var(--card-shadow);
   color: var(--text-main);
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark Mode Text Visibility & Contrast Overrides */
+html.dark .text-primary {
+  color: #64ffda;
+}
+
+html.dark .text-on-surface,
+html.dark .text-on-surface-variant {
+  color: #f1f5f9;
+}
+
+html.dark .text-outline {
+  color: #94a3b8;
 }
 
 .glass-panel-opaque {

@@ -29,18 +29,35 @@ export const TopAppBar = () => {
     }
   };
 
-  const navLinks = [
-    { to: '/', label: 'Home', icon: 'home' },
-    { to: '/journal', label: 'Journal', icon: 'edit_note' },
-    { to: '/focus', label: 'Focus', icon: 'center_focus_strong' },
-    { to: '/music', label: 'Music', icon: 'music_note' },
-    { to: '/games', label: 'Games', icon: 'videogame_asset' },
-    { to: '/feed', label: 'Feed', icon: 'forum' },
-    { to: '/bottle', label: 'Message in a Bottle', icon: 'sailing' },
-    { to: '/small-things', label: 'Small Things That Help', icon: 'self_care' },
-    { to: '/do-nothing', label: 'Do Nothing', icon: 'visibility' },
-    { to: '/world', label: 'Your Little World', icon: 'waves' },
-    { to: '/settings', label: 'Sanctuary Settings', icon: 'settings' },
+  const groupedNavLinks = [
+    {
+      category: 'Main experiences',
+      items: [
+        { to: '/', label: 'Home', icon: 'home' },
+        { to: '/journal', label: 'Journal', icon: 'edit_note' },
+        { to: '/games', label: 'Games', icon: 'videogame_asset' },
+      ],
+    },
+    {
+      category: 'Connect & Explore',
+      items: [
+        { to: '/bottle', label: 'Message in a Bottle', icon: 'sailing' },
+        { to: '/feed', label: 'Feed', icon: 'forum' },
+      ],
+    },
+    {
+      category: 'Wellbeing',
+      items: [
+        { to: '/small-things', label: 'Small Things That Help', icon: 'self_care' },
+        { to: '/do-nothing', label: 'Do Nothing', icon: 'visibility' },
+      ],
+    },
+    {
+      category: 'Personal',
+      items: [
+        { to: '/settings', label: 'Settings', icon: 'settings' },
+      ],
+    },
   ];
 
   return (
@@ -119,25 +136,32 @@ export const TopAppBar = () => {
               </div>
 
               {/* Navigation Items */}
-              <nav className="flex flex-col gap-1.5">
-                {navLinks.map((item) => {
-                  const isActive = location.pathname === item.to;
-                  return (
-                    <NavLink
-                      key={item.to}
-                      to={item.to}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex items-center gap-3.5 px-4 py-3 rounded-2xl transition-all font-label-sm text-sm font-medium ${
-                        isActive
-                          ? 'bg-primary text-white shadow-sm font-semibold'
-                          : 'text-on-surface-variant hover:bg-white/60 hover:text-primary'
-                      }`}
-                    >
-                      <span className="material-symbols-outlined text-xl">{item.icon}</span>
-                      <span>{item.label}</span>
-                    </NavLink>
-                  );
-                })}
+              <nav className="flex flex-col gap-4 pb-4">
+                {groupedNavLinks.map((group) => (
+                  <div key={group.category} className="flex flex-col gap-1">
+                    <span className="font-label-sm text-[10px] uppercase tracking-widest text-primary/70 font-bold px-2 py-1">
+                      {group.category}
+                    </span>
+                    {group.items.map((item) => {
+                      const isActive = location.pathname === item.to;
+                      return (
+                        <NavLink
+                          key={item.to}
+                          to={item.to}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className={`flex items-center gap-3 px-3 py-2 rounded-xl transition-all font-label-sm text-sm font-medium ${
+                            isActive
+                              ? 'bg-primary text-white shadow-sm font-semibold'
+                              : 'text-on-surface-variant hover:bg-white/60 hover:text-primary'
+                          }`}
+                        >
+                          <span className="material-symbols-outlined text-xl">{item.icon}</span>
+                          <span>{item.label}</span>
+                        </NavLink>
+                      );
+                    })}
+                  </div>
+                ))}
               </nav>
             </div>
 

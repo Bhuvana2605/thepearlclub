@@ -80,7 +80,7 @@ export const Settings = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/30 pb-4">
           <div>
-            <h1 className="font-headline-lg text-headline-lg text-primary">Sanctuary Settings</h1>
+            <h1 className="font-headline-lg text-headline-lg text-primary">Settings</h1>
             <p className="font-body-md text-on-surface-variant/80">Customize your presentation & accessibility preferences.</p>
           </div>
 

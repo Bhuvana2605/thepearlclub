@@ -11,7 +11,7 @@ const AQUARIUM_LAYERS = {
   decorations: 'z-20',
   collectibles: 'z-40', // Explicitly higher than decorations (z-20)
   ui: 'z-50',
-  modal: 'z-60'
+  modal: 'z-[70]' // Explicit high z-index above all aquarium layers
 };
 
 // Safe Placement Grid (percentages x, y) keeping items clear of bottom decoration bounds
@@ -179,10 +179,10 @@ export const Aquarium = () => {
         </div>
 
         {/* Action Buttons to open collection overlays */}
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => setActiveTab('found')}
-            className={`py-2 px-4 rounded-full font-label-sm text-xs font-semibold shadow-md transition-all border ${
+            className={`py-2 px-4 rounded-full font-label-sm text-xs font-semibold shadow-md transition-all border shrink-0 ${
               activeTab === 'found'
                 ? 'bg-primary text-white border-primary'
                 : 'bg-white/75 backdrop-blur-md text-primary border-white/80 hover:bg-white'
@@ -192,7 +192,7 @@ export const Aquarium = () => {
           </button>
           <button
             onClick={() => setActiveTab('achieved')}
-            className={`py-2 px-4 rounded-full font-label-sm text-xs font-semibold shadow-md transition-all border ${
+            className={`py-2 px-4 rounded-full font-label-sm text-xs font-semibold shadow-md transition-all border shrink-0 ${
               activeTab === 'achieved'
                 ? 'bg-primary text-white border-primary'
                 : 'bg-white/75 backdrop-blur-md text-primary border-white/80 hover:bg-white'
@@ -205,23 +205,45 @@ export const Aquarium = () => {
 
       {/* LAYER 6: OVERLAY MODAL VIEW 1: FOUND THINGS */}
       {activeTab === 'found' && (
-        <div className={`aquarium-modal fixed inset-0 ${AQUARIUM_LAYERS.modal} flex items-center justify-center p-4 md:p-8 bg-slate-950/40 backdrop-blur-md animate-fade-in pointer-events-auto overflow-y-auto`}>
-          <div className="w-full max-w-4xl glass-panel-opaque rounded-3xl p-6 md:p-10 shadow-2xl flex flex-col gap-6 border border-white/70 max-h-[85vh] overflow-y-auto my-auto">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/40 pb-4">
-              <div>
-                <h2 className="font-headline-lg text-headline-lg text-primary text-2xl font-bold">Found Things</h2>
-                <p className="font-body-md text-sm text-on-surface-variant mt-0.5">
+        <div className={`aquarium-modal fixed inset-0 ${AQUARIUM_LAYERS.modal} flex items-center justify-center p-4 md:p-8 bg-slate-950/50 backdrop-blur-md animate-fade-in pointer-events-auto overflow-y-auto`}>
+          <div className="w-full max-w-4xl glass-panel-opaque rounded-3xl p-6 md:p-10 shadow-2xl flex flex-col gap-6 border border-white/70 max-h-[85vh] overflow-y-auto my-auto pb-12">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/40 pb-4 w-full flex-wrap">
+              <div className="flex-1 min-w-0">
+                <h2 className="font-headline-lg text-headline-lg text-primary text-xl md:text-2xl font-bold">Found Things</h2>
+                <p className="font-body-md text-xs md:text-sm text-on-surface-variant mt-0.5">
                   Collectibles discovered naturally while spending time in Pearl Club.
                 </p>
               </div>
 
-              <button
-                onClick={() => setActiveTab('aquarium')}
-                className="py-2 px-5 rounded-full bg-primary text-white font-label-sm text-xs font-semibold shadow hover:bg-primary/90 transition-all flex items-center gap-1.5 shrink-0"
-              >
-                <span className="material-symbols-outlined text-base">arrow_back</span>
-                Back to Your Little World
-              </button>
+              <div className="flex items-center gap-2 flex-wrap shrink-0">
+                <button
+                  onClick={() => setActiveTab('found')}
+                  className={`py-2 px-3.5 rounded-full font-label-sm text-xs font-semibold transition-all border ${
+                    activeTab === 'found'
+                      ? 'bg-primary text-white border-primary shadow-xs'
+                      : 'bg-white/60 text-primary border-white/80 hover:bg-white'
+                  }`}
+                >
+                  Found Things ({foundItems.length})
+                </button>
+                <button
+                  onClick={() => setActiveTab('achieved')}
+                  className={`py-2 px-3.5 rounded-full font-label-sm text-xs font-semibold transition-all border ${
+                    activeTab === 'achieved'
+                      ? 'bg-primary text-white border-primary shadow-xs'
+                      : 'bg-white/60 text-primary border-white/80 hover:bg-white'
+                  }`}
+                >
+                  Achieved Things ({achievedItems.length})
+                </button>
+                <button
+                  onClick={() => setActiveTab('aquarium')}
+                  className="py-2 px-4 rounded-full bg-primary text-white font-label-sm text-xs font-semibold shadow hover:bg-primary/90 transition-all flex items-center gap-1.5 shrink-0"
+                >
+                  <span className="material-symbols-outlined text-base">arrow_back</span>
+                  Back to Your Little World
+                </button>
+              </div>
             </div>
 
             {/* Category Filter Pills */}
@@ -241,7 +263,7 @@ export const Aquarium = () => {
               ))}
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-2 pb-6">
               {foundItems.filter((raw) => filterItemMatches(getCollectible(raw))).map((rawItem) => {
                 const item = getCollectible(rawItem);
 
@@ -251,17 +273,17 @@ export const Aquarium = () => {
                     onClick={() => setSelectedCollectible({ ...item, source: rawItem.source })}
                     className="p-4 rounded-2xl bg-white/60 border border-white/70 flex items-center gap-4 shadow-sm relative cursor-pointer hover:bg-white/80 transition-all hover:scale-[1.02]"
                   >
-                    <div className="w-16 h-16 p-1 shrink-0">
+                    <div className="relative w-16 h-16 rounded-2xl bg-white/60 border border-white/80 p-2 shrink-0 flex items-center justify-center shadow-xs overflow-hidden">
                       <img src={item.asset || item.image} alt={item.name} className="w-full h-full object-contain drop-shadow-sm" />
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
-                        <h3 className="font-headline-md text-headline-md text-base font-semibold">{item.name}</h3>
-                        <span className={`text-[9px] uppercase px-2 py-0.5 rounded-full border ${getRarityBadgeStyle(item.rarity)}`}>
+                        <h3 className="font-headline-md text-headline-md text-base font-semibold truncate">{item.name}</h3>
+                        <span className={`text-[9px] uppercase px-2 py-0.5 rounded-full border shrink-0 ${getRarityBadgeStyle(item.rarity)}`}>
                           {item.rarity}
                         </span>
                       </div>
-                      <p className="font-label-sm text-xs text-outline leading-tight mt-1">{item.description}</p>
+                      <p className="font-label-sm text-xs text-outline leading-tight mt-1 line-clamp-2">{item.description}</p>
                     </div>
                   </div>
                 );
@@ -273,23 +295,45 @@ export const Aquarium = () => {
 
       {/* LAYER 6: OVERLAY MODAL VIEW 2: ACHIEVED THINGS & DAILY REWARD */}
       {activeTab === 'achieved' && (
-        <div className={`aquarium-modal fixed inset-0 ${AQUARIUM_LAYERS.modal} flex items-center justify-center p-4 md:p-8 bg-slate-950/40 backdrop-blur-md animate-fade-in pointer-events-auto overflow-y-auto`}>
-          <div className="w-full max-w-4xl glass-panel-opaque rounded-3xl p-6 md:p-10 shadow-2xl flex flex-col gap-6 border border-white/70 max-h-[85vh] overflow-y-auto my-auto">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/40 pb-4">
-              <div>
-                <h2 className="font-headline-lg text-headline-lg text-primary text-2xl font-bold">Achieved Things</h2>
-                <p className="font-body-md text-sm text-on-surface-variant mt-0.5">
+        <div className={`aquarium-modal fixed inset-0 ${AQUARIUM_LAYERS.modal} flex items-center justify-center p-4 md:p-8 bg-slate-950/50 backdrop-blur-md animate-fade-in pointer-events-auto overflow-y-auto`}>
+          <div className="w-full max-w-4xl glass-panel-opaque rounded-3xl p-6 md:p-10 shadow-2xl flex flex-col gap-6 border border-white/70 max-h-[85vh] overflow-y-auto my-auto pb-12">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/40 pb-4 w-full flex-wrap">
+              <div className="flex-1 min-w-0">
+                <h2 className="font-headline-lg text-headline-lg text-primary text-xl md:text-2xl font-bold">Achieved Things</h2>
+                <p className="font-body-md text-xs md:text-sm text-on-surface-variant mt-0.5">
                   Milestones, daily rewards, and Focus rewards earned in sanctuary.
                 </p>
               </div>
 
-              <button
-                onClick={() => setActiveTab('aquarium')}
-                className="py-2 px-5 rounded-full bg-primary text-white font-label-sm text-xs font-semibold shadow hover:bg-primary/90 transition-all flex items-center gap-1.5 shrink-0"
-              >
-                <span className="material-symbols-outlined text-base">arrow_back</span>
-                Back to Your Little World
-              </button>
+              <div className="flex items-center gap-2 flex-wrap shrink-0">
+                <button
+                  onClick={() => setActiveTab('found')}
+                  className={`py-2 px-3.5 rounded-full font-label-sm text-xs font-semibold transition-all border ${
+                    activeTab === 'found'
+                      ? 'bg-primary text-white border-primary shadow-xs'
+                      : 'bg-white/60 text-primary border-white/80 hover:bg-white'
+                  }`}
+                >
+                  Found Things ({foundItems.length})
+                </button>
+                <button
+                  onClick={() => setActiveTab('achieved')}
+                  className={`py-2 px-3.5 rounded-full font-label-sm text-xs font-semibold transition-all border ${
+                    activeTab === 'achieved'
+                      ? 'bg-primary text-white border-primary shadow-xs'
+                      : 'bg-white/60 text-primary border-white/80 hover:bg-white'
+                  }`}
+                >
+                  Achieved Things ({achievedItems.length})
+                </button>
+                <button
+                  onClick={() => setActiveTab('aquarium')}
+                  className="py-2 px-4 rounded-full bg-primary text-white font-label-sm text-xs font-semibold shadow hover:bg-primary/90 transition-all flex items-center gap-1.5 shrink-0"
+                >
+                  <span className="material-symbols-outlined text-base">arrow_back</span>
+                  Back to Your Little World
+                </button>
+              </div>
             </div>
 
             {/* Daily Reward Section */}
@@ -332,14 +376,14 @@ export const Aquarium = () => {
                   {achievedItems.filter((i) => i.source === 'focus_rare' || i.source === 'focus_reward').map((rawItem) => {
                     const item = getCollectible(rawItem);
                     return (
-                      <div key={rawItem.id} className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-center gap-4 shadow-sm">
-                        <div className="w-14 h-14 p-1 shrink-0">
+                      <div key={rawItem.id} className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-center gap-4 shadow-sm relative">
+                        <div className="relative w-14 h-14 rounded-2xl bg-amber-100/70 border border-amber-200 p-2 shrink-0 flex items-center justify-center overflow-hidden">
                           <img src={item.asset || item.image} alt={item.name} className="w-full h-full object-contain drop-shadow-sm" />
                         </div>
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
-                            <h4 className="font-headline-md text-headline-md text-base font-bold text-amber-950">{item.name}</h4>
-                            <span className="text-[9px] uppercase px-2 py-0.5 rounded-full border bg-amber-100 text-amber-800 border-amber-300 font-bold">
+                            <h4 className="font-headline-md text-headline-md text-base font-bold text-amber-950 truncate">{item.name}</h4>
+                            <span className="text-[9px] uppercase px-2 py-0.5 rounded-full border bg-amber-100 text-amber-800 border-amber-300 font-bold shrink-0">
                               Focus Rare
                             </span>
                           </div>
@@ -355,9 +399,9 @@ export const Aquarium = () => {
             )}
 
             {/* Milestones & Achievements Grid */}
-            <h2 className="font-headline-md text-headline-md text-primary text-xl">Milestones & Achievements</h2>
+            <h2 className="font-headline-md text-headline-md text-primary text-xl font-bold">Milestones & Achievements</h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-8">
               {achievementsList.map((ach) => {
                 const isUnlocked = achievedState.unlockedIds.includes(ach.id);
                 const isClaimed = achievedState.claimedIds.includes(ach.id);
@@ -366,34 +410,41 @@ export const Aquarium = () => {
                 return (
                   <div
                     key={ach.id}
-                    className={`p-5 rounded-2xl border transition-all flex flex-col justify-between gap-3 ${
+                    className={`relative p-5 rounded-2xl border transition-all flex flex-col justify-between gap-3 overflow-hidden ${
                       isUnlocked
                         ? 'bg-white/70 border-white/80 shadow-sm'
-                        : 'bg-white/30 border-white/40 opacity-70'
+                        : 'bg-white/40 border-white/50 opacity-80'
                     }`}
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-16 h-16 p-1 shrink-0">
-                        <img src={item.asset || item.image} alt={item.name} className={`w-full h-full object-contain drop-shadow-sm ${!isUnlocked && 'grayscale opacity-50'}`} />
+                      <div className="relative w-16 h-16 rounded-2xl bg-white/60 border border-white/80 p-2 flex items-center justify-center shrink-0 shadow-xs overflow-hidden">
+                        <img
+                          src={item.asset || item.image}
+                          alt={item.name}
+                          className={`w-full h-full object-contain drop-shadow-sm ${!isUnlocked ? 'grayscale opacity-40' : ''}`}
+                        />
                       </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-headline-md text-headline-md text-base font-semibold">{ach.title}</h4>
-                          <span className={`text-[9px] uppercase px-2 py-0.5 rounded-full border ${getRarityBadgeStyle(item.rarity)}`}>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                          <h4 className="font-headline-md text-headline-md text-base font-bold text-primary truncate">{ach.title}</h4>
+                          <span className={`text-[9px] uppercase px-2 py-0.5 rounded-full border shrink-0 ${getRarityBadgeStyle(item.rarity)}`}>
                             {item.rarity}
                           </span>
                         </div>
-                        <p className="font-label-sm text-xs text-on-surface-variant mt-1">{ach.description}</p>
+                        <p className="font-label-sm text-xs text-on-surface-variant mt-1 leading-normal">{ach.description}</p>
                       </div>
                     </div>
 
-                    <div className="flex justify-end items-center border-t border-white/30 pt-2">
+                    <div className="flex justify-end items-center border-t border-white/30 pt-3 mt-1">
                       {isClaimed ? (
-                        <span className="font-label-sm text-xs text-primary font-semibold">Unlocked & Claimed</span>
+                        <span className="font-label-sm text-xs text-primary font-semibold flex items-center gap-1">
+                          <span className="material-symbols-outlined text-sm">check_circle</span>
+                          Unlocked & Claimed
+                        </span>
                       ) : isUnlocked ? (
                         <button
                           onClick={() => claimAchievementReward(ach.id)}
-                          className="py-1.5 px-4 rounded-full bg-secondary text-white font-label-sm text-xs font-semibold shadow hover:scale-105"
+                          className="py-1.5 px-4 rounded-full bg-secondary text-white font-label-sm text-xs font-semibold shadow hover:scale-105 transition-transform"
                         >
                           Claim Reward
                         </button>
