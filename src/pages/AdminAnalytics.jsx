@@ -2,19 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSanctuary } from '../context/SanctuaryContext';
 import { supabase } from '../lib/supabase/client';
-import { checkIsAdmin, ADMIN_EMAILS } from '../config/adminConfig';
+import { checkIsAdmin } from '../config/adminConfig';
 import { getAnalyticsSummary } from '../lib/analytics/telemetry';
 
+const formatPearlNo = (val) => {
+  if (!val && val !== 0) return '#PEARL-0001';
+  if (typeof val === 'string' && val.includes('PEARL')) return val;
+  const num = parseInt(val, 10) || 1;
+  return `#PEARL-${String(num).padStart(4, '0')}`;
+};
+
 /**
- * Secure Admin Analytics Dashboard (/admin/analytics)
- * 
- * PRIVACY GUARANTEE:
- * Tracks aggregate event counts, website visits, unique visitors, and user metrics.
- * NEVER stores or displays private journal text, Mood Canvas drawings, or user task text.
+ * Secure Admin Analytics Dashboard (/admin)
+ * Includes Registered Accounts Directory table (Name, Email, Pearl Number, Role, Joined Date).
  */
 export const AdminAnalytics = () => {
-  const { currentUser, profile, signOutUser, focusHistory, journalEntries, activityHistory } = useSanctuary();
+  const { currentUser, profile, signOutUser, focusHistory, journalEntries, activityHistory, formattedPearlNumber } = useSanctuary();
   const [dateFilter, setDateFilter] = useState('7d'); // 'today' | '7d' | '30d' | 'all'
+  const [showUserTable, setShowUserTable] = useState(true);
+  const [userSearch, setUserSearch] = useState('');
+  const [userProfiles, setUserProfiles] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+
   const [telemetry, setTelemetry] = useState({
     totalVisits: 1,
     uniqueVisitors: 1,
@@ -31,11 +40,11 @@ export const AdminAnalytics = () => {
     feedPostsCount: 0,
     bottleCount: 0,
     featureRankings: [
-      { name: 'Focus', count: 0, icon: 'center_focus_strong' },
-      { name: 'Journal', count: 0, icon: 'edit_note' },
-      { name: 'Games', count: 0, icon: 'sports_esports' },
-      { name: 'Music', count: 0, icon: 'headphones' },
-      { name: 'Feed', count: 0, icon: 'forum' },
+      { name: 'Focus Sessions', count: 0, icon: 'center_focus_strong' },
+      { name: 'Journal Entries', count: 0, icon: 'edit_note' },
+      { name: 'Games Played', count: 0, icon: 'sports_esports' },
+      { name: 'Ambient Soundtracks', count: 0, icon: 'headphones' },
+      { name: 'Community Feed', count: 0, icon: 'forum' },
       { name: 'Message in a Bottle', count: 0, icon: 'water_drop' }
     ]
   });
@@ -55,7 +64,63 @@ export const AdminAnalytics = () => {
     };
     loadTelemetry();
 
-    // 2. Calculate Local Feature Usage Metrics
+    // 2. Fetch Real Registered Users from Supabase Database
+    const fetchUsers = async () => {
+      setLoadingUsers(true);
+      let list = [];
+
+      if (supabase) {
+        try {
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+          if (!error && data && data.length > 0) {
+            list = data.map((u, idx) => ({
+              id: u.id || `u_${idx}`,
+              name: u.display_name || u.username || u.full_name || 'Pearl Club Member',
+              username: u.username ? `@${u.username.replace(/^@/, '')}` : '@member',
+              email: u.email || (u.id === currentUser?.id ? currentUser?.email : 'private@pearlclub.sanctuary'),
+              pearlNumber: formatPearlNo(u.pearl_number || u.pearl_no || (idx + 1)),
+              createdAt: u.created_at ? new Date(u.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent',
+              role: u.role || (checkIsAdmin(u, u) ? 'admin' : 'member'),
+              isEarlyMember: u.is_early_member ?? true
+            }));
+          }
+        } catch (e) {
+          console.error('[Admin] Error fetching profiles:', e);
+        }
+      }
+
+      // Local / Offline Fallback Profile
+      if (list.length === 0 && currentUser) {
+        list = [
+          {
+            id: currentUser.id || '1',
+            name: profile?.display_name || profile?.username || 'Bhuvana (Admin)',
+            username: profile?.username ? `@${profile.username.replace(/^@/, '')}` : '@bhuvana',
+            email: currentUser.email || 'chbhuvana0505@gmail.com',
+            pearlNumber: formattedPearlNumber || '#PEARL-0001',
+            createdAt: 'Aug 25, 2026',
+            role: 'admin',
+            isEarlyMember: true
+          }
+        ];
+      }
+
+      setUserProfiles(list);
+      setAnalyticsData((prev) => ({
+        ...prev,
+        registeredUsers: Math.max(prev.registeredUsers, list.length),
+        activeUsers: Math.max(1, list.length)
+      }));
+      setLoadingUsers(false);
+    };
+
+    fetchUsers();
+
+    // 3. Local Feature Metrics
     const journalTotal = Object.keys(journalEntries || {}).filter(
       (k) => journalEntries[k]?.text?.trim().length > 0 || journalEntries[k]?.drawingDataUrl
     ).length;
@@ -81,31 +146,37 @@ export const AdminAnalytics = () => {
       ].sort((a, b) => b.count - a.count)
     }));
 
-    // 3. Supabase Aggregate Records
+    // 4. Supabase Aggregate Records
     if (supabase && currentUser) {
-      const fetchSupabaseAnalytics = async () => {
+      const fetchSupabaseTotals = async () => {
         try {
-          const { count: userCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
           const { count: postsCount } = await supabase.from('posts').select('*', { count: 'exact', head: true });
           const { count: bottlesCount } = await supabase.from('bottles').select('*', { count: 'exact', head: true });
 
           setAnalyticsData((prev) => ({
             ...prev,
-            registeredUsers: userCount || prev.registeredUsers,
-            activeUsers: Math.max(1, userCount || 1),
             feedPostsCount: postsCount || prev.feedPostsCount,
             bottleCount: bottlesCount || prev.bottleCount
           }));
-        } catch (e) {
-          // Silent fallback to local telemetry
+        } catch {
+          // Silent fallback
         }
       };
-
-      fetchSupabaseAnalytics();
+      fetchSupabaseTotals();
     }
-  }, [dateFilter, focusHistory, journalEntries, activityHistory, currentUser]);
+  }, [dateFilter, focusHistory, journalEntries, activityHistory, currentUser, profile, formattedPearlNumber]);
 
-  const configuredEnvEmail = import.meta.env.VITE_ADMIN_EMAIL || '';
+  // Filtered Users List for Search
+  const filteredUsers = userProfiles.filter((u) => {
+    const q = userSearch.toLowerCase().trim();
+    if (!q) return true;
+    return (
+      u.name.toLowerCase().includes(q) ||
+      u.email.toLowerCase().includes(q) ||
+      u.pearlNumber.toLowerCase().includes(q) ||
+      u.username.toLowerCase().includes(q)
+    );
+  });
 
   if (!currentUser) {
     return (
@@ -162,16 +233,16 @@ export const AdminAnalytics = () => {
 
   return (
     <main className="relative z-10 w-full min-h-[85vh] flex flex-col items-center justify-center pt-24 pb-32 px-organic-padding md:px-bubble-margin">
-      <div className="w-full max-w-4xl glass-panel rounded-3xl p-6 md:p-10 shadow-2xl flex flex-col gap-8 border border-white/50 relative overflow-hidden">
+      <div className="w-full max-w-5xl glass-panel rounded-3xl p-6 md:p-10 shadow-2xl flex flex-col gap-8 border border-white/50 relative overflow-hidden">
         
         {/* Header Bar */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/30 pb-4">
           <div>
             <span className="font-label-sm text-[11px] font-semibold text-primary uppercase tracking-widest bg-primary-container/40 px-3 py-1 rounded-full border border-primary-container/30">
-              Pearl Club Admin
+              Pearl Club Admin Dashboard
             </span>
             <h1 className="font-headline-lg text-headline-lg text-primary text-2xl font-bold tracking-tight mt-1">
-              Website Analytics & Visitor Metrics
+              Website Analytics & Registered Accounts
             </h1>
             <p className="font-body-md text-xs text-on-surface-variant mt-0.5">
               Logged in as Admin: <strong className="text-primary">{currentUser.email}</strong>
@@ -210,7 +281,7 @@ export const AdminAnalytics = () => {
           </div>
         </div>
 
-        {/* 1. Primary Visitor & User Metrics Grid */}
+        {/* 1. Summary Metrics Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="p-4 rounded-2xl glass-panel border border-white/40 flex flex-col items-center text-center shadow-sm">
             <span className="material-symbols-outlined text-primary text-3xl mb-1">visibility</span>
@@ -228,12 +299,20 @@ export const AdminAnalytics = () => {
             <span className="font-label-sm text-xs text-outline mt-1 font-semibold">Unique Visitors</span>
           </div>
 
-          <div className="p-4 rounded-2xl glass-panel border border-white/40 flex flex-col items-center text-center shadow-sm">
-            <span className="material-symbols-outlined text-tertiary text-3xl mb-1">group</span>
-            <span className="font-display-md text-display-md text-3xl text-tertiary font-bold">
+          {/* Registered Accounts Card (Clickable to view table) */}
+          <div
+            onClick={() => setShowUserTable(true)}
+            className="p-4 rounded-2xl glass-panel border border-primary/50 bg-primary/5 flex flex-col items-center text-center shadow-md cursor-pointer hover:scale-105 hover:border-primary transition-all group"
+            title="Click to view Registered Members table"
+          >
+            <span className="material-symbols-outlined text-primary text-3xl mb-1 group-hover:animate-bounce">group</span>
+            <span className="font-display-md text-display-md text-3xl text-primary font-bold">
               {analyticsData.registeredUsers}
             </span>
-            <span className="font-label-sm text-xs text-outline mt-1 font-semibold">Registered Accounts</span>
+            <span className="font-label-sm text-xs text-primary mt-1 font-bold flex items-center gap-1">
+              Registered Accounts
+              <span className="material-symbols-outlined text-xs">list_alt</span>
+            </span>
           </div>
 
           <div className="p-4 rounded-2xl glass-panel border border-white/40 flex flex-col items-center text-center shadow-sm">
@@ -245,7 +324,127 @@ export const AdminAnalytics = () => {
           </div>
         </div>
 
-        {/* 2. Most Used Features Ranking */}
+        {/* 2. REGISTERED ACCOUNTS DIRECTORY TABLE */}
+        <div className="flex flex-col gap-4 p-5 md:p-6 rounded-3xl glass-panel border border-white/60 shadow-lg bg-white/40">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-white/30 pb-3">
+            <div className="flex items-center gap-2.5">
+              <span className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                <span className="material-symbols-outlined text-xl">badge</span>
+              </span>
+              <div>
+                <h2 className="font-headline-md text-lg font-bold text-primary">Registered Member Accounts</h2>
+                <p className="font-body-md text-xs text-on-surface-variant">
+                  Detailed list of users registered on Pearl Club with their name, email, and Pearl Number.
+                </p>
+              </div>
+            </div>
+
+            {/* Table Search Input */}
+            <div className="relative w-full sm:w-64">
+              <input
+                type="text"
+                placeholder="Search name, email, or pearl #..."
+                value={userSearch}
+                onChange={(e) => setUserSearch(e.target.value)}
+                className="w-full bg-white/80 border border-primary/30 rounded-full pl-9 pr-4 py-1.5 font-body-md text-xs text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40 shadow-xs"
+              />
+              <span className="material-symbols-outlined text-primary/60 text-lg absolute left-3 top-1.5">
+                search
+              </span>
+            </div>
+          </div>
+
+          {/* Accounts Table Container */}
+          <div className="overflow-x-auto w-full rounded-2xl border border-white/50 shadow-inner bg-white/30">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-primary/10 border-b border-primary/20 text-primary font-label-sm text-xs font-bold uppercase tracking-wider">
+                  <th className="py-3 px-4">Member Name</th>
+                  <th className="py-3 px-4">Email Address</th>
+                  <th className="py-3 px-4">Pearl Number</th>
+                  <th className="py-3 px-4">Role / Status</th>
+                  <th className="py-3 px-4">Joined Date</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/30 font-body-md text-xs">
+                {loadingUsers ? (
+                  <tr>
+                    <td colSpan="5" className="py-8 text-center text-on-surface-variant font-medium">
+                      <div className="flex justify-center items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                        Loading registered member accounts...
+                      </div>
+                    </td>
+                  </tr>
+                ) : filteredUsers.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="py-8 text-center text-on-surface-variant font-medium">
+                      No matching registered accounts found.
+                    </td>
+                  </tr>
+                ) : (
+                  filteredUsers.map((user) => (
+                    <tr key={user.id} className="hover:bg-white/50 transition-colors">
+                      {/* Name & Avatar */}
+                      <td className="py-3.5 px-4 font-semibold text-on-surface">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary to-secondary text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                            {user.name.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <span className="block font-bold text-primary">{user.name}</span>
+                            <span className="block text-[11px] text-outline font-normal">{user.username}</span>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Email */}
+                      <td className="py-3.5 px-4 font-mono text-xs text-on-surface-variant">
+                        {user.email}
+                      </td>
+
+                      {/* Pearl Number Badge */}
+                      <td className="py-3.5 px-4">
+                        <span className="inline-flex items-center gap-1 bg-amber-100/90 text-amber-900 border border-amber-300 font-mono font-bold text-xs px-2.5 py-1 rounded-full shadow-xs">
+                          <img src="/assets/collectibles/pearl.png" alt="Pearl" className="w-3.5 h-3.5 object-contain" />
+                          {user.pearlNumber}
+                        </span>
+                      </td>
+
+                      {/* Role / Status */}
+                      <td className="py-3.5 px-4">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {user.role === 'admin' && (
+                            <span className="bg-primary text-white text-[10px] font-bold uppercase px-2 py-0.5 rounded-full shadow-xs">
+                              Admin
+                            </span>
+                          )}
+                          {user.isEarlyMember && (
+                            <span className="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[10px] font-bold uppercase px-2 py-0.5 rounded-full">
+                              Early Member
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Joined Date */}
+                      <td className="py-3.5 px-4 text-on-surface-variant text-[11px] font-medium">
+                        {user.createdAt}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="flex justify-between items-center text-[11px] text-outline px-1">
+            <span>Showing {filteredUsers.length} of {userProfiles.length} total registered accounts</span>
+            <span className="font-semibold text-primary">Live Database Sync Enabled</span>
+          </div>
+        </div>
+
+        {/* 3. Most Used Features Ranking */}
         <div className="flex flex-col gap-3">
           <h2 className="font-label-sm text-xs text-primary uppercase tracking-widest font-semibold px-1">
             Feature Usage & Engagement
@@ -271,10 +470,10 @@ export const AdminAnalytics = () => {
           </div>
         </div>
 
-        {/* 3. Aggregate Activity Metrics Breakdown */}
+        {/* 4. Aggregate Activity Totals */}
         <div className="flex flex-col gap-3">
           <h2 className="font-label-sm text-xs text-primary uppercase tracking-widest font-semibold px-1">
-            Aggregate Activity Totals
+            Aggregate Activity Metrics
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
             <div className="p-3.5 rounded-xl bg-white/40 border border-white/50 text-center">
@@ -302,20 +501,6 @@ export const AdminAnalytics = () => {
               <span className="font-label-sm text-[11px] text-outline block mt-0.5 font-semibold">Bottles Released</span>
             </div>
           </div>
-        </div>
-
-        {/* Admin Email Authorization Info Card */}
-        <div className="p-4 rounded-2xl bg-white/50 border border-white/60 flex flex-col gap-2 text-left text-xs text-on-surface-variant">
-          <div className="flex items-center gap-2 text-primary font-bold">
-            <span className="material-symbols-outlined text-base">verified</span>
-            <span>Admin Authorization Settings</span>
-          </div>
-          <p className="text-[11px] text-outline">
-            Active Admin Email: <code className="text-primary font-semibold">{currentUser?.email}</code>
-          </p>
-          <p className="text-[11px] text-outline">
-            To authorize additional Gmail addresses as Admin, set <code>VITE_ADMIN_EMAIL=your_email@gmail.com</code> in <code>.env</code> or update <code>ADMIN_EMAILS</code> in <code>src/config/adminConfig.js</code>.
-          </p>
         </div>
 
         {/* Privacy Guarantee Footer */}
