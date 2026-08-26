@@ -108,17 +108,50 @@ html.dark body {
 }
 
 /* Dark Mode Text Visibility & Contrast Overrides */
-html.dark .text-primary {
-  color: #64ffda;
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark h5,
+html.dark h6 {
+  color: #f8fafc;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
 }
 
-html.dark .text-on-surface,
+html.dark .text-primary {
+  color: #5ffbd6 !important;
+}
+
+html.dark .text-secondary {
+  color: #80cbc4 !important;
+}
+
+html.dark .text-tertiary {
+  color: #eae4b1 !important;
+}
+
+html.dark .text-on-surface {
+  color: #f8fafc !important;
+}
+
 html.dark .text-on-surface-variant {
-  color: #f1f5f9;
+  color: #cbd5e1 !important;
 }
 
 html.dark .text-outline {
-  color: #94a3b8;
+  color: #94a3b8 !important;
+}
+
+html.dark input,
+html.dark textarea,
+html.dark select {
+  color: #f8fafc !important;
+  background-color: rgba(15, 23, 42, 0.7) !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #94a3b8 !important;
 }
 
 .glass-panel-opaque {

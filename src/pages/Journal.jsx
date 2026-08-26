@@ -49,14 +49,17 @@ export const Journal = () => {
             August 2026 Memory Map
           </h2>
           <div className="flex items-center gap-3 font-label-sm text-xs text-outline">
-            <span className="flex items-center gap-1">
-              <span className="text-primary font-bold">•</span> Journal
+            <span className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-700 inline-block shadow-xs"></span>
+              <span className="font-semibold text-on-surface">Journal</span>
             </span>
-            <span className="flex items-center gap-1">
-              <span className="text-secondary font-bold">●</span> Focus
+            <span className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-teal-500 inline-block shadow-xs"></span>
+              <span className="font-semibold text-on-surface">Focus</span>
             </span>
-            <span className="flex items-center gap-1">
-              <span className="text-tertiary font-bold">○</span> Game
+            <span className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-400 inline-block shadow-xs"></span>
+              <span className="font-semibold text-on-surface">Game</span>
             </span>
           </div>
         </div>
@@ -90,10 +93,16 @@ export const Journal = () => {
                 title={`Inspect ${dateStr}`}
               >
                 <span className="font-label-sm text-xs">{dayNum}</span>
-                <div className="flex gap-0.5 items-center">
-                  {hasJournal && <span className="text-primary text-xs leading-none">•</span>}
-                  {hasFocus && <span className="text-secondary text-xs leading-none">●</span>}
-                  {hasGame && <span className="text-tertiary text-xs leading-none">○</span>}
+                <div className="flex gap-1 items-center">
+                  {hasJournal && (
+                    <span className="w-2 h-2 rounded-full bg-emerald-700 inline-block shadow-xs" title="Journal Entry" />
+                  )}
+                  {hasFocus && (
+                    <span className="w-2 h-2 rounded-full bg-teal-500 inline-block shadow-xs" title="Focus Session" />
+                  )}
+                  {hasGame && (
+                    <span className="w-2 h-2 rounded-full bg-rose-400 inline-block shadow-xs" title="Game Played" />
+                  )}
                 </div>
               </div>
             );

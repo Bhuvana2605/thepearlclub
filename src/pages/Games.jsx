@@ -193,10 +193,16 @@ export const Games = () => {
           try {
             const results = landmarkerRef.current.detectForVideo(video, performance.now());
             if (results.landmarks && results.landmarks.length > 0) {
+              // Landmark 8: Index Finger Tip
               const indexTip = results.landmarks[0][8];
+              const rawTargetX = (1 - indexTip.x) * canvas.width;
+              const rawTargetY = indexTip.y * canvas.height;
+
+              // LERP / Exponential Moving Average Smoothing Filter (alpha = 0.35)
+              const alpha = 0.35;
               playerPos.current = {
-                x: (1 - indexTip.x) * canvas.width,
-                y: indexTip.y * canvas.height
+                x: playerPos.current.x + (rawTargetX - playerPos.current.x) * alpha,
+                y: playerPos.current.y + (rawTargetY - playerPos.current.y) * alpha
               };
             }
           } catch (e) {}
@@ -212,7 +218,7 @@ export const Games = () => {
         ctx.fillStyle = 'rgba(0, 107, 88, 0.25)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       } else {
-        ctx.fillStyle = 'rgba(100, 255, 218, 0.2)';
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.4)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
 
@@ -220,24 +226,24 @@ export const Games = () => {
         const p = targetPearl.current;
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 22, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, 24, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(100, 255, 218, 0.35)';
         ctx.fill();
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 14, 0, Math.PI * 2);
-        const grad = ctx.createRadialGradient(p.x - 4, p.y - 4, 2, p.x, p.y, 14);
+        ctx.arc(p.x, p.y, 16, 0, Math.PI * 2);
+        const grad = ctx.createRadialGradient(p.x - 4, p.y - 4, 2, p.x, p.y, 16);
         grad.addColorStop(0, '#ffffff');
         grad.addColorStop(0.7, '#e0f2f1');
         grad.addColorStop(1, '#80cbc4');
         ctx.fillStyle = grad;
         ctx.shadowColor = '#ffffff';
-        ctx.shadowBlur = 12;
+        ctx.shadowBlur = 14;
         ctx.fill();
         ctx.shadowBlur = 0;
 
         const dist = Math.hypot(playerPos.current.x - p.x, playerPos.current.y - p.y);
-        if (dist < 26) {
+        if (dist < 32) {
           setScore((s) => s + 1);
           setCatchAnimation(true);
           setTimeout(() => setCatchAnimation(false), 250);
@@ -252,16 +258,21 @@ export const Games = () => {
 
       const { x: fx, y: fy } = playerPos.current;
 
+      // Outer Glowing Ring for Index Finger Pointer
       ctx.beginPath();
-      ctx.arc(fx, fy, 20, 0, Math.PI * 2);
-      ctx.fillStyle = catchAnimation ? 'rgba(100, 255, 218, 0.6)' : 'rgba(255, 255, 255, 0.4)';
-      ctx.strokeStyle = '#006b58';
-      ctx.lineWidth = 2;
+      ctx.arc(fx, fy, 22, 0, Math.PI * 2);
+      ctx.fillStyle = catchAnimation ? 'rgba(100, 255, 218, 0.7)' : 'rgba(255, 255, 255, 0.45)';
+      ctx.strokeStyle = catchAnimation ? '#64ffda' : '#006b58';
+      ctx.lineWidth = 2.5;
+      ctx.shadowColor = '#64ffda';
+      ctx.shadowBlur = catchAnimation ? 18 : 8;
       ctx.fill();
       ctx.stroke();
+      ctx.shadowBlur = 0;
 
+      // Inner Index Tip Focus Dot
       ctx.beginPath();
-      ctx.arc(fx, fy, 7, 0, Math.PI * 2);
+      ctx.arc(fx, fy, 8, 0, Math.PI * 2);
       ctx.fillStyle = '#64ffda';
       ctx.fill();
 
