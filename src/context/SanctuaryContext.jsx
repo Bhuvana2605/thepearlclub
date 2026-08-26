@@ -570,18 +570,21 @@ export const SanctuaryProvider = ({ children }) => {
 
             supabase
               .from('profiles')
-              .insert([
-                {
-                  id: currentUser.id,
-                  name: defaultName,
-                  username: defaultUsername,
-                  bio: 'Finding a little quiet space.',
-                  avatar_url: 'pearl',
-                  created_at: new Date().toISOString()
-                }
-              ])
+              .upsert(
+                [
+                  {
+                    id: currentUser.id,
+                    name: defaultName,
+                    username: defaultUsername,
+                    bio: 'Finding a little quiet space.',
+                    avatar_url: 'pearl',
+                    created_at: new Date().toISOString()
+                  }
+                ],
+                { onConflict: 'id', ignoreDuplicates: true }
+              )
               .select('id, name, username, bio, avatar_url, pearl_number, role, is_admin')
-              .single()
+              .maybeSingle()
               .then(({ data: createdData }) => {
                 if (createdData && createdData.pearl_number != null) {
                   setPearlNumber(createdData.pearl_number);

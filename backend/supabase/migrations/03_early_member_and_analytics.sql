@@ -11,6 +11,7 @@ ALTER TABLE public.profiles
 
 -- Dedicated PostgreSQL Sequence for Atomic Pearl Number Assignment
 CREATE SEQUENCE IF NOT EXISTS public.pearl_number_seq START WITH 1 INCREMENT BY 1;
+ALTER SEQUENCE public.pearl_number_seq INCREMENT BY 1;
 
 -- Function & Trigger to automatically assign permanent sequential pearl_number upon profile creation
 CREATE OR REPLACE FUNCTION public.assign_pearl_number()
@@ -30,17 +31,16 @@ CREATE TRIGGER trigger_assign_pearl_number
   EXECUTE FUNCTION public.assign_pearl_number();
 
 -- Backfill existing profiles sorted strictly by actual registration creation order (created_at ASC)
-DO $$
-DECLARE
-  r RECORD;
-  n INT := 1;
-BEGIN
-  FOR r IN SELECT id FROM public.profiles ORDER BY created_at ASC LOOP
-    UPDATE public.profiles SET pearl_number = n WHERE id = r.id;
-    n := n + 1;
-  END LOOP;
-  PERFORM setval('public.pearl_number_seq', GREATEST(n - 1, 1));
-END $$;
+WITH renumbered AS (
+  SELECT id, ROW_NUMBER() OVER (ORDER BY created_at ASC) AS new_pearl_no
+  FROM public.profiles
+)
+UPDATE public.profiles p
+SET pearl_number = r.new_pearl_no
+FROM renumbered r
+WHERE p.id = r.id;
+
+SELECT setval('public.pearl_number_seq', COALESCE((SELECT MAX(pearl_number) FROM public.profiles), 0));
 
 -- 2. SECURITY: PREVENT NON-ADMIN USERS FROM PROMOTING THEMSELVES TO ADMIN ROLE
 CREATE OR REPLACE FUNCTION public.protect_profile_role()

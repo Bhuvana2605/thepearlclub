@@ -61,24 +61,27 @@ export const SignUp = () => {
         }
 
         if (data?.user) {
-          // Attempt profile record creation separately
+          // Attempt profile record creation safely (upsert with ignoreDuplicates)
           try {
-            const { error: profileErr } = await supabase.from('profiles').insert([
-              {
-                id: data.user.id,
-                name: cleanName,
-                username: cleanUsername,
-                bio: cleanBio,
-                avatar_url: 'pearl',
-                created_at: new Date().toISOString()
-              }
-            ]);
+            const { error: profileErr } = await supabase.from('profiles').upsert(
+              [
+                {
+                  id: data.user.id,
+                  name: cleanName,
+                  username: cleanUsername,
+                  bio: cleanBio,
+                  avatar_url: 'pearl',
+                  created_at: new Date().toISOString()
+                }
+              ],
+              { onConflict: 'id', ignoreDuplicates: true }
+            );
 
             if (profileErr) {
-              console.warn('[Supabase Profile] Profile insertion warning (migrations pending):', profileErr.message);
+              console.warn('[Supabase Profile] Profile insertion warning:', profileErr.message);
             }
           } catch (pErr) {
-            console.warn('[Supabase Profile] Profile creation catch (migrations pending):', pErr);
+            console.warn('[Supabase Profile] Profile creation catch:', pErr);
           }
         }
       } catch (err) {
