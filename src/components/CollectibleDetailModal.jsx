@@ -35,10 +35,10 @@ export const CollectibleDetailModal = ({ isOpen, item, onClose }) => {
   };
 
   const getRarityBadgeStyle = (r) => {
-    if (r === 'legendary') return 'bg-amber-100 text-amber-900 border-amber-300 font-bold';
-    if (r === 'rare') return 'bg-purple-100 text-purple-900 border-purple-300 font-semibold';
-    if (r === 'special') return 'bg-emerald-100 text-emerald-900 border-emerald-300 font-semibold';
-    return 'bg-cyan-100 text-cyan-900 border-cyan-300 font-semibold';
+    if (r === 'legendary') return 'bg-amber-200 text-slate-950 border-amber-400 font-bold !text-black';
+    if (r === 'rare') return 'bg-purple-200 text-slate-950 border-purple-400 font-bold !text-black';
+    if (r === 'special') return 'bg-emerald-200 text-slate-950 border-emerald-400 font-bold !text-black';
+    return 'bg-cyan-200 text-slate-950 border-cyan-400 font-bold !text-black';
   };
 
   return (
@@ -76,7 +76,7 @@ export const CollectibleDetailModal = ({ isOpen, item, onClose }) => {
         <div className="flex flex-col items-center gap-1.5 w-full">
           <h2 className="font-headline-lg text-2xl font-bold text-primary tracking-tight">{name}</h2>
           
-          <span className={`font-label-sm text-xs uppercase tracking-wider px-3.5 py-1 rounded-full border shadow-xs ${getRarityBadgeStyle(rarity)}`}>
+          <span className={`font-label-sm text-xs uppercase tracking-wider px-3.5 py-1 rounded-full border shadow-xs ${getRarityBadgeStyle(rarity)}`} style={{ color: '#000000' }}>
             {rarity}
           </span>
         </div>

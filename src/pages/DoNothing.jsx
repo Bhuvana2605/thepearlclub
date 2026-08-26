@@ -79,7 +79,7 @@ export const DoNothing = () => {
             : 'opacity-0 backdrop-blur-none pointer-events-none'
         }`}
       >
-        <p className="font-body-lg text-body-lg text-primary/80 mb-8 animate-pulse text-center px-4 font-light">
+        <p className="font-body-lg text-body-lg text-slate-950 dark:text-slate-950 font-bold mb-8 animate-pulse text-center px-4" style={{ color: '#000000' }}>
           Deep breath. You are safe here.
         </p>
 

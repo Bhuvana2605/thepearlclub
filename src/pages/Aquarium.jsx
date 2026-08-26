@@ -57,10 +57,10 @@ export const Aquarium = () => {
   };
 
   const getRarityBadgeStyle = (rarity) => {
-    if (rarity === 'legendary') return 'bg-amber-100 text-amber-900 border-amber-300 font-bold';
-    if (rarity === 'rare') return 'bg-purple-100 text-purple-900 border-purple-300 font-semibold';
-    if (rarity === 'special') return 'bg-emerald-100 text-emerald-900 border-emerald-300 font-semibold';
-    return 'bg-slate-100 text-slate-700 border-slate-200';
+    if (rarity === 'legendary') return 'bg-amber-200 text-slate-950 border-amber-400 font-bold !text-black';
+    if (rarity === 'rare') return 'bg-purple-200 text-slate-950 border-purple-400 font-bold !text-black';
+    if (rarity === 'special') return 'bg-emerald-200 text-slate-950 border-emerald-400 font-bold !text-black';
+    return 'bg-cyan-200 text-slate-950 border-cyan-400 font-bold !text-black';
   };
 
   const filterItemMatches = (item) => {
@@ -209,7 +209,7 @@ export const Aquarium = () => {
           <div className="w-full max-w-4xl glass-panel-opaque rounded-3xl p-6 md:p-10 shadow-2xl flex flex-col gap-6 border border-white/70 max-h-[85vh] overflow-y-auto my-auto pb-12">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/40 pb-4 w-full flex-wrap">
               <div className="flex-1 min-w-0">
-                <h2 className="font-headline-lg text-headline-lg text-primary text-xl md:text-2xl font-bold">Found Things</h2>
+                <h2 className="font-headline-lg text-headline-lg text-slate-950 dark:text-slate-950 text-xl md:text-2xl font-bold" style={{ color: '#000000' }}>Found Things</h2>
                 <p className="font-body-md text-xs md:text-sm text-on-surface-variant mt-0.5">
                   Collectibles discovered naturally while spending time in Pearl Club.
                 </p>
@@ -299,7 +299,7 @@ export const Aquarium = () => {
           <div className="w-full max-w-4xl glass-panel-opaque rounded-3xl p-6 md:p-10 shadow-2xl flex flex-col gap-6 border border-white/70 max-h-[85vh] overflow-y-auto my-auto pb-12">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/40 pb-4 w-full flex-wrap">
               <div className="flex-1 min-w-0">
-                <h2 className="font-headline-lg text-headline-lg text-primary text-xl md:text-2xl font-bold">Achieved Things</h2>
+                <h2 className="font-headline-lg text-headline-lg text-slate-950 dark:text-slate-950 text-xl md:text-2xl font-bold" style={{ color: '#000000' }}>Achieved Things</h2>
                 <p className="font-body-md text-xs md:text-sm text-on-surface-variant mt-0.5">
                   Milestones, daily rewards, and Focus rewards earned in sanctuary.
                 </p>

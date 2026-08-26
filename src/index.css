@@ -165,6 +165,23 @@ html.dark textarea::placeholder {
   color: rgba(255, 255, 255, 0.7) !important;
 }
 
+/* Rarity Badges & Light Pill Containers: Always Crisp Black Text */
+.bg-amber-100, .bg-amber-200,
+.bg-purple-100, .bg-purple-200,
+.bg-emerald-100, .bg-emerald-200,
+.bg-cyan-100, .bg-cyan-200,
+.bg-slate-100, .bg-slate-200 {
+  color: #000000 !important;
+}
+
+html.dark .bg-amber-100, html.dark .bg-amber-200,
+html.dark .bg-purple-100, html.dark .bg-purple-200,
+html.dark .bg-emerald-100, html.dark .bg-emerald-200,
+html.dark .bg-cyan-100, html.dark .bg-cyan-200,
+html.dark .bg-slate-100, html.dark .bg-slate-200 {
+  color: #000000 !important;
+}
+
 .glass-panel-opaque {
   background-color: var(--surface-opaque);
   backdrop-filter: blur(20px);
