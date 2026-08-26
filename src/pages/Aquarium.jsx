@@ -179,10 +179,10 @@ export const Aquarium = () => {
         </div>
 
         {/* Action Buttons to open collection overlays */}
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-3 flex-wrap">
           <button
             onClick={() => setActiveTab('found')}
-            className={`py-2 px-4.5 rounded-full font-label-sm text-xs font-bold shadow-lg transition-all border shrink-0 ${
+            className={`py-2.5 px-6 sm:px-7 rounded-full font-label-sm text-xs sm:text-sm font-bold shadow-lg transition-all border shrink-0 whitespace-nowrap ${
               activeTab === 'found'
                 ? 'bg-primary text-white border-primary ring-2 ring-white/40'
                 : 'bg-[#005142] text-white border-teal-600/60 hover:bg-[#003d32]'
@@ -192,7 +192,7 @@ export const Aquarium = () => {
           </button>
           <button
             onClick={() => setActiveTab('achieved')}
-            className={`py-2 px-4.5 rounded-full font-label-sm text-xs font-bold shadow-lg transition-all border shrink-0 ${
+            className={`py-2.5 px-6 sm:px-7 rounded-full font-label-sm text-xs sm:text-sm font-bold shadow-lg transition-all border shrink-0 whitespace-nowrap ${
               activeTab === 'achieved'
                 ? 'bg-primary text-white border-primary ring-2 ring-white/40'
                 : 'bg-[#005142] text-white border-teal-600/60 hover:bg-[#003d32]'
