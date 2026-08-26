@@ -182,20 +182,20 @@ export const Aquarium = () => {
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => setActiveTab('found')}
-            className={`py-2 px-4 rounded-full font-label-sm text-xs font-semibold shadow-md transition-all border shrink-0 ${
+            className={`py-2 px-4.5 rounded-full font-label-sm text-xs font-bold shadow-lg transition-all border shrink-0 ${
               activeTab === 'found'
-                ? 'bg-primary text-white border-primary'
-                : 'bg-white/75 backdrop-blur-md text-primary border-white/80 hover:bg-white'
+                ? 'bg-primary text-white border-primary ring-2 ring-white/40'
+                : 'bg-[#005142] text-white border-teal-600/60 hover:bg-[#003d32]'
             }`}
           >
             Found Things ({foundItems.length})
           </button>
           <button
             onClick={() => setActiveTab('achieved')}
-            className={`py-2 px-4 rounded-full font-label-sm text-xs font-semibold shadow-md transition-all border shrink-0 ${
+            className={`py-2 px-4.5 rounded-full font-label-sm text-xs font-bold shadow-lg transition-all border shrink-0 ${
               activeTab === 'achieved'
-                ? 'bg-primary text-white border-primary'
-                : 'bg-white/75 backdrop-blur-md text-primary border-white/80 hover:bg-white'
+                ? 'bg-primary text-white border-primary ring-2 ring-white/40'
+                : 'bg-[#005142] text-white border-teal-600/60 hover:bg-[#003d32]'
             }`}
           >
             Achieved Things ({achievedItems.length})
@@ -209,7 +209,7 @@ export const Aquarium = () => {
           <div className="w-full max-w-4xl glass-panel-opaque rounded-3xl p-6 md:p-10 shadow-2xl flex flex-col gap-6 border border-white/70 max-h-[85vh] overflow-y-auto my-auto pb-12">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/40 pb-4 w-full flex-wrap">
               <div className="flex-1 min-w-0">
-                <h2 className="font-headline-lg text-headline-lg text-slate-950 dark:text-slate-950 text-xl md:text-2xl font-bold" style={{ color: '#000000' }}>Found Things</h2>
+                <h2 className="font-headline-lg text-headline-lg text-primary text-xl md:text-2xl font-bold">Found Things</h2>
                 <p className="font-body-md text-xs md:text-sm text-on-surface-variant mt-0.5">
                   Collectibles discovered naturally while spending time in Pearl Club.
                 </p>
@@ -299,7 +299,7 @@ export const Aquarium = () => {
           <div className="w-full max-w-4xl glass-panel-opaque rounded-3xl p-6 md:p-10 shadow-2xl flex flex-col gap-6 border border-white/70 max-h-[85vh] overflow-y-auto my-auto pb-12">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/40 pb-4 w-full flex-wrap">
               <div className="flex-1 min-w-0">
-                <h2 className="font-headline-lg text-headline-lg text-slate-950 dark:text-slate-950 text-xl md:text-2xl font-bold" style={{ color: '#000000' }}>Achieved Things</h2>
+                <h2 className="font-headline-lg text-headline-lg text-primary text-xl md:text-2xl font-bold">Achieved Things</h2>
                 <p className="font-body-md text-xs md:text-sm text-on-surface-variant mt-0.5">
                   Milestones, daily rewards, and Focus rewards earned in sanctuary.
                 </p>
