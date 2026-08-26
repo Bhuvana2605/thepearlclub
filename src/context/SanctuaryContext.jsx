@@ -532,21 +532,24 @@ export const SanctuaryProvider = ({ children }) => {
           if (data) {
             let activePearlNumber = data.pearl_number;
 
-            // Self-heal: If pearl_number is NULL in DB for this user, attempt database repair/assignment
-            if (activePearlNumber == null) {
-              try {
-                const { data: repaired } = await supabase
+            // Self-heal: Align logged-in user's pearl_number with exact registration rank in Supabase
+            try {
+              if (data.created_at) {
+                const { count } = await supabase
                   .from('profiles')
-                  .update({ updated_at: new Date().toISOString() })
-                  .eq('id', currentUser.id)
-                  .select('pearl_number')
-                  .single();
-                if (repaired && repaired.pearl_number != null) {
-                  activePearlNumber = repaired.pearl_number;
-                  console.log('[SUPABASE PROFILE DEBUG] REPAIRED PEARL NUMBER:', activePearlNumber);
+                  .select('id', { count: 'exact', head: true })
+                  .lte('created_at', data.created_at);
+
+                if (count && count > 0 && activePearlNumber !== count) {
+                  activePearlNumber = count;
+                  await supabase
+                    .from('profiles')
+                    .update({ pearl_number: count })
+                    .eq('id', currentUser.id);
+                  console.log(`[Supabase Self-Heal] Aligned profile pearl_number to rank ${count}`);
                 }
-              } catch (e) {}
-            }
+              }
+            } catch (e) {}
 
             if (activePearlNumber != null) {
               setPearlNumber(activePearlNumber);

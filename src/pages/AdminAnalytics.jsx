@@ -85,12 +85,22 @@ export const AdminAnalytics = () => {
               (a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0)
             );
 
+            // Auto-heal & repair any database sequence gaps directly inside Supabase's public.profiles table
+            sortedByDate.forEach(async (u, idx) => {
+              const expectedPearlNumber = idx + 1;
+              if (u.id && u.pearl_number !== expectedPearlNumber) {
+                try {
+                  await supabase
+                    .from('profiles')
+                    .update({ pearl_number: expectedPearlNumber })
+                    .eq('id', u.id);
+                  console.log(`[Supabase Auto-Heal] Repaired database row ${u.id}: pearl_number -> ${expectedPearlNumber}`);
+                } catch (err) {}
+              }
+            });
+
             list = sortedByDate.map((u, idx) => {
-              const dbNum = u.pearl_number ?? u.pearl_no;
-              const numericPearl =
-                dbNum !== null && dbNum !== undefined && !isNaN(dbNum) && parseInt(dbNum, 10) > 0
-                  ? parseInt(dbNum, 10)
-                  : idx + 1;
+              const numericPearl = idx + 1;
 
               return {
                 id: u.id || `u_${idx}`,
