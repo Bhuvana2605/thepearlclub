@@ -137,6 +137,27 @@ export const SignUp = () => {
     setResending(false);
   };
 
+  React.useEffect(() => {
+    const hash = window.location.hash;
+    const search = window.location.search;
+    const rawParams = hash.startsWith('#') ? hash.slice(1) : (search.startsWith('?') ? search.slice(1) : '');
+    if (!rawParams) return;
+
+    const params = new URLSearchParams(rawParams);
+    const error = params.get('error');
+    const errorDescription = params.get('error_description') || params.get('error_message');
+
+    if (error || errorDescription) {
+      let message = errorDescription ? decodeURIComponent(errorDescription.replace(/\+/g, ' ')) : error;
+      if (message.includes('Error getting user profile') || error === 'unauthorized_client') {
+        message = 'Google Sign-In Authorization Error: Please check Supabase Google provider setup and ensure https://bqfeekkbxcincwlvabdq.supabase.co/auth/v1/callback is added in Google Cloud Console.';
+      } else if (error === 'redirect_uri_mismatch' || message.includes('redirect_uri_mismatch')) {
+        message = 'Redirect URI mismatch: Add https://bqfeekkbxcincwlvabdq.supabase.co/auth/v1/callback to Authorized Redirect URIs in Google Cloud Console.';
+      }
+      setErrorMsg(message);
+    }
+  }, []);
+
   const handleGoogleSignIn = async () => {
     setErrorMsg('');
     setLoading(true);
@@ -146,12 +167,16 @@ export const SignUp = () => {
         const { error } = await supabase.auth.signInWithOAuth({
           provider: 'google',
           options: {
-            redirectTo: `${window.location.origin}/`
+            redirectTo: `${window.location.origin}/`,
+            queryParams: {
+              access_type: 'offline',
+              prompt: 'consent'
+            }
           }
         });
         if (error) {
           if (error.message?.toLowerCase().includes('provider is not enabled') || error.message?.toLowerCase().includes('unsupported provider')) {
-            setErrorMsg('Google Sign-In is currently being configured in Supabase Auth providers.');
+            setErrorMsg('Google Sign-In needs to be enabled in Supabase Dashboard (Authentication -> Providers -> Google).');
           } else {
             setErrorMsg(error.message);
           }
@@ -328,10 +353,15 @@ export const SignUp = () => {
           </button>
         </form>
 
-        <div className="text-center text-xs font-label-sm text-outline border-t border-white/30 pt-3">
+        <div className="flex flex-col gap-2 border-t border-white/30 pt-3 text-center text-xs font-label-sm text-outline">
           <Link to="/login" className="text-primary hover:underline font-semibold">
             Already have an account? Log in
           </Link>
+          <div className="flex justify-center gap-4 text-[11px] text-slate-500 dark:text-slate-400 pt-1">
+            <Link to="/privacy" className="hover:underline hover:text-primary dark:hover:text-teal-300">Privacy Policy</Link>
+            <span>•</span>
+            <Link to="/terms" className="hover:underline hover:text-primary dark:hover:text-teal-300">Terms of Service</Link>
+          </div>
         </div>
       </div>
     </main>

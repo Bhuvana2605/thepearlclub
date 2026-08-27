@@ -7,6 +7,8 @@ import { Auth } from './pages/Auth';
 import { Login } from './pages/Login';
 import { SignUp } from './pages/SignUp';
 import { ResetPassword } from './pages/ResetPassword';
+import { PrivacyPolicy } from './pages/PrivacyPolicy';
+import { TermsOfService } from './pages/TermsOfService';
 
 import { Home } from './pages/Home';
 import { Journal } from './pages/Journal';
@@ -72,6 +74,8 @@ export function App() {
             <Route path="/login" element={<PublicAuthRoute><Login /></PublicAuthRoute>} />
             <Route path="/signup" element={<PublicAuthRoute><SignUp /></PublicAuthRoute>} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
 
             <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
             <Route path="/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>} />

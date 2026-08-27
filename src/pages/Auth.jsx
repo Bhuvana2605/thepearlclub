@@ -6,6 +6,27 @@ import { PearlClubLogo } from '../components/brand/PearlClubLogo';
 export const Auth = () => {
   const [errorMsg, setErrorMsg] = React.useState('');
 
+  React.useEffect(() => {
+    const hash = window.location.hash;
+    const search = window.location.search;
+    const rawParams = hash.startsWith('#') ? hash.slice(1) : (search.startsWith('?') ? search.slice(1) : '');
+    if (!rawParams) return;
+
+    const params = new URLSearchParams(rawParams);
+    const error = params.get('error');
+    const errorDescription = params.get('error_description') || params.get('error_message');
+
+    if (error || errorDescription) {
+      let message = errorDescription ? decodeURIComponent(errorDescription.replace(/\+/g, ' ')) : error;
+      if (message.includes('Error getting user profile') || error === 'unauthorized_client') {
+        message = 'Google Sign-In Authorization Error: Please check Supabase Google provider setup and ensure https://bqfeekkbxcincwlvabdq.supabase.co/auth/v1/callback is added in Google Cloud Console.';
+      } else if (error === 'redirect_uri_mismatch' || message.includes('redirect_uri_mismatch')) {
+        message = 'Redirect URI mismatch: Add https://bqfeekkbxcincwlvabdq.supabase.co/auth/v1/callback to Authorized Redirect URIs in Google Cloud Console.';
+      }
+      setErrorMsg(message);
+    }
+  }, []);
+
   const handleGoogleSignIn = async () => {
     setErrorMsg('');
     if (supabase) {
@@ -13,7 +34,11 @@ export const Auth = () => {
         const { error } = await supabase.auth.signInWithOAuth({
           provider: 'google',
           options: {
-            redirectTo: `${window.location.origin}/`
+            redirectTo: `${window.location.origin}/`,
+            queryParams: {
+              access_type: 'offline',
+              prompt: 'consent'
+            }
           }
         });
         if (error) {
