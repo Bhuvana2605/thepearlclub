@@ -4,17 +4,27 @@ import { supabase } from '../lib/supabase/client';
 import { PearlClubLogo } from '../components/brand/PearlClubLogo';
 
 export const Auth = () => {
+  const [errorMsg, setErrorMsg] = React.useState('');
+
   const handleGoogleSignIn = async () => {
+    setErrorMsg('');
     if (supabase) {
       try {
-        await supabase.auth.signInWithOAuth({
+        const { error } = await supabase.auth.signInWithOAuth({
           provider: 'google',
           options: {
             redirectTo: `${window.location.origin}/`
           }
         });
+        if (error) {
+          if (error.message?.toLowerCase().includes('provider is not enabled') || error.message?.toLowerCase().includes('unsupported provider')) {
+            setErrorMsg('Google Sign-In needs to be enabled in your Supabase Dashboard under Authentication -> Providers -> Google.');
+          } else {
+            setErrorMsg(error.message);
+          }
+        }
       } catch (err) {
-        console.warn('[Supabase OAuth] Google Sign-In error:', err);
+        setErrorMsg(err.message || 'Google sign-in failed.');
       }
     }
   };
@@ -59,6 +69,12 @@ export const Auth = () => {
             </svg>
             <span>Continue with Google</span>
           </button>
+
+          {errorMsg && (
+            <div className="p-3.5 rounded-xl bg-red-100 border border-red-200 text-red-900 dark:bg-red-950/60 dark:border-red-700/50 dark:text-red-200 font-label-sm text-xs text-left">
+              {errorMsg}
+            </div>
+          )}
 
           {/* DIVIDER */}
           <div className="flex items-center gap-3 my-0.5">
