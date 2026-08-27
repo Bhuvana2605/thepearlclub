@@ -55,15 +55,19 @@ export const SignUp = () => {
         });
 
         if (error) {
-          setErrorMsg(error.message);
+          if (error.message?.toLowerCase().includes('already registered') || error.message?.toLowerCase().includes('user already exists')) {
+            setErrorMsg('An account with this email already exists. Please log in instead.');
+          } else {
+            setErrorMsg(error.message);
+          }
           setLoading(false);
           return;
         }
 
         if (data?.user) {
-          // Attempt profile record creation safely (upsert with ignoreDuplicates)
+          // Attempt profile record creation safely
           try {
-            const { error: profileErr } = await supabase.from('profiles').upsert(
+            await supabase.from('profiles').upsert(
               [
                 {
                   id: data.user.id,
@@ -76,12 +80,16 @@ export const SignUp = () => {
               ],
               { onConflict: 'id', ignoreDuplicates: true }
             );
-
-            if (profileErr) {
-              console.warn('[Supabase Profile] Profile insertion warning:', profileErr.message);
-            }
           } catch (pErr) {
             console.warn('[Supabase Profile] Profile creation catch:', pErr);
+          }
+
+          // If session returned immediately (email confirmation disabled/auto-confirmed)
+          if (data.session) {
+            updateProfile({ name: cleanName, bio: cleanBio });
+            setLoading(false);
+            navigate('/');
+            return;
           }
         }
       } catch (err) {
@@ -101,6 +109,34 @@ export const SignUp = () => {
     setEmailSent(true);
   };
 
+  const [resending, setResending] = useState(false);
+  const [resendStatus, setResendStatus] = useState('');
+
+  const handleResendConfirmation = async () => {
+    setResending(true);
+    setResendStatus('');
+
+    if (supabase) {
+      try {
+        const { error } = await supabase.auth.resend({
+          type: 'signup',
+          email,
+          options: {
+            emailRedirectTo: `${window.location.origin}/login`
+          }
+        });
+        if (error) {
+          setResendStatus(`Resend error: ${error.message}`);
+        } else {
+          setResendStatus('Confirmation link has been resent! Check your inbox.');
+        }
+      } catch (err) {
+        setResendStatus('Failed to resend email.');
+      }
+    }
+    setResending(false);
+  };
+
   const handleGoogleSignIn = async () => {
     setErrorMsg('');
     setLoading(true);
@@ -114,7 +150,11 @@ export const SignUp = () => {
           }
         });
         if (error) {
-          setErrorMsg(error.message);
+          if (error.message?.toLowerCase().includes('provider is not enabled') || error.message?.toLowerCase().includes('unsupported provider')) {
+            setErrorMsg('Google Sign-In is currently being configured in Supabase Auth providers.');
+          } else {
+            setErrorMsg(error.message);
+          }
           setLoading(false);
         }
       } catch (err) {
@@ -141,12 +181,30 @@ export const SignUp = () => {
             <br />
             Please confirm your email before continuing to Pearl Club.
           </p>
-          <Link
-            to="/login"
-            className="w-full py-3.5 px-6 rounded-full bg-primary text-white font-label-sm text-xs font-semibold shadow hover:bg-primary/90 transition-transform mt-2"
-          >
-            Back to Login
-          </Link>
+
+          {resendStatus && (
+            <div className="p-3 rounded-xl bg-teal-100 border border-teal-200 text-teal-900 dark:bg-teal-950/60 dark:border-teal-700/50 dark:text-teal-200 font-label-sm text-xs w-full">
+              {resendStatus}
+            </div>
+          )}
+
+          <div className="flex flex-col gap-2 w-full mt-1">
+            <button
+              type="button"
+              onClick={handleResendConfirmation}
+              disabled={resending}
+              className="w-full py-3 px-6 rounded-full bg-white dark:bg-slate-900 text-primary dark:text-teal-300 font-label-sm text-xs font-semibold border border-primary/30 dark:border-slate-700 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+            >
+              {resending ? 'Resending email...' : 'Resend Confirmation Email'}
+            </button>
+
+            <Link
+              to="/login"
+              className="w-full py-3.5 px-6 rounded-full bg-primary text-white font-label-sm text-xs font-semibold shadow hover:bg-primary/90 transition-transform"
+            >
+              Back to Login
+            </Link>
+          </div>
         </div>
       </main>
     );

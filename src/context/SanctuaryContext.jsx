@@ -567,9 +567,11 @@ export const SanctuaryProvider = ({ children }) => {
               createdAt: data.created_at || prev.createdAt
             }));
           } else {
-            // Auto-create missing profile row for authenticated user
-            const defaultName = currentUser.user_metadata?.name || currentUser.email?.split('@')[0] || 'Sanctuary Member';
-            const defaultUsername = currentUser.user_metadata?.username || `member_${currentUser.id.slice(0, 6)}`;
+            // Auto-create missing profile row for authenticated user (e.g. Google OAuth or new sign-up)
+            const meta = currentUser.user_metadata || {};
+            const defaultName = meta.full_name || meta.name || currentUser.email?.split('@')[0] || 'Haven Member';
+            const defaultUsername = meta.username || `member_${currentUser.id.slice(0, 6)}`;
+            const defaultAvatar = meta.avatar_url || meta.picture || 'pearl';
 
             supabase
               .from('profiles')
@@ -580,7 +582,7 @@ export const SanctuaryProvider = ({ children }) => {
                     name: defaultName,
                     username: defaultUsername,
                     bio: 'Finding a little quiet space.',
-                    avatar_url: 'pearl',
+                    avatar_url: defaultAvatar,
                     created_at: new Date().toISOString()
                   }
                 ],
@@ -589,14 +591,17 @@ export const SanctuaryProvider = ({ children }) => {
               .select('id, name, username, bio, avatar_url, pearl_number, role, is_admin')
               .maybeSingle()
               .then(({ data: createdData }) => {
-                if (createdData && createdData.pearl_number != null) {
-                  setPearlNumber(createdData.pearl_number);
+                if (createdData) {
+                  if (createdData.pearl_number != null) {
+                    setPearlNumber(createdData.pearl_number);
+                  }
                   setProfile((prev) => ({
                     ...prev,
-                    pearl_number: createdData.pearl_number,
-                    name: createdData.name,
-                    username: createdData.username,
-                    bio: createdData.bio,
+                    pearl_number: createdData.pearl_number ?? prev.pearl_number,
+                    name: createdData.name || defaultName,
+                    username: createdData.username || defaultUsername,
+                    bio: createdData.bio || prev.bio,
+                    avatar: createdData.avatar_url || defaultAvatar,
                     role: createdData.role || 'user',
                     is_admin: Boolean(createdData.role === 'admin' || createdData.is_admin)
                   }));

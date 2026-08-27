@@ -11,10 +11,14 @@ export const Login = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [resetMsg, setResetMsg] = useState('');
 
+  const [isUnconfirmed, setIsUnconfirmed] = useState(false);
+  const [resending, setResending] = useState(false);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMsg('');
     setResetMsg('');
+    setIsUnconfirmed(false);
 
     if (!email || !password) {
       setErrorMsg('Please enter both email and password.');
@@ -27,7 +31,10 @@ export const Login = () => {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) {
           if (error.message?.toLowerCase().includes('email not confirmed')) {
-            setErrorMsg('Please confirm your email before logging in.');
+            setErrorMsg('Your email is not confirmed yet. Please check your inbox or click resend below.');
+            setIsUnconfirmed(true);
+          } else if (error.message?.toLowerCase().includes('invalid login credentials')) {
+            setErrorMsg('Invalid email or password. Please check your credentials or click "Forgot password?".');
           } else {
             setErrorMsg(error.message);
           }
@@ -56,6 +63,37 @@ export const Login = () => {
     navigate('/');
   };
 
+  const handleResendConfirmation = async () => {
+    if (!email) {
+      setErrorMsg('Please enter your email address above to resend confirmation.');
+      return;
+    }
+    setResending(true);
+    setErrorMsg('');
+    setResetMsg('');
+
+    if (supabase) {
+      try {
+        const { error } = await supabase.auth.resend({
+          type: 'signup',
+          email,
+          options: {
+            emailRedirectTo: `${window.location.origin}/login`
+          }
+        });
+        if (error) {
+          setErrorMsg(error.message);
+        } else {
+          setResetMsg('Confirmation link has been resent to your email.');
+          setIsUnconfirmed(false);
+        }
+      } catch (err) {
+        setErrorMsg(err.message || 'Failed to resend confirmation email.');
+      }
+    }
+    setResending(false);
+  };
+
   const handleGoogleSignIn = async () => {
     setErrorMsg('');
     setResetMsg('');
@@ -70,7 +108,11 @@ export const Login = () => {
           }
         });
         if (error) {
-          setErrorMsg(error.message);
+          if (error.message?.toLowerCase().includes('provider is not enabled') || error.message?.toLowerCase().includes('unsupported provider')) {
+            setErrorMsg('Google Sign-In is currently being configured in Supabase Auth providers.');
+          } else {
+            setErrorMsg(error.message);
+          }
           setLoading(false);
         }
       } catch (err) {
@@ -178,8 +220,18 @@ export const Login = () => {
           </div>
 
           {errorMsg && (
-            <div className="p-3 rounded-xl bg-red-100 border border-red-200 text-red-900 dark:bg-red-950/60 dark:border-red-700/50 dark:text-red-200 font-label-sm text-xs">
-              {errorMsg}
+            <div className="p-3.5 rounded-xl bg-red-100 border border-red-200 text-red-900 dark:bg-red-950/60 dark:border-red-700/50 dark:text-red-200 font-label-sm text-xs flex flex-col gap-2">
+              <span>{errorMsg}</span>
+              {isUnconfirmed && (
+                <button
+                  type="button"
+                  onClick={handleResendConfirmation}
+                  disabled={resending}
+                  className="px-3.5 py-1.5 rounded-lg bg-red-800 text-white font-semibold hover:bg-red-900 transition-colors w-fit text-xs mt-1 shadow-xs"
+                >
+                  {resending ? 'Resending...' : 'Resend Confirmation Email'}
+                </button>
+              )}
             </div>
           )}
 
