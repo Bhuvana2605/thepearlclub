@@ -22,7 +22,7 @@ export const CollectibleDetailModal = ({ isOpen, item, onClose }) => {
   const name = item.name || registryData.name || 'Sanctuary Collectible';
   const image = item.asset || item.image || registryData.asset || registryData.image || '/assets/collectibles/pearl.png';
   const rarity = item.rarity || registryData.rarity || 'common';
-  const description = item.description || registryData.description || 'A quiet discovery resting in your sanctuary.';
+  const description = item.description || registryData.description || 'A quiet discovery resting in your haven.';
 
   const getSourceLabel = (source) => {
     if (source === 'early-member' || source === 'early_member') return 'Early Pearl Club Member';
@@ -31,7 +31,7 @@ export const CollectibleDetailModal = ({ isOpen, item, onClose }) => {
     if (source === 'return_milestone') return 'Return Visit Milestone';
     if (source === 'achievement') return 'Achievement Milestone';
     if (source === 'found') return 'Found in Your Little World';
-    return 'Sanctuary Collection';
+    return 'Haven Collection';
   };
 
   const getRarityBadgeStyle = (r) => {

@@ -188,7 +188,7 @@ export const FocusAquarium = () => {
       {/* Bottom Footer Info */}
       <footer className="relative z-20 pb-6 px-6 text-center">
         <p className="font-label-sm text-xs text-white/80 drop-shadow-sm">
-          Focus Pearls float quietly in your sanctuary aquarium.
+          Focus Pearls float quietly in your haven aquarium.
         </p>
       </footer>
 

@@ -256,7 +256,7 @@ export const Bottle = () => {
             Community Rules
           </h2>
           <p className="font-body-md text-body-md text-on-surface-variant mb-6">
-            Pearl Club is a peaceful digital sanctuary. Please honor these guidelines when releasing messages:
+            Pearl Club is a peaceful digital haven. Please honor these guidelines when releasing messages:
           </p>
 
           <div className="space-y-3 bg-white/40 p-6 rounded-2xl border border-white/50 shadow-inner">

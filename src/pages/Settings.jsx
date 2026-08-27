@@ -70,7 +70,7 @@ export const Settings = () => {
   const handleReset = () => {
     if (window.confirm('Are you sure you want to reset all local Pearl Club data? This will clear tasks, history, and rewards.')) {
       resetAllLocalData();
-      alert('Local sanctuary data has been reset.');
+      alert('Local haven data has been reset.');
     }
   };
 
@@ -215,7 +215,7 @@ export const Settings = () => {
         {/* SECTION 5: ENVIRONMENT THEME SWITCHER */}
         <div className="flex flex-col gap-3">
           <h2 className="font-label-sm text-xs text-primary uppercase tracking-widest font-semibold">
-            Sanctuary Environment Theme
+            Haven Environment Theme
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {themes.map((t) => {
@@ -245,7 +245,7 @@ export const Settings = () => {
                 Your Progress • Focus Journey
               </h2>
               <p className="font-body-md text-xs text-on-surface-variant mt-0.5">
-                Complete qualifying Focus sessions to advance your sanctuary journey.
+                Complete qualifying Focus sessions to advance your haven journey.
               </p>
             </div>
             <span className="font-label-sm text-xs font-semibold text-primary bg-primary-container/40 px-3 py-1 rounded-full border border-primary-container/30">
@@ -292,15 +292,15 @@ export const Settings = () => {
             </div>
 
             <div className="grid grid-cols-3 gap-2 my-1">
-              <div className={`p-3 rounded-xl border flex flex-col items-center text-center ${returnRewards.day3 ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-white/40 border-white/50 text-outline'}`}>
+              <div className={`p-3 rounded-xl border flex flex-col items-center text-center transition-all ${returnRewards.day3 ? 'bg-emerald-50 border-emerald-300 text-emerald-900 dark:bg-emerald-950/80 dark:border-emerald-700/80 dark:text-emerald-200' : 'bg-white/40 border-white/50 text-outline dark:bg-slate-900/60 dark:border-slate-700/60 dark:text-slate-300'}`}>
                 <span className="font-label-sm text-xs font-semibold">Day 3</span>
                 <span className="font-body-md text-[11px] mt-0.5">{returnRewards.day3 ? '✓ Rare Unlocked' : 'Starfish'}</span>
               </div>
-              <div className={`p-3 rounded-xl border flex flex-col items-center text-center ${returnRewards.day5 ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-white/40 border-white/50 text-outline'}`}>
+              <div className={`p-3 rounded-xl border flex flex-col items-center text-center transition-all ${returnRewards.day5 ? 'bg-emerald-50 border-emerald-300 text-emerald-900 dark:bg-emerald-950/80 dark:border-emerald-700/80 dark:text-emerald-200' : 'bg-white/40 border-white/50 text-outline dark:bg-slate-900/60 dark:border-slate-700/60 dark:text-slate-300'}`}>
                 <span className="font-label-sm text-xs font-semibold">Day 5</span>
                 <span className="font-body-md text-[11px] mt-0.5">{returnRewards.day5 ? '✓ Rare Unlocked' : 'Seahorse'}</span>
               </div>
-              <div className={`p-3 rounded-xl border flex flex-col items-center text-center ${returnRewards.day7 ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-white/40 border-white/50 text-outline'}`}>
+              <div className={`p-3 rounded-xl border flex flex-col items-center text-center transition-all ${returnRewards.day7 ? 'bg-emerald-50 border-emerald-300 text-emerald-900 dark:bg-emerald-950/80 dark:border-emerald-700/80 dark:text-emerald-200' : 'bg-white/40 border-white/50 text-outline dark:bg-slate-900/60 dark:border-slate-700/60 dark:text-slate-300'}`}>
                 <span className="font-label-sm text-xs font-semibold">Day 7</span>
                 <span className="font-body-md text-[11px] mt-0.5">{returnRewards.day7 ? '✓ Special Unlocked' : 'Pearl Shell'}</span>
               </div>
@@ -343,7 +343,7 @@ export const Settings = () => {
             </p>
           </div>
 
-          {/* Real Sanctuary Focus Metrics */}
+          {/* Real Haven Focus Metrics */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="p-3 rounded-xl bg-white/40 text-center border border-white/50">
               <span className="font-headline-lg text-headline-lg text-primary">
@@ -380,7 +380,7 @@ export const Settings = () => {
           <div>
             <h3 className="font-headline-md text-headline-md text-primary text-sm font-semibold">Account Session</h3>
             <p className="font-label-sm text-xs text-on-surface-variant">
-              {currentUser ? `Signed in as ${currentUser.email}` : 'Local sanctuary active.'}
+              {currentUser ? `Signed in as ${currentUser.email}` : 'Local haven active.'}
             </p>
           </div>
           <button
@@ -396,7 +396,7 @@ export const Settings = () => {
         {/* SECTION 6: DATA RESET */}
         <div className="flex justify-between items-center">
           <div>
-            <h3 className="font-headline-md text-headline-md text-error text-base">Reset Sanctuary Data</h3>
+            <h3 className="font-headline-md text-headline-md text-error text-base">Reset Haven Data</h3>
             <p className="font-label-sm text-xs text-on-surface-variant">Clear all local tasks, journal entries, and collectibles.</p>
           </div>
           <button

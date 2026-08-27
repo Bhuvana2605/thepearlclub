@@ -3,18 +3,42 @@ import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 import { storage } from '../lib/storage/storage';
 import { useSanctuary } from '../context/SanctuaryContext';
 
-// Pre-filled Sudoku puzzle fallback grids
-const INITIAL_SUDOKU = [
-  [5, 3, 0, 0, 7, 0, 0, 0, 0],
-  [6, 0, 0, 1, 9, 5, 0, 0, 0],
-  [0, 9, 8, 0, 0, 0, 0, 6, 0],
-  [8, 0, 0, 0, 6, 0, 0, 0, 3],
-  [4, 0, 0, 8, 0, 3, 0, 0, 1],
-  [7, 0, 0, 0, 2, 0, 0, 0, 6],
-  [0, 6, 0, 0, 0, 0, 2, 8, 0],
-  [0, 0, 0, 4, 1, 9, 0, 0, 5],
-  [0, 0, 0, 0, 8, 0, 0, 7, 9]
-];
+// Pre-filled Sudoku puzzle grids
+const SUDOKU_PUZZLES = {
+  Easy: [
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 0, 7, 9]
+  ],
+  Medium: [
+    [0, 0, 0, 2, 6, 0, 7, 0, 1],
+    [6, 8, 0, 0, 7, 0, 0, 9, 0],
+    [1, 9, 0, 0, 0, 4, 5, 0, 0],
+    [8, 2, 0, 1, 0, 0, 0, 4, 0],
+    [0, 0, 4, 6, 0, 2, 9, 0, 0],
+    [0, 5, 0, 0, 0, 3, 0, 2, 8],
+    [0, 0, 9, 3, 0, 0, 0, 7, 4],
+    [0, 4, 0, 0, 5, 0, 0, 3, 6],
+    [7, 0, 3, 0, 1, 8, 0, 0, 0]
+  ],
+  Hard: [
+    [0, 2, 0, 6, 0, 8, 0, 0, 0],
+    [5, 8, 0, 0, 0, 9, 7, 0, 0],
+    [0, 0, 0, 0, 4, 0, 0, 0, 0],
+    [3, 7, 0, 0, 0, 0, 5, 0, 0],
+    [6, 0, 0, 0, 0, 0, 0, 0, 4],
+    [0, 0, 8, 0, 0, 0, 0, 1, 3],
+    [0, 0, 0, 0, 2, 0, 0, 0, 0],
+    [0, 0, 9, 8, 0, 0, 0, 3, 6],
+    [0, 0, 0, 3, 0, 6, 0, 9, 0]
+  ]
+};
 
 export const Games = () => {
   const { recordActivityDate } = useSanctuary();
@@ -22,12 +46,13 @@ export const Games = () => {
   // ==================================================
   // 1. SUDOKU GAME
   // ==================================================
-  const [grid, setGrid] = useState(() => JSON.parse(JSON.stringify(INITIAL_SUDOKU)));
+  const [sudokuDifficulty, setSudokuDifficulty] = useState('Easy');
+  const [initialBoard, setInitialBoard] = useState(() => SUDOKU_PUZZLES.Easy);
+  const [grid, setGrid] = useState(() => JSON.parse(JSON.stringify(SUDOKU_PUZZLES.Easy)));
   const [selectedCell, setSelectedCell] = useState(null);
 
   const handleCellClick = (r, c) => {
     recordActivityDate('sudoku');
-    if (INITIAL_SUDOKU[r][c] !== 0) return;
     setSelectedCell({ r, c });
   };
 
@@ -35,15 +60,52 @@ export const Games = () => {
     recordActivityDate('sudoku');
     if (!selectedCell) return;
     const { r, c } = selectedCell;
+    if (initialBoard[r][c] !== 0) return;
     const nextGrid = JSON.parse(JSON.stringify(grid));
     nextGrid[r][c] = num;
     setGrid(nextGrid);
   };
 
   const handleResetSudoku = () => {
-    setGrid(JSON.parse(JSON.stringify(INITIAL_SUDOKU)));
+    setGrid(JSON.parse(JSON.stringify(initialBoard)));
     setSelectedCell(null);
   };
+
+  const handleChangeDifficulty = (diff) => {
+    const puzzle = SUDOKU_PUZZLES[diff] || SUDOKU_PUZZLES.Easy;
+    setSudokuDifficulty(diff);
+    setInitialBoard(puzzle);
+    setGrid(JSON.parse(JSON.stringify(puzzle)));
+    setSelectedCell(null);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!selectedCell) return;
+      const { r, c } = selectedCell;
+
+      if (['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
+        handleNumberInput(parseInt(e.key, 10));
+      } else if (e.key === 'Backspace' || e.key === 'Delete' || e.key === '0') {
+        handleNumberInput(0);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setSelectedCell({ r: (r - 1 + 9) % 9, c });
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setSelectedCell({ r: (r + 1) % 9, c });
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        setSelectedCell({ r, c: (c - 1 + 9) % 9 });
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        setSelectedCell({ r, c: (c + 1) % 9 });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedCell, grid, initialBoard]);
 
   // ==================================================
   // 2. PEARL CATCH - MEDIAPIPE HAND LANDMARKER (INDEX FINGER)
@@ -382,93 +444,130 @@ export const Games = () => {
       {/* Vertical 3-Equal Cards Container */}
       <div className="flex flex-col gap-8 w-full">
         {/* CARD 1: Sudoku */}
-        <section className="glass-panel rounded-xl p-6 md:p-8 min-h-[460px] flex flex-col items-center justify-between border border-white/50 shadow-xl">
+        <section className="glass-panel rounded-xl p-6 md:p-8 min-h-[480px] flex flex-col items-center justify-between border border-white/50 dark:border-slate-800 shadow-xl">
           <div className="w-full flex justify-between items-center mb-2">
             <div>
-              <h2 className="font-headline-md text-headline-md text-secondary">Sudoku</h2>
-              <p className="font-body-md text-body-md text-on-surface-variant text-sm">Gentle logic placement</p>
+              <h2 className="font-headline-md text-headline-md text-secondary dark:text-teal-300">Sudoku</h2>
+              <p className="font-body-md text-body-md text-on-surface-variant dark:text-slate-300 text-sm">Gentle 9x9 logic placement</p>
             </div>
+
             <div className="flex gap-2 items-center">
-              <span className="font-label-sm text-label-sm text-on-surface-variant glass-panel px-3 py-1 rounded-full">
-                Easy
-              </span>
+              <select
+                value={sudokuDifficulty}
+                onChange={(e) => handleChangeDifficulty(e.target.value)}
+                className="font-label-sm text-xs text-primary dark:text-teal-200 bg-white/70 dark:bg-slate-900/80 border border-white/60 dark:border-slate-700 rounded-full px-3 py-1.5 focus:outline-none cursor-pointer"
+              >
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+
               <button
                 onClick={handleResetSudoku}
-                className="text-primary hover:scale-110 transition-transform p-1"
-                title="Reset Puzzle"
+                className="text-primary dark:text-teal-300 hover:scale-110 transition-transform p-1.5 rounded-full hover:bg-white/40 dark:hover:bg-slate-800"
+                title="Reset Active Puzzle"
               >
                 <span className="material-symbols-outlined text-xl">refresh</span>
               </button>
             </div>
           </div>
 
-          <div className="grid grid-cols-9 gap-1 bg-primary/10 p-2 rounded-xl border border-white/40 w-full max-w-[300px] aspect-square my-auto">
-            {grid.map((row, r) =>
-              row.map((val, c) => {
-                const isFixed = INITIAL_SUDOKU[r][c] !== 0;
-                const isSelected = selectedCell?.r === r && selectedCell?.c === c;
+          {/* 9x9 SUDOKU BOARD WITH CRISP GRID LINES & 3x3 SUBGRID DIVIDERS */}
+          <div className="w-full max-w-[340px] aspect-square my-auto p-0.5 bg-slate-300/80 dark:bg-slate-900 border-2 border-primary/80 dark:border-teal-400/90 rounded-none shadow-lg">
+            <div className="grid grid-cols-9 w-full h-full rounded-none overflow-hidden bg-white dark:bg-slate-950">
+              {grid.map((row, r) =>
+                row.map((val, c) => {
+                  const isFixed = initialBoard[r][c] !== 0;
+                  const isSelected = selectedCell?.r === r && selectedCell?.c === c;
+                  const isSameRowColBox =
+                    selectedCell &&
+                    (selectedCell.r === r ||
+                      selectedCell.c === c ||
+                      (Math.floor(selectedCell.r / 3) === Math.floor(r / 3) && Math.floor(selectedCell.c / 3) === Math.floor(c / 3)));
+                  const selectedVal = selectedCell ? grid[selectedCell.r][selectedCell.c] : null;
+                  const isSameNumber = selectedVal && selectedVal !== 0 && val === selectedVal;
 
-                return (
-                  <button
-                    key={`${r}-${c}`}
-                    onClick={() => handleCellClick(r, c)}
-                    className={`aspect-square flex items-center justify-center font-headline-md text-headline-md text-sm md:text-base rounded transition-all ${
-                      isFixed
-                        ? 'bg-white/80 text-primary font-bold cursor-default'
-                        : isSelected
-                        ? 'bg-primary-container text-on-primary-container ring-2 ring-primary'
-                        : val !== 0
-                        ? 'bg-white/60 text-secondary'
-                        : 'bg-white/40 hover:bg-white/70'
-                    }`}
-                  >
-                    {val !== 0 ? val : ''}
-                  </button>
-                );
-              })
-            )}
+                  const isThickRowBorder = r === 2 || r === 5;
+                  const isThickColBorder = c === 2 || c === 5;
+
+                  const borderClasses = `
+                    ${r !== 8 ? (isThickRowBorder ? 'border-b-2 border-b-primary/70 dark:border-b-teal-400/80' : 'border-b border-b-slate-200/90 dark:border-b-slate-800/80') : ''}
+                    ${c !== 8 ? (isThickColBorder ? 'border-r-2 border-r-primary/70 dark:border-r-teal-400/80' : 'border-r border-r-slate-200/90 dark:border-r-slate-800/80') : ''}
+                  `;
+
+                  let cellStyle = 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100';
+
+                  if (isSelected) {
+                    cellStyle = 'bg-teal-400/30 dark:bg-teal-500/40 text-primary dark:text-white font-extrabold ring-2 ring-primary dark:ring-teal-300 z-10';
+                  } else if (isSameNumber) {
+                    cellStyle = 'bg-teal-200/50 dark:bg-teal-900/60 text-primary dark:text-teal-200 font-bold ring-1 ring-teal-400/60';
+                  } else if (isSameRowColBox) {
+                    cellStyle = 'bg-teal-50/70 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100';
+                  } else if (isFixed) {
+                    cellStyle = 'bg-slate-100/90 dark:bg-slate-800/90 text-primary dark:text-teal-300 font-bold cursor-default';
+                  }
+
+                  return (
+                    <button
+                      key={`${r}-${c}`}
+                      onClick={() => handleCellClick(r, c)}
+                      className={`aspect-square flex items-center justify-center font-headline-md text-base md:text-lg transition-all focus:outline-none ${borderClasses} ${cellStyle}`}
+                    >
+                      {val !== 0 ? val : ''}
+                    </button>
+                  );
+                })
+              )}
+            </div>
           </div>
 
-          <div className="grid grid-cols-5 gap-2 w-full max-w-[300px] mt-2">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+          {/* KEYPAD & CONTROLS */}
+          <div className="flex flex-col gap-2 w-full max-w-[340px] mt-3">
+            <div className="grid grid-cols-5 gap-2">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                <button
+                  key={num}
+                  onClick={() => handleNumberInput(num)}
+                  className="glass-panel font-headline-md text-headline-md text-primary dark:text-teal-200 hover:bg-primary/20 dark:hover:bg-teal-900/50 rounded-xl py-2 font-bold hover:scale-105 transition-all shadow-sm active:scale-95"
+                >
+                  {num}
+                </button>
+              ))}
               <button
-                key={num}
-                onClick={() => handleNumberInput(num)}
-                className="glass-panel font-headline-md text-headline-md text-primary rounded-lg py-1.5 hover:bg-white/70 transition-colors shadow-sm"
+                onClick={() => handleNumberInput(0)}
+                className="glass-panel text-error dark:text-red-400 hover:bg-error/20 rounded-xl py-2 transition-all flex items-center justify-center shadow-sm active:scale-95"
+                title="Erase (Backspace)"
               >
-                {num}
+                <span className="material-symbols-outlined text-xl">backspace</span>
               </button>
-            ))}
-            <button
-              onClick={() => handleNumberInput(0)}
-              className="glass-panel text-secondary rounded-lg py-1.5 hover:bg-white/70 transition-colors flex items-center justify-center shadow-sm"
-              title="Erase"
-            >
-              <span className="material-symbols-outlined text-lg">backspace</span>
-            </button>
+            </div>
+
+            <p className="font-label-sm text-[11px] text-outline dark:text-slate-400 text-center mt-1">
+              Tip: Click any cell and use 1-9 or Arrow keys on your keyboard.
+            </p>
           </div>
         </section>
 
         {/* CARD 2: Pearl Catch */}
-        <section className="glass-panel rounded-xl p-6 md:p-8 min-h-[460px] flex flex-col justify-between border border-white/50 shadow-xl relative overflow-hidden">
+        <section className="glass-panel rounded-xl p-6 md:p-8 min-h-[460px] flex flex-col justify-between border border-white/50 dark:border-slate-800 shadow-xl relative overflow-hidden">
           <div className="w-full flex justify-between items-center mb-2">
             <div>
-              <h2 className="font-headline-md text-headline-md text-secondary">Pearl Catch</h2>
-              <p className="font-body-md text-body-md text-on-surface-variant text-sm">
+              <h2 className="font-headline-md text-headline-md text-secondary dark:text-teal-300">Pearl Catch</h2>
+              <p className="font-body-md text-body-md text-on-surface-variant dark:text-slate-300 text-sm">
                 Catch as many pearls as you can in 30 seconds using your index finger.
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="font-label-sm text-label-sm bg-primary-container text-on-primary-container px-3 py-1 rounded-full font-bold">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-label-sm text-xs bg-primary-container text-slate-950 dark:bg-teal-900 dark:text-teal-100 px-3.5 py-1 rounded-full font-bold border border-primary-container/80 dark:border-teal-700 shadow-xs">
                 PEARLS: {score}
               </span>
-              <span className="font-label-sm text-label-sm bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-bold">
+              <span className="font-label-sm text-xs bg-secondary-container text-slate-950 dark:bg-slate-800 dark:text-slate-100 px-3.5 py-1 rounded-full font-bold border border-secondary-container/80 dark:border-slate-700 shadow-xs">
                 TIME: {timeLeft}s
               </span>
             </div>
           </div>
 
-          <div className="w-full aspect-video max-h-[260px] rounded-xl bg-white/20 border border-white/50 inner-glow relative overflow-hidden flex items-center justify-center my-auto">
+          <div className="w-full aspect-video max-h-[260px] rounded-xl bg-slate-900/40 border border-white/40 dark:border-slate-700/60 relative overflow-hidden flex items-center justify-center my-auto shadow-inner">
             <video ref={videoRef} className="hidden" playsInline muted />
 
             <canvas

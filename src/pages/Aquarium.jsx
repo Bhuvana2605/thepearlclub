@@ -171,7 +171,7 @@ export const Aquarium = () => {
       <header className={`aquarium-ui relative ${AQUARIUM_LAYERS.ui} pt-20 md:pt-24 px-6 md:px-12 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pointer-events-auto`}>
         <div>
           <span className="font-label-sm text-xs text-primary font-semibold uppercase tracking-widest bg-white/60 px-3 py-1 rounded-full border border-white/70 shadow-xs">
-            SANCTUARY ECOSYSTEM
+            HAVEN ECOSYSTEM
           </span>
           <h1 className="font-headline-lg text-headline-lg text-primary text-2xl md:text-3xl mt-1 drop-shadow-xs">
             Your Little World
@@ -301,7 +301,7 @@ export const Aquarium = () => {
               <div className="flex-1 min-w-0">
                 <h2 className="font-headline-lg text-headline-lg text-primary text-xl md:text-2xl font-bold">Achieved Things</h2>
                 <p className="font-body-md text-xs md:text-sm text-on-surface-variant mt-0.5">
-                  Milestones, daily rewards, and Focus rewards earned in sanctuary.
+                  Milestones, daily rewards, and Focus rewards earned in haven.
                 </p>
               </div>
 

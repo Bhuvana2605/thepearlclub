@@ -410,7 +410,7 @@ export const Feed = () => {
             </div>
 
             <p className="font-body-md text-xs text-on-surface-variant">
-              The Pearl Club is a quiet sanctuary. Please follow these core principles:
+              The Pearl Club is a quiet haven. Please follow these core principles:
             </p>
 
             <div className="flex flex-col gap-3">

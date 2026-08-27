@@ -28,7 +28,7 @@ export const Profile = () => {
   const handleSave = (e) => {
     e.preventDefault();
     updateProfile({
-      name: nameInput.trim() || 'Sanctuary Member',
+      name: nameInput.trim() || 'Haven Member',
       bio: bioInput.trim() || 'Finding a little quiet space.',
       avatar: avatarInput
     });
@@ -47,15 +47,16 @@ export const Profile = () => {
         <div className="absolute -top-24 -right-24 w-60 h-60 bg-primary-container/30 rounded-full blur-3xl pointer-events-none"></div>
 
         {/* Top Header */}
-        <div className="flex justify-between items-start border-b border-white/30 pb-4">
-          <div>
-            <span className="font-label-sm text-xs text-primary font-semibold uppercase tracking-widest bg-primary-container/40 px-3 py-1 rounded-full border border-primary-container/30">
-              Private Local Profile
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3.5 border-b border-white/30 pb-4">
+          <div className="flex flex-col gap-1.5 items-start">
+            <span className="inline-flex items-center gap-1.5 font-label-sm text-[11px] sm:text-xs text-primary font-semibold uppercase tracking-wider bg-primary-container/40 px-3 py-1 rounded-full border border-primary-container/30 whitespace-nowrap shrink-0">
+              <span className="material-symbols-outlined text-sm">lock</span>
+              <span>Private Local Profile</span>
             </span>
-            <h1 className="font-headline-lg text-headline-lg text-primary mt-2">Personal Sanctuary</h1>
+            <h1 className="font-headline-lg text-2xl sm:text-headline-lg text-primary mt-0.5">Personal Haven</h1>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
             <button
               onClick={handleSignOut}
               className="text-error hover:bg-error/10 px-3.5 py-1.5 rounded-full border border-error/30 flex items-center gap-1.5 text-xs font-semibold transition-transform hover:scale-105"
@@ -181,7 +182,7 @@ export const Profile = () => {
         {/* Dynamic Personal Statistics Grid */}
         <div className="flex flex-col gap-4">
           <h2 className="font-label-sm text-label-sm text-primary uppercase tracking-widest px-1">
-            Personal Sanctuary Stats
+            Personal Haven Stats
           </h2>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

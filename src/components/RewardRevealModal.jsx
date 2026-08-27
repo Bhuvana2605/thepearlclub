@@ -7,7 +7,7 @@ export const RewardRevealModal = ({
   onClose,
   collectibleId,
   title = 'New Discovery',
-  subtitle = 'A rare treasure has entered your sanctuary.',
+  subtitle = 'A rare treasure has entered your haven.',
   onClaim
 }) => {
   const { settings } = useSanctuary();

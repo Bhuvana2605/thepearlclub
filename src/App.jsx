@@ -6,6 +6,7 @@ import { Layout } from './components/Layout';
 import { Auth } from './pages/Auth';
 import { Login } from './pages/Login';
 import { SignUp } from './pages/SignUp';
+import { ResetPassword } from './pages/ResetPassword';
 
 import { Home } from './pages/Home';
 import { Journal } from './pages/Journal';
@@ -27,7 +28,7 @@ import { AdminAnalytics } from './pages/AdminAnalytics';
 const LoadingScreen = () => (
   <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-b from-[#e1f5fe] via-[#b2dfdb] to-[#80cbc4] text-primary p-6 text-center">
     <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin mb-4" />
-    <h2 className="font-headline-md text-xl font-semibold text-primary">Pearl Club Sanctuary</h2>
+    <h2 className="font-headline-md text-xl font-semibold text-primary">Pearl Club Haven</h2>
     <p className="font-body-md text-xs text-on-surface-variant mt-1">Verifying authentication session...</p>
   </div>
 );
@@ -70,6 +71,7 @@ export function App() {
             <Route path="/auth" element={<PublicAuthRoute><Auth /></PublicAuthRoute>} />
             <Route path="/login" element={<PublicAuthRoute><Login /></PublicAuthRoute>} />
             <Route path="/signup" element={<PublicAuthRoute><SignUp /></PublicAuthRoute>} />
+            <Route path="/reset-password" element={<ResetPassword />} />
 
             <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
             <Route path="/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>} />

@@ -94,16 +94,16 @@ export const SideNavBar = () => {
         </div>
       ) : (
         /* EXPANDED FULL SIDEBAR DRAWER */
-        <div className="w-64 glass-panel-opaque rounded-3xl p-5 shadow-2xl flex flex-col gap-4 border border-white/60 animate-fade-in max-h-[85vh] overflow-y-auto">
+        <div className="w-64 glass-panel-opaque rounded-3xl p-5 shadow-2xl flex flex-col gap-4 border border-white/60 dark:border-slate-800 animate-fade-in max-h-[85vh] overflow-y-auto">
           {/* Header & Collapse Toggle */}
-          <div className="flex items-center justify-between border-b border-gray-200/50 pb-3">
-            <div className="flex items-center gap-2 text-primary font-semibold text-sm">
+          <div className="flex items-center justify-between border-b border-gray-200/50 dark:border-slate-800/80 pb-3">
+            <div className="flex items-center gap-2 text-primary dark:text-teal-300 font-semibold text-sm">
               <span className="material-symbols-outlined text-xl">auto_awesome</span>
-              <span>Sanctuary Navigation</span>
+              <span className="dark:text-white">Haven Navigation</span>
             </div>
             <button
               onClick={() => setIsExpanded(false)}
-              className="p-1.5 rounded-full hover:bg-gray-100/60 text-gray-500 transition-colors"
+              className="p-1.5 rounded-full hover:bg-gray-100/60 dark:hover:bg-slate-800 text-gray-500 dark:text-slate-400 transition-colors"
               title="Collapse Menu"
               aria-label="Collapse Navigation Menu"
             >
@@ -115,7 +115,7 @@ export const SideNavBar = () => {
           <div className="flex flex-col gap-4">
             {groupedLinks.map((group) => (
               <div key={group.category} className="flex flex-col gap-1">
-                <span className="font-label-sm text-[10px] uppercase tracking-widest text-primary/70 font-bold px-2">
+                <span className="font-label-sm text-[10px] uppercase tracking-widest text-primary/70 dark:text-teal-400 font-bold px-2">
                   {group.category}
                 </span>
                 {group.items.map((item) => {
@@ -127,8 +127,8 @@ export const SideNavBar = () => {
                       onClick={() => setIsExpanded(false)}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
                         isActive
-                          ? 'bg-primary text-white shadow-sm font-semibold'
-                          : 'text-on-surface-variant hover:bg-white/50 hover:text-primary'
+                          ? 'bg-primary dark:bg-teal-600 text-white shadow-sm font-semibold'
+                          : 'text-on-surface-variant dark:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-800/80 hover:text-primary dark:hover:text-teal-300'
                       }`}
                     >
                       <span className="material-symbols-outlined text-lg">{item.icon}</span>
