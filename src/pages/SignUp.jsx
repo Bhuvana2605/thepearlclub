@@ -240,7 +240,10 @@ export const SignUp = () => {
       <div className="w-full max-w-md glass-panel-opaque rounded-[2rem] p-8 md:p-10 flex flex-col gap-6 border border-white/60 dark:border-slate-700/60 shadow-2xl relative z-10 animate-fade-in my-auto">
         <div className="text-center flex flex-col items-center gap-2">
           <PearlClubLogo variant="full" size="md" />
-          <p className="font-body-md text-body-md text-on-surface-variant dark:text-slate-300 text-sm mt-1">Create your private haven account.</p>
+          <h1 className="font-headline-md text-xl font-bold text-primary dark:text-teal-300 mt-1">The Pearl Club</h1>
+          <p className="font-body-md text-on-surface-variant dark:text-slate-300 text-xs mt-0.5 max-w-xs leading-relaxed">
+            The Pearl Club is a private digital sanctuary providing ambient soundscapes, focus tools, daily reflections, and personal mindfulness. Create your account below.
+          </p>
         </div>
 
         {/* GOOGLE OAUTH SIGN-UP BUTTON */}
