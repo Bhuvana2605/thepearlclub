@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase/client';
 import { PearlClubLogo } from '../components/brand/PearlClubLogo';
+import { useSanctuary } from '../context/SanctuaryContext';
 
 export const Auth = () => {
+  const navigate = useNavigate();
+  const { enterGuestMode } = useSanctuary();
   const [errorMsg, setErrorMsg] = useState('');
   const [googleLoading, setGoogleLoading] = useState(false);
+
+  const handleGuestEntry = () => {
+    enterGuestMode();
+    navigate('/');
+  };
 
   React.useEffect(() => {
     const hash = window.location.hash;
@@ -112,6 +120,16 @@ export const Auth = () => {
                 <span>Continue with Google</span>
               </>
             )}
+          </button>
+
+          {/* GUEST EXPLORER BUTTON */}
+          <button
+            type="button"
+            onClick={handleGuestEntry}
+            className="w-full bg-white/50 dark:bg-slate-800/60 hover:bg-white/80 dark:hover:bg-slate-800 text-[#006b58] dark:text-teal-300 border border-white/80 dark:border-slate-700/80 rounded-full py-3.5 px-4 font-label-sm text-xs font-semibold flex items-center justify-center gap-2.5 transition-all shadow-xs group"
+          >
+            <span className="material-symbols-outlined text-lg text-teal-600 dark:text-teal-400 group-hover:rotate-45 transition-transform duration-300">explore</span>
+            <span>Explore Sanctuary as Guest</span>
           </button>
 
           {errorMsg && (

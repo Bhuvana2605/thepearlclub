@@ -346,21 +346,21 @@ export const AdminAnalytics = () => {
         </div>
 
         {/* 1. Summary Metrics Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
           <div className="p-4 rounded-2xl glass-panel border border-white/40 flex flex-col items-center text-center shadow-sm">
             <span className="material-symbols-outlined text-primary text-3xl mb-1">visibility</span>
-            <span className="font-display-md text-display-md text-3xl text-primary font-bold">
+            <span className="font-display-md text-display-md text-2xl sm:text-3xl text-primary font-bold">
               {telemetry.totalVisits}
             </span>
-            <span className="font-label-sm text-xs text-outline mt-1 font-semibold">Total Website Visits</span>
+            <span className="font-label-sm text-[11px] sm:text-xs text-outline mt-1 font-semibold">Total Visits</span>
           </div>
 
           <div className="p-4 rounded-2xl glass-panel border border-white/40 flex flex-col items-center text-center shadow-sm">
             <span className="material-symbols-outlined text-secondary text-3xl mb-1">person_pin_circle</span>
-            <span className="font-display-md text-display-md text-3xl text-secondary font-bold">
+            <span className="font-display-md text-display-md text-2xl sm:text-3xl text-secondary font-bold">
               {telemetry.uniqueVisitors}
             </span>
-            <span className="font-label-sm text-xs text-outline mt-1 font-semibold">Unique Visitors</span>
+            <span className="font-label-sm text-[11px] sm:text-xs text-outline mt-1 font-semibold">Unique Visitors</span>
           </div>
 
           {/* Registered Accounts Card (Clickable to view table) */}
@@ -370,21 +370,30 @@ export const AdminAnalytics = () => {
             title="Click to view Registered Members table"
           >
             <span className="material-symbols-outlined text-primary text-3xl mb-1 group-hover:animate-bounce">group</span>
-            <span className="font-display-md text-display-md text-3xl text-primary font-bold">
+            <span className="font-display-md text-display-md text-2xl sm:text-3xl text-primary font-bold">
               {analyticsData.registeredUsers}
             </span>
-            <span className="font-label-sm text-xs text-primary mt-1 font-bold flex items-center gap-1">
-              Registered Accounts
+            <span className="font-label-sm text-[11px] sm:text-xs text-primary mt-1 font-bold flex items-center gap-1">
+              Members
               <span className="material-symbols-outlined text-xs">list_alt</span>
             </span>
           </div>
 
-          <div className="p-4 rounded-2xl glass-panel border border-white/40 flex flex-col items-center text-center shadow-sm">
-            <span className="material-symbols-outlined text-emerald-700 text-3xl mb-1">today</span>
-            <span className="font-display-md text-display-md text-3xl text-emerald-800 font-bold">
-              {telemetry.todayVisits}
+          {/* Guest Explorers Summary Card */}
+          <div className="p-4 rounded-2xl glass-panel border border-teal-400/50 bg-teal-500/10 flex flex-col items-center text-center shadow-sm" title="Anonymous visitors exploring Pearl Club in Guest Mode">
+            <span className="material-symbols-outlined text-teal-600 dark:text-teal-300 text-3xl mb-1">explore</span>
+            <span className="font-display-md text-display-md text-2xl sm:text-3xl text-teal-700 dark:text-teal-300 font-bold">
+              {Math.max(1, telemetry.uniqueVisitors - analyticsData.registeredUsers)}
             </span>
-            <span className="font-label-sm text-xs text-outline mt-1 font-semibold">Today's Visits</span>
+            <span className="font-label-sm text-[11px] sm:text-xs text-teal-800 dark:text-teal-200 mt-1 font-semibold">Guest Explorers</span>
+          </div>
+
+          <div className="p-4 rounded-2xl glass-panel border border-white/40 flex flex-col items-center text-center shadow-sm">
+            <span className="material-symbols-outlined text-emerald-600 text-3xl mb-1">bolt</span>
+            <span className="font-display-md text-display-md text-2xl sm:text-3xl text-emerald-700 dark:text-emerald-300 font-bold">
+              {analyticsData.activeUsers}
+            </span>
+            <span className="font-label-sm text-[11px] sm:text-xs text-outline mt-1 font-semibold">Active Sanctuary Users</span>
           </div>
         </div>
 

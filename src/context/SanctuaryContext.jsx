@@ -112,6 +112,33 @@ export const SanctuaryProvider = ({ children }) => {
   const [authLoading, setAuthLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
 
+  const enterGuestMode = () => {
+    try {
+      localStorage.setItem('pearl_club_guest_active', 'true');
+    } catch (e) {}
+    setCurrentUser({
+      id: 'guest_explorer_session',
+      isGuest: true,
+      email: 'guest@pearlclub.local',
+      user_metadata: {
+        full_name: 'Guest Explorer',
+        name: 'Guest Explorer',
+        preferred_username: 'guest_explorer',
+        avatar_url: 'pearl'
+      }
+    });
+    setAuthLoading(false);
+  };
+
+  const exitGuestMode = () => {
+    try {
+      localStorage.removeItem('pearl_club_guest_active');
+    } catch (e) {}
+    if (currentUser?.isGuest) {
+      setCurrentUser(null);
+    }
+  };
+
   useEffect(() => {
     let isSubscribed = true;
 
@@ -128,6 +155,24 @@ export const SanctuaryProvider = ({ children }) => {
       }
     }, timeoutMs);
 
+    const checkGuestFallback = () => {
+      try {
+        if (localStorage.getItem('pearl_club_guest_active') === 'true') {
+          setCurrentUser({
+            id: 'guest_explorer_session',
+            isGuest: true,
+            email: 'guest@pearlclub.local',
+            user_metadata: {
+              full_name: 'Guest Explorer',
+              name: 'Guest Explorer',
+              preferred_username: 'guest_explorer',
+              avatar_url: 'pearl'
+            }
+          });
+        }
+      } catch (e) {}
+    };
+
     if (supabase) {
       supabase.auth
         .getSession()
@@ -135,23 +180,30 @@ export const SanctuaryProvider = ({ children }) => {
           if (isSubscribed) {
             console.log('[SUPABASE AUTH SESSION DEBUG] INITIAL SESSION:', Boolean(session), session?.user?.id ?? 'NONE');
             if (session?.user) {
+              try { localStorage.removeItem('pearl_club_guest_active'); } catch (e) {}
               setCurrentUser(session.user);
+            } else {
+              checkGuestFallback();
             }
             setAuthLoading(false);
           }
         })
         .catch((err) => {
           console.warn('[Supabase Auth] getSession error:', err);
-          if (isSubscribed) setAuthLoading(false);
+          if (isSubscribed) {
+            checkGuestFallback();
+            setAuthLoading(false);
+          }
         });
 
       const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
         if (isSubscribed) {
           console.log('[SUPABASE AUTH SESSION DEBUG] EVENT:', event, 'SESSION:', Boolean(session), 'USER ID:', session?.user?.id ?? 'NONE');
           if (session?.user) {
+            try { localStorage.removeItem('pearl_club_guest_active'); } catch (e) {}
             setCurrentUser(session.user);
           } else if (event === 'SIGNED_OUT') {
-            setCurrentUser(null);
+            checkGuestFallback();
           }
           setAuthLoading(false);
         }
@@ -163,11 +215,15 @@ export const SanctuaryProvider = ({ children }) => {
         subscription.unsubscribe();
       };
     } else {
+      checkGuestFallback();
       setAuthLoading(false);
     }
   }, []);
 
   const signOutUser = async () => {
+    try {
+      localStorage.removeItem('pearl_club_guest_active');
+    } catch (e) {}
     if (supabase) {
       await supabase.auth.signOut();
     }
@@ -1408,6 +1464,8 @@ export const SanctuaryProvider = ({ children }) => {
         authLoading,
         currentUser,
         signOutUser,
+        enterGuestMode,
+        exitGuestMode,
         addCollectibleToUser,
         triggerNaturalDiscovery,
         grantGameReward,

@@ -3,7 +3,7 @@ import { bottleService, validateBottleText } from '../lib/supabase/bottleService
 import { useSanctuary } from '../context/SanctuaryContext';
 
 export const Bottle = () => {
-  const { bottleSafety, reportBottle, blockSender, incrementDailyBottleCount } = useSanctuary();
+  const { currentUser, bottleSafety, reportBottle, blockSender, incrementDailyBottleCount } = useSanctuary();
 
   const [activeTab, setActiveTab] = useState('find'); // 'find' | 'send' | 'rules'
 
@@ -54,6 +54,11 @@ export const Bottle = () => {
     e.preventDefault();
     setValidationError('');
     setSendSuccess('');
+
+    if (currentUser?.isGuest) {
+      setValidationError("Create a free account or sign in with Google to cast bottles out into the sanctuary ocean.");
+      return;
+    }
 
     // Check daily rate limit (Max 5 per day)
     const today = new Date().toISOString().split('T')[0];
