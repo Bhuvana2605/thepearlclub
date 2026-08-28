@@ -282,38 +282,10 @@ export const Settings = () => {
             </button>
           </div>
 
-          {/* RETURN MILESTONES PROGRESS TRACKER */}
-          <div className="flex flex-col gap-2 p-4 rounded-xl bg-white/50 border border-white/60">
-            <div className="flex justify-between items-center">
-              <span className="font-label-sm text-xs font-semibold text-on-surface">Return Visit Milestones</span>
-              <span className="font-headline-md text-headline-md text-primary text-xs font-semibold">
-                {returnDays.length} Distinct Visit Days
-              </span>
-            </div>
-
-            <div className="grid grid-cols-3 gap-2 my-1">
-              <div className={`p-3 rounded-xl border flex flex-col items-center text-center transition-all ${returnRewards.day3 ? 'bg-emerald-50 border-emerald-300 text-emerald-900 dark:bg-emerald-950/80 dark:border-emerald-700/80 dark:text-emerald-200' : 'bg-white/40 border-white/50 text-outline dark:bg-slate-900/60 dark:border-slate-700/60 dark:text-slate-300'}`}>
-                <span className="font-label-sm text-xs font-semibold">Day 3</span>
-                <span className="font-body-md text-[11px] mt-0.5">{returnRewards.day3 ? '✓ Rare Unlocked' : 'Starfish'}</span>
-              </div>
-              <div className={`p-3 rounded-xl border flex flex-col items-center text-center transition-all ${returnRewards.day5 ? 'bg-emerald-50 border-emerald-300 text-emerald-900 dark:bg-emerald-950/80 dark:border-emerald-700/80 dark:text-emerald-200' : 'bg-white/40 border-white/50 text-outline dark:bg-slate-900/60 dark:border-slate-700/60 dark:text-slate-300'}`}>
-                <span className="font-label-sm text-xs font-semibold">Day 5</span>
-                <span className="font-body-md text-[11px] mt-0.5">{returnRewards.day5 ? '✓ Rare Unlocked' : 'Seahorse'}</span>
-              </div>
-              <div className={`p-3 rounded-xl border flex flex-col items-center text-center transition-all ${returnRewards.day7 ? 'bg-emerald-50 border-emerald-300 text-emerald-900 dark:bg-emerald-950/80 dark:border-emerald-700/80 dark:text-emerald-200' : 'bg-white/40 border-white/50 text-outline dark:bg-slate-900/60 dark:border-slate-700/60 dark:text-slate-300'}`}>
-                <span className="font-label-sm text-xs font-semibold">Day 7</span>
-                <span className="font-body-md text-[11px] mt-0.5">{returnRewards.day7 ? '✓ Special Unlocked' : 'Pearl Shell'}</span>
-              </div>
-            </div>
-            <p className="font-label-sm text-[11px] text-outline text-center">
-              Progress accumulates on distinct calendar days. Missing a day does not reset your streak.
-            </p>
-          </div>
-
           {/* 7-Step Focus Visual Tracker */}
           <div className="flex flex-col gap-2 p-4 rounded-xl bg-white/50 border border-white/60">
             <div className="flex justify-between items-center">
-              <span className="font-label-sm text-xs font-semibold text-on-surface">Focus Journey Tracker</span>
+              <span className="font-label-sm text-xs font-semibold text-on-surface">Golden Pearl Focus Progress</span>
               <span className="font-headline-md text-headline-md text-primary text-xs font-semibold">
                 {Math.min(7, (focusState?.qualifyingDates?.length || 0))} / 7 Days
               </span>
@@ -337,9 +309,7 @@ export const Settings = () => {
               })}
             </div>
             <p className="font-label-sm text-[11px] text-outline text-center">
-              {Math.min(7, (focusState?.qualifyingDates?.length || 0)) >= 7
-                ? '✨ Seven Focus days completed! Golden Pearl unlocked in Your Little World.'
-                : `${Math.min(7, (focusState?.qualifyingDates?.length || 0))} days completed. Progress is permanent and never resets.`}
+              Accumulates at your own pace whenever you complete focus sessions. Missing a day does not reset your progress.
             </p>
           </div>
 

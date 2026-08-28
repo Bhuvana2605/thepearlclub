@@ -98,10 +98,10 @@ export const FocusAquarium = () => {
             Focus Pearls: <span className="font-headline-md text-sm text-secondary font-bold">{pearls.length}</span>
           </div>
 
-          {/* 7-Day Progression Pill */}
-          <div className="px-4 py-1.5 rounded-full bg-white/75 backdrop-blur-md border border-white/80 text-primary shadow-md flex items-center gap-2 font-label-sm text-xs font-semibold">
+          {/* Golden Pearl Progression Pill */}
+          <div className="px-4 py-1.5 rounded-full bg-white/75 backdrop-blur-md border border-white/80 text-primary shadow-md flex items-center gap-2 font-label-sm text-xs font-semibold" title="Accumulates at your own pace whenever you complete focus sessions. Missing a day does not reset your progress.">
             <span className="material-symbols-outlined text-amber-500 text-sm">stars</span>
-            7-Day Focus Streak: <span className="font-bold text-amber-800">{streakProgress} / 7 days</span>
+            Golden Pearl Progress: <span className="font-bold text-amber-800">{streakProgress} / 7 days</span>
           </div>
         </div>
       </header>

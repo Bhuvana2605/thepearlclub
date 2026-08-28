@@ -3,7 +3,7 @@ import { useSanctuary } from '../context/SanctuaryContext';
 import { MoodCanvas } from './MoodCanvas';
 
 export const Journal = () => {
-  const { journalEntries, saveJournalEntry, activityHistory } = useSanctuary();
+  const { journalEntries, saveJournalEntry, activityHistory, triggerNaturalDiscovery } = useSanctuary();
   const [activeTab, setActiveTab] = useState('chronicle'); // 'chronicle' | 'canvas' | 'history'
 
   const todayKey = new Date().toISOString().split('T')[0];
@@ -22,6 +22,9 @@ export const Journal = () => {
 
   const handleSaveText = () => {
     saveJournalEntry(selectedDate, textInput);
+    if (triggerNaturalDiscovery) {
+      triggerNaturalDiscovery('journal');
+    }
     setSaveStatus('Entry saved locally');
     setTimeout(() => setSaveStatus(''), 2500);
   };

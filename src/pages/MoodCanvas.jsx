@@ -111,6 +111,9 @@ export const MoodCanvas = () => {
     if (!canvas) return;
     const dataUrl = canvas.toDataURL('image/png');
     saveMoodDrawing(dateKey, dataUrl);
+    if (triggerNaturalDiscovery) {
+      triggerNaturalDiscovery('canvas');
+    }
     setSaveNotice(true);
     setTimeout(() => {
       setSaveNotice(false);

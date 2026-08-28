@@ -12,28 +12,20 @@ const SanctuaryContext = createContext(null);
 
 const DEFAULT_ACHIEVEMENTS = [
   {
-    id: 'five_days_reflection',
-    title: 'Five Days of Reflection',
-    description: 'Journal on 5 different calendar days.',
-    category: 'journal_days',
-    requirement: 5,
-    collectible: { id: 'pearl-shell', name: 'Pearl Shell', source: 'achievement' }
-  },
-  {
-    id: 'fifteen_days_sanctuary',
-    title: '15 Days With Your Little World',
-    description: 'Visit Pearl Club on 15 distinct calendar days.',
-    category: 'visited_days',
-    requirement: 15,
-    collectible: { id: 'glow-pearl', name: 'Luminous Pearl of 15 Days', source: 'achievement' }
+    id: 'first_reflection',
+    title: 'First Reflection',
+    description: 'Write your first journal reflection.',
+    category: 'journal_total',
+    requirement: 1,
+    collectible: { id: 'sea-glass', name: 'Sea Glass', source: 'achievement' }
   },
   {
     id: 'finding_your_words',
     title: 'Finding Your Words',
-    description: 'Create 10 journal entries.',
+    description: 'Create 5 journal reflections.',
     category: 'journal_total',
-    requirement: 10,
-    collectible: { id: 'sea-glass', name: 'Sea Glass', source: 'achievement' }
+    requirement: 5,
+    collectible: { id: 'pearl-shell', name: 'Pearl Shell', source: 'achievement' }
   },
   {
     id: 'first_focus',
@@ -52,41 +44,49 @@ const DEFAULT_ACHIEVEMENTS = [
     collectible: { id: 'bluetang', name: 'Blue Tang', source: 'achievement' }
   },
   {
-    id: 'focused_week',
-    title: 'Focused Week',
-    description: 'Complete focus sessions on 5 different calendar days.',
+    id: 'focused_explorer',
+    title: 'Focus Explorer',
+    description: 'Complete 5 focus sessions.',
     category: 'focus_days',
     requirement: 5,
     collectible: { id: 'jellyfish', name: 'Luminous Jellyfish', source: 'achievement' }
   },
   {
-    id: 'puzzle_week',
-    title: 'Puzzle Week',
-    description: 'Play Sudoku on 7 different calendar days.',
+    id: 'puzzle_explorer',
+    title: 'Mindful Puzzles',
+    description: 'Play Sudoku in your sanctuary.',
     category: 'sudoku_days',
-    requirement: 7,
+    requirement: 1,
     collectible: { id: 'tiny-starfish', name: 'Tiny Starfish', source: 'achievement' }
   },
   {
-    id: 'pearl_hunter',
-    title: 'Pearl Hunter',
-    description: 'Play Pearl Catch on 7 different calendar days.',
+    id: 'pearl_catcher',
+    title: 'Pearl Catcher',
+    description: 'Play Pearl Catch.',
     category: 'pearlCatch_days',
-    requirement: 7,
+    requirement: 1,
     collectible: { id: 'coral', name: 'Azure Coral', source: 'achievement' }
   },
   {
     id: 'quick_thinker',
     title: 'Quick Thinker',
-    description: 'Play Quick Math on 7 different calendar days.',
+    description: 'Play Quick Math.',
     category: 'quickMath_days',
-    requirement: 7,
+    requirement: 1,
     collectible: { id: 'seahorse', name: 'Golden Seahorse', source: 'achievement' }
+  },
+  {
+    id: 'fifteen_days_sanctuary',
+    title: 'Sanctuary Companion',
+    description: 'Visit Pearl Club on 15 distinct days at your own pace.',
+    category: 'visited_days',
+    requirement: 15,
+    collectible: { id: 'glow-pearl', name: 'Luminous Pearl of 15 Days', source: 'achievement' }
   }
 ];
 
-const DAILY_REWARD_POOL = ['clownfish', 'bluetang', 'yellowtang', 'pearl-shell', 'tiny-starfish', 'sea-glass', 'coral', 'seahorse'];
-const FOCUS_REWARD_POOL = ['clownfish', 'bluetang', 'yellowtang', 'angelfish', 'guppy', 'sea-glass', 'tiny-starfish', 'coral', 'rocks'];
+const COMMON_REWARD_POOL = ['clownfish', 'guppy', 'bluetang', 'yellowtang', 'pearl-shell', 'pearl', 'starfish', 'tiny-starfish', 'sea-glass', 'coral', 'rocks'];
+const RARE_REWARD_POOL = ['seahorse', 'jellyfish', 'turtle', 'angelfish', 'rare-shell', 'puzzle-pearl'];
 
 const DEFAULT_FOCUS_CATEGORIES = ['Work', 'Study', 'Reading', 'Rest', 'Cleaning', 'Personal'];
 
@@ -289,65 +289,87 @@ export const SanctuaryProvider = ({ children }) => {
     }
   }, [currentUser?.id]);
 
-  // Return Days & Milestone Check Effect (Runs per authenticated user)
+  // Visited Calendar Days Tracking (Silent tracking, no streak pressure or popups)
   useEffect(() => {
     const userId = currentUser?.id;
     if (!userId) return;
 
     const savedDays = storage.get('return_days', [], userId);
-    const savedRewards = storage.get('return_rewards', { day3: false, day5: false, day7: false }, userId);
-
     let updatedDays = savedDays;
     if (!savedDays.includes(todayKey)) {
       updatedDays = [...savedDays, todayKey];
       storage.save('return_days', updatedDays, userId);
     }
-
     setReturnDays(updatedDays);
-    setReturnRewards(savedRewards);
-
-    const distinctCount = updatedDays.length;
-
-    // Check Day 3 Milestone
-    if (distinctCount >= 3 && !savedRewards.day3) {
-      const rewardId = 'starfish';
-      addCollectibleToUser(rewardId, 'return_milestone');
-      const updatedRewards = { ...savedRewards, day3: true };
-      setReturnRewards(updatedRewards);
-      storage.save('return_rewards', updatedRewards, userId);
-      setPendingSurpriseReward({
-        title: 'Three days with Pearl Club.',
-        subtitle: 'Something rare has appeared in your sanctuary.',
-        collectibleId: rewardId
-      });
-    }
-    // Check Day 5 Milestone
-    else if (distinctCount >= 5 && !savedRewards.day5) {
-      const rewardId = 'seahorse';
-      addCollectibleToUser(rewardId, 'return_milestone');
-      const updatedRewards = { ...savedRewards, day5: true };
-      setReturnRewards(updatedRewards);
-      storage.save('return_rewards', updatedRewards, userId);
-      setPendingSurpriseReward({
-        title: 'Five days with Pearl Club.',
-        subtitle: 'Another rare discovery has drifted in.',
-        collectibleId: rewardId
-      });
-    }
-    // Check Day 7 Milestone
-    else if (distinctCount >= 7 && !savedRewards.day7) {
-      const rewardId = 'pearl-shell';
-      addCollectibleToUser(rewardId, 'return_milestone');
-      const updatedRewards = { ...savedRewards, day7: true };
-      setReturnRewards(updatedRewards);
-      storage.save('return_rewards', updatedRewards, userId);
-      setPendingSurpriseReward({
-        title: 'Seven days with Pearl Club.',
-        subtitle: 'A special collectible has entered Your Little World.',
-        collectibleId: rewardId
-      });
-    }
   }, [currentUser?.id, todayKey]);
+
+  // NATURAL DISCOVERY ENGINE (Relaxed, low-pressure, cooldown-based common discoveries)
+  const [lastNaturalDiscoveryTime, setLastNaturalDiscoveryTime] = useState(0);
+
+  const triggerNaturalDiscovery = (sourceContext = 'explore') => {
+    const userId = currentUser?.id;
+    if (!userId) return null;
+
+    const now = Date.now();
+    // Cooldown check: minimum 3 minutes between natural discoveries
+    if (now - lastNaturalDiscoveryTime < 3 * 60 * 1000) {
+      return null;
+    }
+
+    // 45% probability roll
+    if (Math.random() > 0.45) {
+      return null;
+    }
+
+    const randomIndex = Math.floor(Math.random() * COMMON_REWARD_POOL.length);
+    const catId = COMMON_REWARD_POOL[randomIndex];
+    const reg = getCollectible(catId);
+
+    addCollectibleToUser(catId, 'natural-discovery');
+    setLastNaturalDiscoveryTime(now);
+
+    const softTitles = [
+      "A little something washed ashore.",
+      "You found something.",
+      "There was something waiting for you.",
+      "A tiny discovery drifted in."
+    ];
+    const chosenTitle = softTitles[Math.floor(Math.random() * softTitles.length)];
+
+    const discoveryObj = {
+      collectibleId: catId,
+      title: chosenTitle,
+      subtitle: `A ${reg?.name || 'common discovery'} has entered your sanctuary.`
+    };
+
+    setPendingSurpriseReward(discoveryObj);
+    return discoveryObj;
+  };
+
+  // GAME RARE REWARD DISPATCHER (Optional rewards for intentional game engagement)
+  const grantGameReward = (gameType = 'game') => {
+    const userId = currentUser?.id;
+    if (!userId) return null;
+
+    if (Math.random() < 0.65) {
+      const randomIndex = Math.floor(Math.random() * RARE_REWARD_POOL.length);
+      const catId = RARE_REWARD_POOL[randomIndex];
+      const reg = getCollectible(catId);
+
+      addCollectibleToUser(catId, 'game');
+      logActivityEvent('reward', { source: 'game', rewardName: reg?.name || catId });
+
+      const discoveryObj = {
+        collectibleId: catId,
+        title: "A rare discovery appeared!",
+        subtitle: `You found a ${reg?.name || 'rare sea companion'} while playing ${gameType}.`
+      };
+
+      setPendingSurpriseReward(discoveryObj);
+      return reg;
+    }
+    return null;
+  };
 
   // Central User-Owned Collectible Reward Dispatcher
   const addCollectibleToUser = (collectibleId, source = 'earned') => {
@@ -523,43 +545,34 @@ export const SanctuaryProvider = ({ children }) => {
         .select('id, name, username, bio, avatar_url, pearl_number, role, is_admin, created_at')
         .eq('id', currentUser.id)
         .maybeSingle()
-        .then(async ({ data, error }) => {
-          console.log('[SUPABASE PROFILE DEBUG] AUTH USER ID:', currentUser?.id);
-          console.log('[SUPABASE PROFILE DEBUG] PROFILE DATA:', data);
-          console.log('[SUPABASE PROFILE DEBUG] PROFILE ERROR:', error);
-          console.log('[SUPABASE PROFILE DEBUG] PEARL NUMBER:', data?.pearl_number);
-
+        .then(({ data, error }) => {
           if (data) {
-            let activePearlNumber = data.pearl_number;
-
-            // Self-heal: Align logged-in user's pearl_number with exact registration rank in Supabase
-            try {
-              if (data.created_at) {
-                const { count } = await supabase
-                  .from('profiles')
-                  .select('id', { count: 'exact', head: true })
-                  .lte('created_at', data.created_at);
-
-                if (count && count > 0 && activePearlNumber !== count) {
-                  activePearlNumber = count;
-                  await supabase
-                    .from('profiles')
-                    .update({ pearl_number: count })
-                    .eq('id', currentUser.id);
-                  console.log(`[Supabase Self-Heal] Aligned profile pearl_number to rank ${count}`);
-                }
-              }
-            } catch (e) {}
-
+            const activePearlNumber = data.pearl_number;
             if (activePearlNumber != null) {
               setPearlNumber(activePearlNumber);
+            }
+
+            // Derive a clean fallback username if DB contains legacy member_... string
+            const meta = currentUser.user_metadata || {};
+            const cleanFallbackName = data.name || meta.full_name || meta.name || (currentUser.email ? currentUser.email.split('@')[0] : 'Pearl Member');
+            let resolvedUsername = data.username;
+            if (!resolvedUsername || resolvedUsername.startsWith('member_')) {
+              const rawSlug = meta.preferred_username || meta.username || meta.full_name || meta.name || (currentUser.email ? currentUser.email.split('@')[0] : '');
+              if (rawSlug) {
+                const cleanSlug = rawSlug.toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_').replace(/^_+|_+$/g, '');
+                if (cleanSlug && cleanSlug.length >= 2) {
+                  resolvedUsername = cleanSlug;
+                  // Asynchronously update legacy member_... username in DB
+                  supabase.from('profiles').update({ username: cleanSlug, name: cleanFallbackName }).eq('id', currentUser.id).then(() => {}).catch(() => {});
+                }
+              }
             }
 
             setProfile((prev) => ({
               ...prev,
               pearl_number: activePearlNumber != null ? activePearlNumber : prev.pearl_number,
-              name: data.name || prev.name,
-              username: data.username || prev.username,
+              name: cleanFallbackName,
+              username: resolvedUsername || prev.username,
               bio: data.bio || prev.bio,
               avatar: data.avatar_url || prev.avatar,
               role: data.role || (data.is_admin ? 'admin' : 'user'),
@@ -569,8 +582,11 @@ export const SanctuaryProvider = ({ children }) => {
           } else {
             // Auto-create missing profile row for authenticated user (e.g. Google OAuth or new sign-up)
             const meta = currentUser.user_metadata || {};
-            const defaultName = meta.full_name || meta.name || currentUser.email?.split('@')[0] || 'Haven Member';
-            const defaultUsername = meta.username || `member_${currentUser.id.slice(0, 6)}`;
+            const defaultName = meta.full_name || meta.name || meta.given_name || (currentUser.email ? currentUser.email.split('@')[0] : 'Pearl Member');
+            
+            const rawSlug = meta.preferred_username || meta.username || meta.full_name || meta.name || (currentUser.email ? currentUser.email.split('@')[0] : 'pearl_member');
+            const cleanSlug = rawSlug.toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_').replace(/^_+|_+$/g, '') || `pearl_${currentUser.id.slice(0, 6)}`;
+            const defaultUsername = cleanSlug;
             const defaultAvatar = meta.avatar_url || meta.picture || 'pearl';
 
             supabase
@@ -910,18 +926,25 @@ export const SanctuaryProvider = ({ children }) => {
   };
 
   const grantRandomFocusReward = (category, duration) => {
-    const randomIndex = Math.floor(Math.random() * FOCUS_REWARD_POOL.length);
-    const catId = FOCUS_REWARD_POOL[randomIndex];
+    const randomIndex = Math.floor(Math.random() * RARE_REWARD_POOL.length);
+    const catId = RARE_REWARD_POOL[randomIndex];
     const reg = getCollectible(catId);
 
     const rewardItem = {
       ...reg,
-      source: 'focus_reward',
+      source: 'focus_rare',
       unlockedAt: new Date().toISOString()
     };
 
-    addItemToInventory(rewardItem);
-    logActivityEvent('reward', { source: 'focus_reward', rewardName: rewardItem.name });
+    addCollectibleToUser(catId, 'focus_rare');
+    logActivityEvent('reward', { source: 'focus_rare', rewardName: rewardItem.name || catId });
+
+    setPendingSurpriseReward({
+      collectibleId: catId,
+      title: "A rare discovery emerged.",
+      subtitle: `You found a ${reg?.name || 'rare sea companion'} from your completed focus session.`
+    });
+
     return rewardItem;
   };
 
@@ -1143,9 +1166,9 @@ export const SanctuaryProvider = ({ children }) => {
         }
       }
 
-      const consecutiveDays = getConsecutiveQualifyingDays(nextDates);
+      const totalQualifyingFocusDays = nextDates.length;
 
-      if (consecutiveDays >= 7 && qualifies) {
+      if (totalQualifyingFocusDays >= 7 && qualifies && !worldState?.hasGoldenPearl) {
         let convertedCount = 0;
         nextPearls = nextPearls.map((p) => {
           if (p.status === 'available' && convertedCount < 7) {
@@ -1160,7 +1183,7 @@ export const SanctuaryProvider = ({ children }) => {
           id: 'golden-pearl',
           name: 'Golden Pearl',
           source: 'focus_rare',
-          description: 'A glowing Golden Pearl formed by 7 consecutive days of deep focus.',
+          description: 'A glowing Golden Pearl discovered after accumulating 7 days of deep focus.',
           unlockedAt: new Date().toISOString()
         };
 
@@ -1171,18 +1194,13 @@ export const SanctuaryProvider = ({ children }) => {
           collectibleId: 'golden-pearl'
         };
 
-        addItemToInventory({
-          id: 'golden-pearl',
-          name: 'Golden Pearl',
-          source: 'focus_rare',
-          unlockedAt: new Date().toISOString()
-        });
+        addCollectibleToUser('golden-pearl', 'focus_milestone');
 
         return {
           pearls: nextPearls,
           sessions: [sessionObj, ...currentSessions],
           qualifyingDates: nextDates,
-          streakProgress: 0,
+          streakProgress: totalQualifyingFocusDays,
           rareRewards: [rareRecord, ...currentRares]
         };
       }
@@ -1191,7 +1209,7 @@ export const SanctuaryProvider = ({ children }) => {
         pearls: nextPearls,
         sessions: [sessionObj, ...currentSessions],
         qualifyingDates: nextDates,
-        streakProgress: consecutiveDays,
+        streakProgress: totalQualifyingFocusDays,
         rareRewards: currentRares
       };
     });
@@ -1210,6 +1228,9 @@ export const SanctuaryProvider = ({ children }) => {
 
   const toggleSoundTrack = (trackName) => {
     const isNowPlaying = ambientPlayer.toggleTrack(trackName);
+    if (isNowPlaying) {
+      triggerNaturalDiscovery('music');
+    }
     setSoundState((prev) => ({
       ...prev,
       activePreset: null,
@@ -1377,6 +1398,8 @@ export const SanctuaryProvider = ({ children }) => {
         currentUser,
         signOutUser,
         addCollectibleToUser,
+        triggerNaturalDiscovery,
+        grantGameReward,
         returnDays,
         returnRewards,
         pendingSurpriseReward,

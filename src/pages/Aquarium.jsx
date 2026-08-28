@@ -37,7 +37,8 @@ export const Aquarium = () => {
     pendingUnlockedAchievement,
     setPendingUnlockedAchievement,
     isDailyRewardAvailable,
-    claimDailyReward
+    claimDailyReward,
+    triggerNaturalDiscovery
   } = useSanctuary();
 
   const [activeTab, setActiveTab] = useState('aquarium'); // 'aquarium' | 'found' | 'achieved'
@@ -140,7 +141,10 @@ export const Aquarium = () => {
           return (
             <div
               key={rawItem.id || idx}
-              onClick={() => setSelectedCollectible({ ...item, source: rawItem.source })}
+              onClick={() => {
+                setSelectedCollectible({ ...item, source: rawItem.source });
+                if (triggerNaturalDiscovery) triggerNaturalDiscovery('aquarium');
+              }}
               className={`absolute flex flex-col items-center group cursor-pointer transition-transform hover:scale-125 ${
                 isMoving ? 'animate-float-slow' : 'animate-float-slight'
               }`}

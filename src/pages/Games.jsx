@@ -41,7 +41,7 @@ const SUDOKU_PUZZLES = {
 };
 
 export const Games = () => {
-  const { recordActivityDate } = useSanctuary();
+  const { recordActivityDate, grantGameReward } = useSanctuary();
 
   // ==================================================
   // 1. SUDOKU GAME
@@ -223,6 +223,9 @@ export const Games = () => {
 
   const handleEndGame = () => {
     setGameState('finished');
+    if (grantGameReward) {
+      grantGameReward('Pearl Catch');
+    }
     if (animFrameIdRef.current) cancelAnimationFrame(animFrameIdRef.current);
 
     setScore((finalScore) => {

@@ -101,11 +101,22 @@ export const AdminAnalytics = () => {
 
             list = sortedByDate.map((u, idx) => {
               const numericPearl = idx + 1;
+              const meta = u.raw_user_meta_data || {};
+              const rawName = u.name || u.display_name || u.full_name || meta.full_name || meta.name || meta.given_name;
+              const name = rawName || (u.email ? u.email.split('@')[0] : 'Pearl Member');
+
+              let cleanUsername = u.username;
+              if (!cleanUsername || cleanUsername.startsWith('member_')) {
+                const derived = (name || (u.email ? u.email.split('@')[0] : '')).toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_').replace(/^_+|_+$/g, '');
+                cleanUsername = derived && derived.length >= 2 ? `@${derived}` : (u.username ? `@${u.username.replace(/^@/, '')}` : '@member');
+              } else {
+                cleanUsername = `@${cleanUsername.replace(/^@/, '')}`;
+              }
 
               return {
                 id: u.id || `u_${idx}`,
-                name: u.display_name || u.username || u.full_name || u.name || 'Pearl Club Member',
-                username: u.username ? `@${u.username.replace(/^@/, '')}` : '@member',
+                name: name,
+                username: cleanUsername,
                 email: u.email || (u.id === currentUser?.id ? currentUser?.email : 'private@pearlclub.sanctuary'),
                 pearlVal: numericPearl,
                 pearlNumber: formatPearlNo(numericPearl),
@@ -423,7 +434,7 @@ export const AdminAnalytics = () => {
                       </span>
                     </div>
                   </th>
-                  <th className="py-3 px-4">Email Address</th>
+                  <th className="py-3 px-4">Username</th>
                   <th
                     onClick={() => handleSortToggle('pearlVal')}
                     className="py-3 px-4 cursor-pointer hover:bg-primary/15 transition-colors select-none"
@@ -435,6 +446,7 @@ export const AdminAnalytics = () => {
                       </span>
                     </div>
                   </th>
+                  <th className="py-3 px-4">Email Address</th>
                   <th className="py-3 px-4">Role / Status</th>
                   <th
                     onClick={() => handleSortToggle('createdAtDate')}
@@ -452,7 +464,7 @@ export const AdminAnalytics = () => {
               <tbody className="divide-y divide-white/30 font-body-md text-xs">
                 {loadingUsers ? (
                   <tr>
-                    <td colSpan="5" className="py-8 text-center text-on-surface-variant font-medium">
+                    <td colSpan="6" className="py-8 text-center text-on-surface-variant font-medium">
                       <div className="flex justify-center items-center gap-2">
                         <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                         Loading registered member accounts...
@@ -461,29 +473,28 @@ export const AdminAnalytics = () => {
                   </tr>
                 ) : sortedAndFilteredUsers.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="py-8 text-center text-on-surface-variant font-medium">
+                    <td colSpan="6" className="py-8 text-center text-on-surface-variant font-medium">
                       No matching registered accounts found.
                     </td>
                   </tr>
                 ) : (
                   sortedAndFilteredUsers.map((user) => (
                     <tr key={user.id} className="hover:bg-white/50 transition-colors">
-                      {/* Name & Avatar */}
+                      {/* Member Name */}
                       <td className="py-3.5 px-4 font-semibold text-on-surface">
                         <div className="flex items-center gap-2.5">
                           <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary to-secondary text-white font-bold text-xs flex items-center justify-center shadow-xs">
                             {user.name.charAt(0).toUpperCase()}
                           </div>
-                          <div>
-                            <span className="block font-bold text-primary">{user.name}</span>
-                            <span className="block text-[11px] text-outline font-normal">{user.username}</span>
-                          </div>
+                          <span className="font-bold text-primary text-sm">{user.name}</span>
                         </div>
                       </td>
 
-                      {/* Email */}
-                      <td className="py-3.5 px-4 font-mono text-xs text-on-surface-variant">
-                        {user.email}
+                      {/* Username */}
+                      <td className="py-3.5 px-4 font-mono text-xs font-semibold text-slate-700 dark:text-slate-300">
+                        <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                          {user.username}
+                        </span>
                       </td>
 
                       {/* Pearl Number Badge */}
@@ -492,6 +503,11 @@ export const AdminAnalytics = () => {
                           <img src="/assets/collectibles/pearl.png" alt="Pearl" className="w-3.5 h-3.5 object-contain" />
                           {user.pearlNumber}
                         </span>
+                      </td>
+
+                      {/* Email */}
+                      <td className="py-3.5 px-4 font-mono text-xs text-on-surface-variant">
+                        {user.email}
                       </td>
 
                       {/* Role / Status */}
