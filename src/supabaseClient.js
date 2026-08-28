@@ -12,4 +12,11 @@ const supabaseKey =
   import.meta.env.REACT_APP_SUPABASE_KEY || 
   'sb_publishable_Lq4PB__oEVaBs-FUVbqODQ_Ic00Mv9J';
 
-export const supabase = clientInstance || createClient(supabaseUrl, supabaseKey);
+export const supabase = clientInstance || createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    flowType: 'implicit',
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true
+  }
+});

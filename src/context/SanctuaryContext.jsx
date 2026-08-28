@@ -562,101 +562,80 @@ export const SanctuaryProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (supabase && currentUser) {
-      supabase
-        .from('profiles')
-        .select('id, name, username, bio, avatar_url, pearl_number, role, is_admin, created_at')
-        .eq('id', currentUser.id)
-        .maybeSingle()
-        .then(({ data, error }) => {
-          if (data) {
-            const activePearlNumber = data.pearl_number;
-            if (activePearlNumber != null) {
-              setPearlNumber(activePearlNumber);
-            }
+    if (currentUser) {
+      // Derive instant default metadata so UI renders immediately without waiting for database query
+      const meta = currentUser.user_metadata || {};
+      const defaultName = meta.full_name || meta.name || meta.given_name || (currentUser.email ? currentUser.email.split('@')[0] : 'Pearl Member');
+      const rawSlug = meta.preferred_username || meta.username || meta.full_name || meta.name || (currentUser.email ? currentUser.email.split('@')[0] : 'pearl_member');
+      const cleanSlug = rawSlug.toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_').replace(/^_+|_+$/g, '') || `pearl_${currentUser.id.slice(0, 6)}`;
+      const defaultAvatar = meta.avatar_url || meta.picture || 'pearl';
 
-            // Derive a clean fallback username if DB contains legacy member_... string
-            const meta = currentUser.user_metadata || {};
-            const cleanFallbackName = data.name || meta.full_name || meta.name || (currentUser.email ? currentUser.email.split('@')[0] : 'Pearl Member');
-            let resolvedUsername = data.username;
-            if (!resolvedUsername || resolvedUsername.startsWith('member_')) {
-              const rawSlug = meta.preferred_username || meta.username || meta.full_name || meta.name || (currentUser.email ? currentUser.email.split('@')[0] : '');
-              if (rawSlug) {
-                const cleanSlug = rawSlug.toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_').replace(/^_+|_+$/g, '');
-                if (cleanSlug && cleanSlug.length >= 2) {
-                  resolvedUsername = cleanSlug;
-                  // Asynchronously update legacy member_... username in DB
-                  supabase.from('profiles').update({ username: cleanSlug, name: cleanFallbackName }).eq('id', currentUser.id).then(() => {}).catch(() => {});
-                }
+      setProfile((prev) => ({
+        ...prev,
+        name: prev.name || defaultName,
+        username: prev.username || cleanSlug,
+        avatar: prev.avatar || defaultAvatar
+      }));
+
+      if (supabase) {
+        supabase
+          .from('profiles')
+          .select('id, name, username, bio, avatar_url, pearl_number, role, is_admin, created_at')
+          .eq('id', currentUser.id)
+          .maybeSingle()
+          .then(({ data, error }) => {
+            if (data) {
+              const activePearlNumber = data.pearl_number;
+              if (activePearlNumber != null) {
+                setPearlNumber(activePearlNumber);
               }
+
+              let resolvedUsername = data.username;
+              if (!resolvedUsername || resolvedUsername.startsWith('member_')) {
+                resolvedUsername = cleanSlug;
+                supabase.from('profiles').update({ username: cleanSlug, name: data.name || defaultName }).eq('id', currentUser.id).then(() => {}).catch(() => {});
+              }
+
+              setProfile((prev) => ({
+                ...prev,
+                pearl_number: activePearlNumber != null ? activePearlNumber : prev.pearl_number,
+                name: data.name || defaultName,
+                username: resolvedUsername || prev.username,
+                bio: data.bio || prev.bio,
+                avatar: data.avatar_url || defaultAvatar,
+                role: data.role || (data.is_admin ? 'admin' : 'user'),
+                is_admin: Boolean(data.role === 'admin' || data.is_admin),
+                createdAt: data.created_at || prev.createdAt
+              }));
+            } else {
+              // Asynchronously insert missing profile row for new user
+              supabase
+                .from('profiles')
+                .upsert(
+                  [
+                    {
+                      id: currentUser.id,
+                      name: defaultName,
+                      username: cleanSlug,
+                      bio: 'Finding a little quiet space.',
+                      avatar_url: defaultAvatar,
+                      created_at: new Date().toISOString()
+                    }
+                  ],
+                  { onConflict: 'id', ignoreDuplicates: true }
+                )
+                .then(() => {})
+                .catch(() => {});
             }
-
-            setProfile((prev) => ({
-              ...prev,
-              pearl_number: activePearlNumber != null ? activePearlNumber : prev.pearl_number,
-              name: cleanFallbackName,
-              username: resolvedUsername || prev.username,
-              bio: data.bio || prev.bio,
-              avatar: data.avatar_url || prev.avatar,
-              role: data.role || (data.is_admin ? 'admin' : 'user'),
-              is_admin: Boolean(data.role === 'admin' || data.is_admin),
-              createdAt: data.created_at || prev.createdAt
-            }));
-          } else {
-            // Auto-create missing profile row for authenticated user (e.g. Google OAuth or new sign-up)
-            const meta = currentUser.user_metadata || {};
-            const defaultName = meta.full_name || meta.name || meta.given_name || (currentUser.email ? currentUser.email.split('@')[0] : 'Pearl Member');
-            
-            const rawSlug = meta.preferred_username || meta.username || meta.full_name || meta.name || (currentUser.email ? currentUser.email.split('@')[0] : 'pearl_member');
-            const cleanSlug = rawSlug.toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_').replace(/^_+|_+$/g, '') || `pearl_${currentUser.id.slice(0, 6)}`;
-            const defaultUsername = cleanSlug;
-            const defaultAvatar = meta.avatar_url || meta.picture || 'pearl';
-
-            supabase
-              .from('profiles')
-              .upsert(
-                [
-                  {
-                    id: currentUser.id,
-                    name: defaultName,
-                    username: defaultUsername,
-                    bio: 'Finding a little quiet space.',
-                    avatar_url: defaultAvatar,
-                    created_at: new Date().toISOString()
-                  }
-                ],
-                { onConflict: 'id', ignoreDuplicates: true }
-              )
-              .select('id, name, username, bio, avatar_url, pearl_number, role, is_admin')
-              .maybeSingle()
-              .then(({ data: createdData }) => {
-                if (createdData) {
-                  if (createdData.pearl_number != null) {
-                    setPearlNumber(createdData.pearl_number);
-                  }
-                  setProfile((prev) => ({
-                    ...prev,
-                    pearl_number: createdData.pearl_number ?? prev.pearl_number,
-                    name: createdData.name || defaultName,
-                    username: createdData.username || defaultUsername,
-                    bio: createdData.bio || prev.bio,
-                    avatar: createdData.avatar_url || defaultAvatar,
-                    role: createdData.role || 'user',
-                    is_admin: Boolean(createdData.role === 'admin' || createdData.is_admin)
-                  }));
-                }
-              })
-              .catch(() => {});
-          }
-        })
-        .catch((err) => {
-          console.warn('[Supabase Profile] Fetch catch:', err);
-        });
-    } else if (!currentUser) {
-      // Unauthenticated visitor has no Pearl number
+          })
+          .catch((err) => {
+            console.warn('[Supabase Profile] Fetch catch:', err);
+          });
+      }
+    } else {
       setPearlNumber(null);
     }
-  }, [currentUser]);
+  }, [currentUser?.id]);
 
   useEffect(() => {
     const userId = currentUser?.id;
