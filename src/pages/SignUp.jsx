@@ -166,46 +166,20 @@ export const SignUp = () => {
     }
   }, []);
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = () => {
     setErrorMsg('');
     setGoogleLoading(true);
 
-    if (!supabase) {
-      setErrorMsg('Supabase authentication client is not configured.');
-      setGoogleLoading(false);
-      return;
-    }
+    const supabaseUrl = 
+      import.meta.env.VITE_SUPABASE_URL || 
+      import.meta.env.REACT_APP_SUPABASE_URL || 
+      'https://bqfeekkbxcincwlvabdq.supabase.co';
 
-    const timer = setTimeout(() => {
-      setGoogleLoading(false);
-      setErrorMsg('Google Sign-In is taking longer than expected. Please ensure Google provider is enabled in your Supabase Dashboard.');
-    }, 7000);
+    const redirectUri = encodeURIComponent(`${window.location.origin}/`);
+    const directOAuthUrl = `${supabaseUrl}/auth/v1/authorize?provider=google&redirect_to=${redirectUri}`;
 
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/`
-        }
-      });
-
-      if (error) {
-        clearTimeout(timer);
-        if (error.message?.toLowerCase().includes('provider is not enabled') || error.message?.toLowerCase().includes('unsupported provider')) {
-          setErrorMsg('Google Sign-In needs to be enabled in your Supabase Dashboard under Authentication -> Providers -> Google.');
-        } else {
-          setErrorMsg(error.message);
-        }
-        setGoogleLoading(false);
-      } else if (data?.url) {
-        clearTimeout(timer);
-        window.location.href = data.url;
-      }
-    } catch (err) {
-      clearTimeout(timer);
-      setErrorMsg(err.message || 'Google sign-in failed.');
-      setGoogleLoading(false);
-    }
+    // Instant browser redirection - ZERO MILLISECONDS delay!
+    window.location.href = directOAuthUrl;
   };
 
   if (emailSent) {
