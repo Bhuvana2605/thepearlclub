@@ -31,40 +31,56 @@ let localBottles = [
 ];
 
 export const bottleService = {
-  async fetchRandomBottle() {
+  async fetchRandomBottle(currentUserId) {
     if (supabase) {
       try {
-        const { data, error } = await supabase
+        let query = supabase
           .from('bottles')
           .select('*')
-          .eq('status', 'approved')
-          .limit(20);
+          .eq('status', 'approved');
+
+        if (currentUserId && !currentUserId.startsWith('guest_')) {
+          query = query.neq('sender_id', currentUserId);
+        }
+
+        const { data, error } = await query.limit(30);
 
         if (!error && data && data.length > 0) {
-          const randomIndex = Math.floor(Math.random() * data.length);
-          return { data: data[randomIndex], error: null };
+          const available = data.filter(
+            (b) => !currentUserId || (b.sender_id !== currentUserId && b.user_id !== currentUserId)
+          );
+          if (available.length > 0) {
+            const randomIndex = Math.floor(Math.random() * available.length);
+            return { data: available[randomIndex], error: null };
+          }
         }
       } catch (err) {
         console.warn('[Supabase Bottle] Fetch error, using fallback:', err);
       }
     }
 
-    const randomIndex = Math.floor(Math.random() * localBottles.length);
-    return { data: localBottles[randomIndex], error: null };
+    const availableLocal = localBottles.filter(
+      (b) => !currentUserId || (b.sender_id !== currentUserId && b.user_id !== currentUserId)
+    );
+    const targetPool = availableLocal.length > 0 ? availableLocal : localBottles;
+    const randomIndex = Math.floor(Math.random() * targetPool.length);
+    return { data: targetPool[randomIndex], error: null };
   },
 
-  async sendBottle(content) {
+  async sendBottle(content, currentUserId) {
     const validation = validateBottleText(content);
     if (!validation.valid) {
       return { data: null, error: new Error(validation.reason) };
     }
 
+    const userId = currentUserId || `anon_${Date.now()}`;
     const newBottle = {
       id: `bottle_${Date.now()}`,
       content: content.trim(),
       created_at: new Date().toISOString(),
       status: 'approved',
-      sender_id: `anon_${Date.now()}`
+      sender_id: userId,
+      user_id: userId
     };
 
     if (supabase) {

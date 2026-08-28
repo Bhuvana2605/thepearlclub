@@ -37,12 +37,15 @@ export const Bottle = () => {
   const handleFetchBottle = async () => {
     setIsFetching(true);
     setCurrentBottle(null);
-    const { data } = await bottleService.fetchRandomBottle();
+    const { data } = await bottleService.fetchRandomBottle(currentUser?.id);
     setIsFetching(false);
 
     if (data) {
-      // Check if blocked or reported locally
-      if (bottleSafety.blockedSenders.includes(data.sender_id) || bottleSafety.reportedBottleIds.includes(data.id)) {
+      const isSelfSent = currentUser?.id && (data.sender_id === currentUser.id || data.user_id === currentUser.id);
+      const isBlockedOrReported = bottleSafety.blockedSenders.includes(data.sender_id) || bottleSafety.reportedBottleIds.includes(data.id);
+
+      // Automatically skip own bottles, blocked senders, or reported bottles
+      if (isSelfSent || isBlockedOrReported) {
         handleFetchBottle();
       } else {
         setCurrentBottle(data);
@@ -80,7 +83,7 @@ export const Bottle = () => {
     }
 
     setIsSending(true);
-    const { error } = await bottleService.sendBottle(composerText);
+    const { error } = await bottleService.sendBottle(composerText, currentUser?.id);
     setIsSending(false);
 
     if (error) {
