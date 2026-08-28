@@ -166,26 +166,39 @@ export const SignUp = () => {
     }
   }, []);
 
-  const handleGoogleSignIn = () => {
+  const handleGoogleSignIn = async () => {
     setErrorMsg('');
     setGoogleLoading(true);
 
-    const GOOGLE_CLIENT_ID =
-      import.meta.env.VITE_GOOGLE_CLIENT_ID ||
-      '504816841965-lo4d9e6sjl217tos5t132cm9l579ik25.apps.googleusercontent.com';
+    if (!supabase) {
+      setErrorMsg('Supabase authentication client is not configured.');
+      setGoogleLoading(false);
+      return;
+    }
 
-    const supabaseUrl = 
-      import.meta.env.VITE_SUPABASE_URL || 
-      import.meta.env.REACT_APP_SUPABASE_URL || 
-      'https://bqfeekkbxcincwlvabdq.supabase.co';
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/`,
+          queryParams: {
+            prompt: 'select_account'
+          }
+        }
+      });
 
-    const supabaseCallback = `${supabaseUrl}/auth/v1/callback`;
-    const appRedirect = encodeURIComponent(`${window.location.origin}/`);
-
-    // Direct Google OAuth 2.0 URL - Connects directly to Google's CDN in 0.3s (bypasses 5-min Supabase authorize cold start)
-    const directGoogleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(supabaseCallback)}&redirect_to=${appRedirect}&response_type=code&scope=email+profile&prompt=select_account`;
-
-    window.location.href = directGoogleAuthUrl;
+      if (error) {
+        setErrorMsg(error.message || 'Google sign-in failed.');
+        setGoogleLoading(false);
+      } else if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        setGoogleLoading(false);
+      }
+    } catch (err) {
+      setErrorMsg(err.message || 'Google sign-in failed.');
+      setGoogleLoading(false);
+    }
   };
 
   if (emailSent) {

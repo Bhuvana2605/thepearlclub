@@ -115,21 +115,28 @@ export const SanctuaryProvider = ({ children }) => {
   useEffect(() => {
     let isSubscribed = true;
 
-    // Safety timer to guarantee authLoading resolves within 3 seconds under all network conditions
+    const hasOAuthInUrl = 
+      window.location.hash.includes('access_token') || 
+      window.location.hash.includes('type=recovery') || 
+      window.location.search.includes('code=');
+
+    // Give OAuth token resolution up to 8s if hash/code is in URL, else 3s
+    const timeoutMs = hasOAuthInUrl ? 8000 : 3000;
     const safetyTimer = setTimeout(() => {
       if (isSubscribed) {
         setAuthLoading(false);
       }
-    }, 3000);
+    }, timeoutMs);
 
     if (supabase) {
       supabase.auth
         .getSession()
         .then(({ data: { session } }) => {
           if (isSubscribed) {
-            console.log('[SUPABASE AUTH SESSION DEBUG] INITIAL SESSION EXISTS:', Boolean(session));
-            console.log('[SUPABASE AUTH SESSION DEBUG] USER ID:', session?.user?.id ?? 'NONE');
-            setCurrentUser(session?.user ?? null);
+            console.log('[SUPABASE AUTH SESSION DEBUG] INITIAL SESSION:', Boolean(session), session?.user?.id ?? 'NONE');
+            if (session?.user) {
+              setCurrentUser(session.user);
+            }
             setAuthLoading(false);
           }
         })
@@ -140,10 +147,12 @@ export const SanctuaryProvider = ({ children }) => {
 
       const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
         if (isSubscribed) {
-          console.log('[SUPABASE AUTH SESSION DEBUG] EVENT:', event);
-          console.log('[SUPABASE AUTH SESSION DEBUG] SESSION EXISTS:', Boolean(session));
-          console.log('[SUPABASE AUTH SESSION DEBUG] USER ID:', session?.user?.id ?? 'NONE');
-          setCurrentUser(session?.user ?? null);
+          console.log('[SUPABASE AUTH SESSION DEBUG] EVENT:', event, 'SESSION:', Boolean(session), 'USER ID:', session?.user?.id ?? 'NONE');
+          if (session?.user) {
+            setCurrentUser(session.user);
+          } else if (event === 'SIGNED_OUT') {
+            setCurrentUser(null);
+          }
           setAuthLoading(false);
         }
       });
