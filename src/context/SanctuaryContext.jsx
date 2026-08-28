@@ -113,23 +113,46 @@ export const SanctuaryProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    if (supabase) {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        console.log('[SUPABASE AUTH SESSION DEBUG] INITIAL SESSION EXISTS:', Boolean(session));
-        console.log('[SUPABASE AUTH SESSION DEBUG] USER ID:', session?.user?.id ?? 'NONE');
-        setCurrentUser(session?.user ?? null);
+    let isSubscribed = true;
+
+    // Safety timer to guarantee authLoading resolves within 3 seconds under all network conditions
+    const safetyTimer = setTimeout(() => {
+      if (isSubscribed) {
         setAuthLoading(false);
-      });
+      }
+    }, 3000);
+
+    if (supabase) {
+      supabase.auth
+        .getSession()
+        .then(({ data: { session } }) => {
+          if (isSubscribed) {
+            console.log('[SUPABASE AUTH SESSION DEBUG] INITIAL SESSION EXISTS:', Boolean(session));
+            console.log('[SUPABASE AUTH SESSION DEBUG] USER ID:', session?.user?.id ?? 'NONE');
+            setCurrentUser(session?.user ?? null);
+            setAuthLoading(false);
+          }
+        })
+        .catch((err) => {
+          console.warn('[Supabase Auth] getSession error:', err);
+          if (isSubscribed) setAuthLoading(false);
+        });
 
       const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-        console.log('[SUPABASE AUTH SESSION DEBUG] EVENT:', event);
-        console.log('[SUPABASE AUTH SESSION DEBUG] SESSION EXISTS:', Boolean(session));
-        console.log('[SUPABASE AUTH SESSION DEBUG] USER ID:', session?.user?.id ?? 'NONE');
-        setCurrentUser(session?.user ?? null);
-        setAuthLoading(false);
+        if (isSubscribed) {
+          console.log('[SUPABASE AUTH SESSION DEBUG] EVENT:', event);
+          console.log('[SUPABASE AUTH SESSION DEBUG] SESSION EXISTS:', Boolean(session));
+          console.log('[SUPABASE AUTH SESSION DEBUG] USER ID:', session?.user?.id ?? 'NONE');
+          setCurrentUser(session?.user ?? null);
+          setAuthLoading(false);
+        }
       });
 
-      return () => subscription.unsubscribe();
+      return () => {
+        isSubscribed = false;
+        clearTimeout(safetyTimer);
+        subscription.unsubscribe();
+      };
     } else {
       setAuthLoading(false);
     }
