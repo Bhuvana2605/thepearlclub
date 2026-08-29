@@ -551,7 +551,12 @@ export const SanctuaryProvider = ({ children }) => {
   });
 
   const [environmentAudioVolume, setEnvironmentAudioVolumeState] = useState(() => {
-    return storage.get('environment_audio_volume', 0.12, currentUser?.id);
+    const saved = storage.get('environment_audio_volume', null, currentUser?.id);
+    if (saved === null || typeof saved !== 'number' || saved <= 0.20) {
+      storage.save('environment_audio_volume', 0.70, currentUser?.id);
+      return 0.70;
+    }
+    return saved;
   });
 
   const setEnvironmentAudioEnabled = (enabled) => {
@@ -648,9 +653,43 @@ export const SanctuaryProvider = ({ children }) => {
           .select('id, name, username, bio, avatar_url, pearl_number, role, is_admin, created_at')
           .eq('id', currentUser.id)
           .maybeSingle()
-          .then(({ data, error }) => {
+          .then(async ({ data, error }) => {
             if (data) {
-              const activePearlNumber = data.pearl_number;
+              let activePearlNumber = data.pearl_number;
+
+              // Calculate exact 1-indexed sequential Pearl Number strictly based on signup creation date rank
+              try {
+                const { data: allProfiles } = await supabase
+                  .from('profiles')
+                  .select('id, created_at')
+                  .order('created_at', { ascending: true });
+
+                if (allProfiles && allProfiles.length > 0) {
+                  const sortedByDate = [...allProfiles].sort(
+                    (a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0)
+                  );
+                  const userIdx = sortedByDate.findIndex((p) => p.id === currentUser.id);
+                  if (userIdx !== -1) {
+                    const expectedPearlNumber = userIdx + 1;
+                    activePearlNumber = expectedPearlNumber;
+
+                    // Auto-heal database row if pearl_number was out of sync (e.g. sequence jump 127 -> 46)
+                    if (data.pearl_number !== expectedPearlNumber) {
+                      supabase
+                        .from('profiles')
+                        .update({ pearl_number: expectedPearlNumber })
+                        .eq('id', currentUser.id)
+                        .then(() => {
+                          console.log(`[Supabase Auto-Heal] Repaired database row ${currentUser.id}: pearl_number ${data.pearl_number} -> ${expectedPearlNumber}`);
+                        })
+                        .catch(() => {});
+                    }
+                  }
+                }
+              } catch (calcErr) {
+                console.warn('[Supabase Profile] Rank calculation catch:', calcErr);
+              }
+
               if (activePearlNumber != null) {
                 setPearlNumber(activePearlNumber);
               }
@@ -689,7 +728,26 @@ export const SanctuaryProvider = ({ children }) => {
                   ],
                   { onConflict: 'id', ignoreDuplicates: true }
                 )
-                .then(() => {})
+                .then(async () => {
+                  // Immediately compute sequential rank after profile insert
+                  try {
+                    const { data: freshProfiles } = await supabase
+                      .from('profiles')
+                      .select('id, created_at')
+                      .order('created_at', { ascending: true });
+
+                    if (freshProfiles && freshProfiles.length > 0) {
+                      const sortedByDate = [...freshProfiles].sort(
+                        (a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0)
+                      );
+                      const userIdx = sortedByDate.findIndex((p) => p.id === currentUser.id);
+                      const assignedNo = userIdx !== -1 ? userIdx + 1 : freshProfiles.length;
+                      setPearlNumber(assignedNo);
+                      setProfile((prev) => ({ ...prev, pearl_number: assignedNo }));
+                      await supabase.from('profiles').update({ pearl_number: assignedNo }).eq('id', currentUser.id);
+                    }
+                  } catch (e) {}
+                })
                 .catch(() => {});
             }
           })

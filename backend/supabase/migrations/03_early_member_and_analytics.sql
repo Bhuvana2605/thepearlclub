@@ -17,8 +17,8 @@ ALTER SEQUENCE public.pearl_number_seq INCREMENT BY 1;
 CREATE OR REPLACE FUNCTION public.assign_pearl_number()
 RETURNS TRIGGER AS $$
 BEGIN
-  IF NEW.pearl_number IS NULL THEN
-    NEW.pearl_number := nextval('public.pearl_number_seq');
+  IF NEW.pearl_number IS NULL OR NEW.pearl_number <= 0 THEN
+    NEW.pearl_number := COALESCE((SELECT COUNT(*) FROM public.profiles WHERE id != NEW.id), 0) + 1;
   END IF;
   RETURN NEW;
 END;
