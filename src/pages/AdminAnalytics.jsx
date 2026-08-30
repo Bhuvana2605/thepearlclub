@@ -31,7 +31,7 @@ export const AdminAnalytics = () => {
   const [exportNotice, setExportNotice] = useState(null);
   const [showExportMenu, setShowExportMenu] = useState(false);
 
-  // Helper to generate UTF-8 CSV String for Google Sheets / Excel
+  // Helper to generate UTF-8 CSV String for Google Sheets File Download
   const generateUsersCSV = (usersList) => {
     const headers = [
       'Pearl Number',
@@ -40,8 +40,7 @@ export const AdminAnalytics = () => {
       'Email Address',
       'Role',
       'Early Member',
-      'Joined Date',
-      'User ID'
+      'Joined Date'
     ];
 
     const rows = usersList.map((u) => [
@@ -51,11 +50,35 @@ export const AdminAnalytics = () => {
       `"${(u.email || '').replace(/"/g, '""')}"`,
       `"${(u.role || 'member').replace(/"/g, '""')}"`,
       `"${u.isEarlyMember ? 'Yes' : 'No'}"`,
-      `"${(u.createdAt || '').replace(/"/g, '""')}"`,
-      `"${(u.id || '').replace(/"/g, '""')}"`
+      `"${(u.createdAt || '').replace(/"/g, '""')}"`
     ]);
 
     return [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+  };
+
+  // Helper to generate TSV String for seamless Ctrl+V Google Sheets Pasting
+  const generateUsersTSV = (usersList) => {
+    const headers = [
+      'Pearl Number',
+      'Member Name',
+      'Username',
+      'Email Address',
+      'Role',
+      'Early Member',
+      'Joined Date'
+    ];
+
+    const rows = usersList.map((u) => [
+      u.pearlNumber || '',
+      u.name || '',
+      u.username || '',
+      u.email || '',
+      u.role || 'member',
+      u.isEarlyMember ? 'Yes' : 'No',
+      u.createdAt || ''
+    ]);
+
+    return [headers.join('\t'), ...rows.map((r) => r.join('\t'))].join('\n');
   };
 
   const handleDownloadCSV = () => {
@@ -76,16 +99,21 @@ export const AdminAnalytics = () => {
   };
 
   const handleCopyCSV = () => {
-    const csvData = generateUsersCSV(sortedAndFilteredUsers);
-    navigator.clipboard.writeText(csvData);
-    setExportNotice('✓ Copied user data CSV to clipboard! Paste directly into Google Sheets (Ctrl+V).');
+    const tsvData = generateUsersTSV(sortedAndFilteredUsers);
+    navigator.clipboard.writeText(tsvData);
+    setExportNotice('✓ Copied user data to clipboard! Click cell A1 in Google Sheets and press Ctrl+V to paste into cells.');
     setShowExportMenu(false);
-    setTimeout(() => setExportNotice(null), 5000);
+    setTimeout(() => setExportNotice(null), 6000);
   };
 
   const handleOpenSheetsAndDownload = () => {
+    const tsvData = generateUsersTSV(sortedAndFilteredUsers);
+    navigator.clipboard.writeText(tsvData);
     handleDownloadCSV();
     window.open('https://sheets.new', '_blank');
+    setExportNotice('📋 Data copied to clipboard & CSV downloaded! Click cell A1 in your new Google Sheet and press Ctrl+V to fill instantly!');
+    setShowExportMenu(false);
+    setTimeout(() => setExportNotice(null), 8000);
   };
 
   const [telemetry, setTelemetry] = useState({
@@ -173,11 +201,14 @@ export const AdminAnalytics = () => {
                 cleanUsername = `@${cleanUsername.replace(/^@/, '')}`;
               }
 
+              const rawEmail = u.email || meta.email || meta.user_email || (u.id === currentUser?.id ? currentUser?.email : null);
+              const resolvedEmail = rawEmail || `${cleanUsername.replace(/^@/, '')}@pearlclub.sanctuary`;
+
               return {
                 id: u.id || `u_${idx}`,
                 name: name,
                 username: cleanUsername,
-                email: u.email || (u.id === currentUser?.id ? currentUser?.email : 'private@pearlclub.sanctuary'),
+                email: resolvedEmail,
                 pearlVal: numericPearl,
                 pearlNumber: formatPearlNo(numericPearl),
                 createdAtDate: u.created_at ? new Date(u.created_at) : new Date(Date.now() - (sortedByDate.length - idx) * 86400000),
