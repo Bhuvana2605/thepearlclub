@@ -1,44 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 import { storage } from '../lib/storage/storage';
 import { useSanctuary } from '../context/SanctuaryContext';
-
-// Pre-filled Sudoku puzzle grids
-const SUDOKU_PUZZLES = {
-  Easy: [
-    [5, 3, 0, 0, 7, 0, 0, 0, 0],
-    [6, 0, 0, 1, 9, 5, 0, 0, 0],
-    [0, 9, 8, 0, 0, 0, 0, 6, 0],
-    [8, 0, 0, 0, 6, 0, 0, 0, 3],
-    [4, 0, 0, 8, 0, 3, 0, 0, 1],
-    [7, 0, 0, 0, 2, 0, 0, 0, 6],
-    [0, 6, 0, 0, 0, 0, 2, 8, 0],
-    [0, 0, 0, 4, 1, 9, 0, 0, 5],
-    [0, 0, 0, 0, 8, 0, 0, 7, 9]
-  ],
-  Medium: [
-    [0, 0, 0, 2, 6, 0, 7, 0, 1],
-    [6, 8, 0, 0, 7, 0, 0, 9, 0],
-    [1, 9, 0, 0, 0, 4, 5, 0, 0],
-    [8, 2, 0, 1, 0, 0, 0, 4, 0],
-    [0, 0, 4, 6, 0, 2, 9, 0, 0],
-    [0, 5, 0, 0, 0, 3, 0, 2, 8],
-    [0, 0, 9, 3, 0, 0, 0, 7, 4],
-    [0, 4, 0, 0, 5, 0, 0, 3, 6],
-    [7, 0, 3, 0, 1, 8, 0, 0, 0]
-  ],
-  Hard: [
-    [0, 2, 0, 6, 0, 8, 0, 0, 0],
-    [5, 8, 0, 0, 0, 9, 7, 0, 0],
-    [0, 0, 0, 0, 4, 0, 0, 0, 0],
-    [3, 7, 0, 0, 0, 0, 5, 0, 0],
-    [6, 0, 0, 0, 0, 0, 0, 0, 4],
-    [0, 0, 8, 0, 0, 0, 0, 1, 3],
-    [0, 0, 0, 0, 2, 0, 0, 0, 0],
-    [0, 0, 9, 8, 0, 0, 0, 3, 6],
-    [0, 0, 0, 3, 0, 6, 0, 9, 0]
-  ]
-};
+import {
+  SUDOKU_PUZZLE_COLLECTION,
+  solveSudoku,
+  findBoardConflicts,
+  isBoardSolved
+} from '../lib/sudoku/sudokuEngine';
 
 export const Games = () => {
   const { recordActivityDate, grantGameReward } = useSanctuary();
@@ -47,41 +16,136 @@ export const Games = () => {
   // 1. SUDOKU GAME
   // ==================================================
   const [sudokuDifficulty, setSudokuDifficulty] = useState('Easy');
-  const [initialBoard, setInitialBoard] = useState(() => SUDOKU_PUZZLES.Easy);
-  const [grid, setGrid] = useState(() => JSON.parse(JSON.stringify(SUDOKU_PUZZLES.Easy)));
-  const [selectedCell, setSelectedCell] = useState(null);
+  const [puzzleIndex, setPuzzleIndex] = useState(0);
 
+  const getInitialPuzzle = (diff, idx) => {
+    const list = SUDOKU_PUZZLE_COLLECTION[diff] || SUDOKU_PUZZLE_COLLECTION.Easy;
+    return list[idx % list.length];
+  };
+
+  const [initialBoard, setInitialBoard] = useState(() => getInitialPuzzle('Easy', 0));
+  const [grid, setGrid] = useState(() => JSON.parse(JSON.stringify(getInitialPuzzle('Easy', 0))));
+  const [selectedCell, setSelectedCell] = useState(null);
+  const [isSudokuSolved, setIsSudokuSolved] = useState(false);
+  const [sudokuFeedback, setSudokuFeedback] = useState(null);
+
+  // Compute solution grid dynamically for hints & validation
+  const solutionGrid = useMemo(() => solveSudoku(initialBoard), [initialBoard]);
+
+  // Compute rule conflicts in real-time
+  const boardConflicts = useMemo(() => findBoardConflicts(grid), [grid]);
+
+  // Handle cell click
   const handleCellClick = (r, c) => {
     recordActivityDate('sudoku');
     setSelectedCell({ r, c });
   };
 
+  // Handle number input (1-9 or 0 for erase)
   const handleNumberInput = (num) => {
+    if (isSudokuSolved) return;
     recordActivityDate('sudoku');
-    if (!selectedCell) return;
+
+    if (!selectedCell) {
+      setSudokuFeedback('Please click a cell on the grid first.');
+      setTimeout(() => setSudokuFeedback(null), 2500);
+      return;
+    }
     const { r, c } = selectedCell;
-    if (initialBoard[r][c] !== 0) return;
+    if (initialBoard[r][c] !== 0) {
+      setSudokuFeedback('Pre-filled numbers cannot be changed.');
+      setTimeout(() => setSudokuFeedback(null), 2000);
+      return;
+    }
+
     const nextGrid = JSON.parse(JSON.stringify(grid));
     nextGrid[r][c] = num;
     setGrid(nextGrid);
+    setSudokuFeedback(null);
+
+    // Check if puzzle is completed
+    if (isBoardSolved(nextGrid, solutionGrid)) {
+      setIsSudokuSolved(true);
+      grantGameReward('Sudoku');
+    }
   };
 
+  // Reset active board
   const handleResetSudoku = () => {
     setGrid(JSON.parse(JSON.stringify(initialBoard)));
     setSelectedCell(null);
+    setIsSudokuSolved(false);
+    setSudokuFeedback(null);
   };
 
+  // Switch difficulty or get new puzzle
   const handleChangeDifficulty = (diff) => {
-    const puzzle = SUDOKU_PUZZLES[diff] || SUDOKU_PUZZLES.Easy;
     setSudokuDifficulty(diff);
-    setInitialBoard(puzzle);
-    setGrid(JSON.parse(JSON.stringify(puzzle)));
+    setPuzzleIndex(0);
+    const nextPuzzle = getInitialPuzzle(diff, 0);
+    setInitialBoard(nextPuzzle);
+    setGrid(JSON.parse(JSON.stringify(nextPuzzle)));
     setSelectedCell(null);
+    setIsSudokuSolved(false);
+    setSudokuFeedback(null);
+  };
+
+  const handleNextPuzzle = () => {
+    const nextIdx = puzzleIndex + 1;
+    setPuzzleIndex(nextIdx);
+    const nextPuzzle = getInitialPuzzle(sudokuDifficulty, nextIdx);
+    setInitialBoard(nextPuzzle);
+    setGrid(JSON.parse(JSON.stringify(nextPuzzle)));
+    setSelectedCell(null);
+    setIsSudokuSolved(false);
+    setSudokuFeedback(null);
+  };
+
+  // Hint feature
+  const handleSudokuHint = () => {
+    if (isSudokuSolved) return;
+    recordActivityDate('sudoku');
+
+    let targetR = selectedCell?.r;
+    let targetC = selectedCell?.c;
+
+    // If cell selected is empty or has a mistake
+    if (targetR !== undefined && targetC !== undefined && initialBoard[targetR][targetC] === 0) {
+      // Good target
+    } else {
+      // Find first empty cell
+      let found = false;
+      for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+          if (grid[r][c] === 0 || grid[r][c] !== solutionGrid[r][c]) {
+            targetR = r;
+            targetC = c;
+            found = true;
+            break;
+          }
+        }
+        if (found) break;
+      }
+    }
+
+    if (targetR !== undefined && targetC !== undefined) {
+      const correctVal = solutionGrid[targetR][targetC];
+      const nextGrid = JSON.parse(JSON.stringify(grid));
+      nextGrid[targetR][targetC] = correctVal;
+      setGrid(nextGrid);
+      setSelectedCell({ r: targetR, c: targetC });
+      setSudokuFeedback(`💡 Hint: Placed ${correctVal} at row ${targetR + 1}, col ${targetC + 1}`);
+
+      if (isBoardSolved(nextGrid, solutionGrid)) {
+        setIsSudokuSolved(true);
+        grantGameReward('Sudoku');
+      }
+    }
   };
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!selectedCell) return;
+      if (!selectedCell || isSudokuSolved) return;
       const { r, c } = selectedCell;
 
       if (['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
@@ -105,7 +169,7 @@ export const Games = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedCell, grid, initialBoard]);
+  }, [selectedCell, grid, initialBoard, isSudokuSolved]);
 
   // ==================================================
   // 2. PEARL CATCH - MEDIAPIPE HAND LANDMARKER (INDEX FINGER)
@@ -447,14 +511,43 @@ export const Games = () => {
       {/* Vertical 3-Equal Cards Container */}
       <div className="flex flex-col gap-8 w-full">
         {/* CARD 1: Sudoku */}
-        <section className="glass-panel rounded-xl p-6 md:p-8 min-h-[480px] flex flex-col items-center justify-between border border-white/50 dark:border-slate-800 shadow-xl">
-          <div className="w-full flex justify-between items-center mb-2">
+        <section className="glass-panel rounded-xl p-6 md:p-8 min-h-[500px] flex flex-col items-center justify-between border border-white/50 dark:border-slate-800 shadow-xl relative overflow-hidden">
+          
+          {/* Victory Overlay Modal */}
+          {isSudokuSolved && (
+            <div className="absolute inset-0 z-30 bg-slate-950/80 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-fade-in">
+              <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-3 ring-4 ring-emerald-500/30">
+                <span className="material-symbols-outlined text-4xl">emoji_events</span>
+              </div>
+              <h3 className="font-headline-lg text-2xl font-bold text-white mb-1">Sudoku Mastered!</h3>
+              <p className="font-body-md text-sm text-teal-200 mb-4 max-w-xs">
+                Splendid logic! You completed the {sudokuDifficulty} Sudoku puzzle and earned <strong>+5 Sanctuary Pearls</strong>.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleNextPuzzle}
+                  className="bg-teal-400 text-slate-950 font-bold px-5 py-2.5 rounded-full shadow-lg hover:scale-105 transition-transform flex items-center gap-1.5 text-xs"
+                >
+                  <span className="material-symbols-outlined text-base">play_arrow</span>
+                  Play Next Puzzle
+                </button>
+                <button
+                  onClick={handleResetSudoku}
+                  className="bg-white/20 text-white font-semibold px-4 py-2.5 rounded-full hover:bg-white/30 transition-all text-xs"
+                >
+                  Replay
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-2">
             <div>
               <h2 className="font-headline-md text-headline-md text-secondary dark:text-teal-300">Sudoku</h2>
               <p className="font-body-md text-body-md text-on-surface-variant dark:text-slate-300 text-sm">Gentle 9x9 logic placement</p>
             </div>
 
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center flex-wrap">
               <select
                 value={sudokuDifficulty}
                 onChange={(e) => handleChangeDifficulty(e.target.value)}
@@ -466,6 +559,24 @@ export const Games = () => {
               </select>
 
               <button
+                onClick={handleSudokuHint}
+                className="font-label-sm text-xs text-amber-800 dark:text-amber-300 bg-amber-100/90 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700 rounded-full px-3 py-1.5 font-bold hover:scale-105 transition-all flex items-center gap-1 shadow-xs"
+                title="Get a hint for an empty cell"
+              >
+                <span className="material-symbols-outlined text-sm text-amber-600">lightbulb</span>
+                Hint
+              </button>
+
+              <button
+                onClick={handleNextPuzzle}
+                className="font-label-sm text-xs text-primary dark:text-teal-200 bg-white/70 dark:bg-slate-900/80 border border-white/60 dark:border-slate-700 rounded-full px-3 py-1.5 font-bold hover:scale-105 transition-all flex items-center gap-1 shadow-xs"
+                title="Load next Sudoku puzzle"
+              >
+                <span className="material-symbols-outlined text-sm">casino</span>
+                New
+              </button>
+
+              <button
                 onClick={handleResetSudoku}
                 className="text-primary dark:text-teal-300 hover:scale-110 transition-transform p-1.5 rounded-full hover:bg-white/40 dark:hover:bg-slate-800"
                 title="Reset Active Puzzle"
@@ -475,12 +586,21 @@ export const Games = () => {
             </div>
           </div>
 
-          {/* 9x9 SUDOKU BOARD WITH CRISP GRID LINES & 3x3 SUBGRID DIVIDERS */}
+          {/* Feedback Toast */}
+          {sudokuFeedback && (
+            <div className="w-full max-w-[340px] mb-2 px-3 py-1.5 rounded-lg bg-teal-50 dark:bg-slate-800 border border-teal-200 dark:border-teal-700 text-teal-800 dark:text-teal-200 text-xs text-center font-medium animate-pulse">
+              {sudokuFeedback}
+            </div>
+          )}
+
+          {/* 9x9 SUDOKU BOARD WITH CRISP GRID LINES & REAL-TIME CONFLICT HIGHLIGHTING */}
           <div className="w-full max-w-[340px] aspect-square my-auto p-0.5 bg-slate-300/80 dark:bg-slate-900 border-2 border-primary/80 dark:border-teal-400/90 rounded-none shadow-lg">
             <div className="grid grid-cols-9 w-full h-full rounded-none overflow-hidden bg-white dark:bg-slate-950">
               {grid.map((row, r) =>
                 row.map((val, c) => {
+                  const cellKey = `${r}-${c}`;
                   const isFixed = initialBoard[r][c] !== 0;
+                  const isConflict = boardConflicts.has(cellKey);
                   const isSelected = selectedCell?.r === r && selectedCell?.c === c;
                   const isSameRowColBox =
                     selectedCell &&
@@ -500,7 +620,9 @@ export const Games = () => {
 
                   let cellStyle = 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100';
 
-                  if (isSelected) {
+                  if (isConflict) {
+                    cellStyle = 'bg-red-100 dark:bg-red-950/80 text-red-600 dark:text-red-300 font-extrabold ring-2 ring-red-500/80 z-20';
+                  } else if (isSelected) {
                     cellStyle = 'bg-teal-400/30 dark:bg-teal-500/40 text-primary dark:text-white font-extrabold ring-2 ring-primary dark:ring-teal-300 z-10';
                   } else if (isSameNumber) {
                     cellStyle = 'bg-teal-200/50 dark:bg-teal-900/60 text-primary dark:text-teal-200 font-bold ring-1 ring-teal-400/60';
@@ -512,7 +634,7 @@ export const Games = () => {
 
                   return (
                     <button
-                      key={`${r}-${c}`}
+                      key={cellKey}
                       onClick={() => handleCellClick(r, c)}
                       className={`aspect-square flex items-center justify-center font-headline-md text-base md:text-lg transition-all focus:outline-none ${borderClasses} ${cellStyle}`}
                     >
@@ -546,7 +668,7 @@ export const Games = () => {
             </div>
 
             <p className="font-label-sm text-[11px] text-outline dark:text-slate-400 text-center mt-1">
-              Tip: Click any cell and use 1-9 or Arrow keys on your keyboard.
+              Tip: Click any cell and use 1-9 or Arrow keys on your keyboard. Red cells indicate Sudoku conflicts.
             </p>
           </div>
         </section>
