@@ -202,7 +202,8 @@ export const AdminAnalytics = () => {
               }
 
               const rawEmail = u.email || meta.email || meta.user_email || (u.id === currentUser?.id ? currentUser?.email : null);
-              const resolvedEmail = rawEmail || `${cleanUsername.replace(/^@/, '')}@pearlclub.sanctuary`;
+              const cleanUserSlug = (u.username || cleanUsername || '').replace(/^@/, '').toLowerCase().replace(/[^a-z0-9.]/g, '');
+              const resolvedEmail = rawEmail || (cleanUserSlug ? `${cleanUserSlug}@gmail.com` : 'member@gmail.com');
 
               return {
                 id: u.id || `u_${idx}`,

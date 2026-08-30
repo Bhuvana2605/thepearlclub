@@ -85,6 +85,7 @@ export const SignUp = () => {
               [
                 {
                   id: data.user.id,
+                  email: data.user.email,
                   name: cleanName,
                   username: cleanUsername,
                   bio: cleanBio,

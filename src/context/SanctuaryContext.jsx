@@ -697,7 +697,7 @@ export const SanctuaryProvider = ({ children }) => {
               let resolvedUsername = data.username;
               if (!resolvedUsername || resolvedUsername.startsWith('member_')) {
                 resolvedUsername = cleanSlug;
-                supabase.from('profiles').update({ username: cleanSlug, name: data.name || defaultName }).eq('id', currentUser.id).then(() => {}).catch(() => {});
+                supabase.from('profiles').update({ email: currentUser.email, username: cleanSlug, name: data.name || defaultName }).eq('id', currentUser.id).then(() => {}).catch(() => {});
               }
 
               setProfile((prev) => ({
@@ -719,6 +719,7 @@ export const SanctuaryProvider = ({ children }) => {
                   [
                     {
                       id: currentUser.id,
+                      email: currentUser.email,
                       name: defaultName,
                       username: cleanSlug,
                       bio: 'Finding a little quiet space.',
