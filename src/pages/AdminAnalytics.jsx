@@ -163,13 +163,28 @@ export const AdminAnalytics = () => {
 
       if (supabase) {
         try {
-          const { data, error } = await supabase
-            .from('profiles')
-            .select('*');
+          // Attempt 1: Fetch via secure RPC function which joins auth.users (retrieving exact sign-up Gmails)
+          let fetchedRows = null;
+          try {
+            const { data: rpcData, error: rpcError } = await supabase.rpc('get_admin_user_directory');
+            if (!rpcError && rpcData && rpcData.length > 0) {
+              fetchedRows = rpcData;
+            }
+          } catch (rpcErr) {}
 
-          if (!error && data && data.length > 0) {
-            // Sort profiles by created_at ascending (oldest signup = #PEARL-0001)
-            const sortedByDate = [...data].sort(
+          // Attempt 2: Fallback to direct profiles table query
+          if (!fetchedRows) {
+            const { data: tableData, error: tableError } = await supabase
+              .from('profiles')
+              .select('*');
+            if (!tableError && tableData && tableData.length > 0) {
+              fetchedRows = tableData;
+            }
+          }
+
+          if (fetchedRows && fetchedRows.length > 0) {
+            // Sort profiles strictly by created_at ascending (oldest signup = #PEARL-0001)
+            const sortedByDate = [...fetchedRows].sort(
               (a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0)
             );
 
@@ -182,14 +197,13 @@ export const AdminAnalytics = () => {
                     .from('profiles')
                     .update({ pearl_number: expectedPearlNumber })
                     .eq('id', u.id);
-                  console.log(`[Supabase Auto-Heal] Repaired database row ${u.id}: pearl_number -> ${expectedPearlNumber}`);
                 } catch (err) {}
               }
             });
 
             list = sortedByDate.map((u, idx) => {
-              const numericPearl = idx + 1;
-              const meta = u.raw_user_meta_data || {};
+              const numericPearl = idx + 1; // Strict sequential pearl rank: #0001, #0002, #0003...
+              const meta = u.raw_user_meta_data || u.user_metadata || {};
               const rawName = u.name || u.display_name || u.full_name || meta.full_name || meta.name || meta.given_name;
               const name = rawName || (u.email ? u.email.split('@')[0] : 'Pearl Member');
 
